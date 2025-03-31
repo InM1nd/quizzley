@@ -1,0 +1,34 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1740665641426,
+      "tag": "0000_spotty_stick",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1742488673428,
+      "tag": "0001_cute_corsair",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1742905322974,
+      "tag": "0002_panoramic_jigsaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1742905634385,
+      "tag": "0003_puzzling_jimmy_woo",
+      "breakpoints": true
+    }
+  ]
+}
