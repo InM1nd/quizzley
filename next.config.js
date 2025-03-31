@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+
+  // Минимальная конфигурация для оптимизации изображений
+  images: {
+    domains: ["example.com"], // Замени на нужные домены, если используешь изображения из интернета
+  },
+
+  // Если у тебя нет кастомного Webpack-конфига, можно его временно убрать
   webpack: (config, { isServer }) => {
+    // Можно оставить для оптимизации в случае сборки на сервере
     if (!isServer) {
       config.optimization = {
         ...config.optimization,
@@ -15,15 +23,15 @@ const nextConfig = {
         },
       };
     }
+
     return config;
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
-    ],
+
+  // Убедимся, что мы не настраиваем лишние или экспериментальные параметры
+  // Временно отключим любые экспериментальные флаги, если они есть
+  experimental: {
+    // Пример, если что-то было настроено
+    // ignoreDuringBuilds: true,
   },
 };
 
