@@ -19,9 +19,12 @@ const Page = async () => {
 
   return (
     <div className="flex flex-col flex-1">
-      <main className="py-11 flex flex-col items-center flex-1 mt-24">
+      <main className="py-11 flex flex-col items-center flex-1">
         <div className="fixed inset-0 -z-10 h-full w-full bg-white dark:bg-zinc-900 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="max-w-4xl mx-auto px-4">
+          <h1 className="py-12 text-center text-3xl font-bold text-primary">
+            Generate Your Quizz
+          </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Настройки квиза */}
             <div className="relative group">

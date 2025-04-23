@@ -159,3 +159,23 @@ export const quizzSubmitionRelations = relations(
     }),
   })
 );
+
+/* Feedback */
+export const feedbacks = pgTable("feedbacks", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  rating: text("rating"),
+  feedback: text("feedback").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  premiumGranted: boolean("premium_granted").default(false),
+  premiumEndDate: timestamp("premium_end_date", { mode: "date" }),
+});
+
+export const feedbacksRelations = relations(feedbacks, ({ one }) => ({
+  user: one(users, {
+    fields: [feedbacks.userId],
+    references: [users.id],
+  }),
+}));

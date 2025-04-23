@@ -51,6 +51,9 @@ const ManageSubscription = () => {
   return (
     <div className="flex flex-col gap-2">
       <Button
+        type="submit"
+        size={"lg"}
+        className="mt-4"
         disabled={loading}
         onClick={redirectToCustomerPortal}
       >

@@ -1,7 +1,7 @@
 "use client";
 
-import { AnimatedCard } from "./animated-card";
-import { AnimatedIcon } from "./animated-icon";
+import { AnimatedCard } from "../ui/animated-card";
+import { AnimatedIcon } from "../ui/animated-icon";
 import { Brain, CheckCircle, Sparkles } from "lucide-react";
 
 const features = [

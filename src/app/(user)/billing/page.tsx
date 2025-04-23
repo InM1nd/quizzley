@@ -1,7 +1,7 @@
 import ManageSubscription from "./ManageSubscription";
-import { users } from "@/db/schema";
+import { feedbacks, users } from "@/db/schema";
 import { auth, signIn } from "@/auth";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { db } from "@/db";
 import { Settings, Sparkles, ScrollText } from "lucide-react";
 
@@ -17,11 +17,18 @@ const page = async () => {
   const user = await db.query.users.findFirst({
     where: eq(users.id, session.user.id),
   });
+  const feedback = await db.query.feedbacks.findFirst({
+    where: eq(feedbacks.userId, userId!),
+    orderBy: [desc(feedbacks.createdAt)],
+  });
 
   const plan = user?.subscribed ? "premium" : "free";
+  const nextBillingDate = feedback?.premiumEndDate
+    ? new Date(feedback.premiumEndDate).toLocaleDateString()
+    : "N/A";
 
   return (
-    <div className="container max-w-4xl mx-auto mt-24 p-6">
+    <div className="container max-w-4xl mx-auto p-6">
       {/* Фоновый градиент */}
       <div className="fixed inset-0 -z-10 h-full w-full bg-white dark:bg-zinc-900 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
 
@@ -118,7 +125,7 @@ const page = async () => {
             <div className="flex items-center space-x-2">
               <ScrollText className="text-orange-500" />
               <p className="text-sm text-zinc-400">
-                Next billing date: {new Date().toLocaleDateString()}
+                Next billing date: {nextBillingDate}
               </p>
             </div>
             <a

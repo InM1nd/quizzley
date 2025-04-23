@@ -1,18 +1,24 @@
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/ui/footer";
+import Footer from "@/components/footer";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { AnimatedIcon } from "@/components/ui/animated-icon";
 import Aurora from "@/components/ui/aurora";
 import { AnimatedHeading } from "@/components/ui/animated-heading";
 import { AnimatedCard } from "@/components/ui/animated-card";
-import { FeaturesSection } from "@/components/ui/features-section";
+import { FeaturesSection } from "@/components/sections/features-section";
 import SpotlightCard from "@/components/ui/spotlight-card";
-import { ArrowRight, Brain, CheckCircle, Sparkles, Star } from "lucide-react";
+import {
+  ArrowRight,
+  BarChart3,
+  Brain,
+  CheckCircle,
+  FileText,
+  Sparkles,
+  Star,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { LampContainer } from "@/components/ui/lamp";
-import { motion } from "framer-motion";
-import { CTASection } from "@/components/ui/cta-section";
+import { CTASection } from "@/components/sections/cta-section";
 
 export default function Home() {
   const features = [
@@ -82,11 +88,29 @@ export default function Home() {
     },
   ];
 
+  const faqs = [
+    {
+      question: "How quickly do you respond to inquiries?",
+      answer:
+        "We strive to respond to all inquiries within 24 hours on business days. For urgent technical support questions, we typically respond much faster.",
+    },
+    {
+      question: "Can I request a product demonstration?",
+      answer:
+        "Yes, we'd be happy to provide a demonstration of Quizzley for you or your team. Fill out the form above indicating 'Demo Request' in the subject, and we'll arrange a presentation.",
+    },
+    {
+      question: "How do I report a technical issue?",
+      answer:
+        "The best way to report a technical issue is through the feedback form above, specifying 'Technical Issue' in the subject and providing as many details about the problem as possible.",
+    },
+  ];
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative overflow-hidden ">
+        <section className="relative overflow-hidden">
           <div className="absolute inset-0 -z-10">
             <Aurora
               colorStops={["#FF6B00", "#FFA500", "#FF4500"]}
@@ -98,9 +122,11 @@ export default function Home() {
           <div className="mx-auto max-w-7xl">
             <div className="relative z-10 px-6 py-16 sm:px-6 lg:py-60 lg:px-8">
               <div className="mx-auto max-w-2xl text-center">
-                <AnimatedHeading className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+                <AnimatedHeading className="text-4xl font-bold tracking-tight text-white sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
                   Create Smart Quizzes with{" "}
-                  <span className="text-primary">AI</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
+                    AI
+                  </span>
                 </AnimatedHeading>
                 <AnimatedHeading
                   delay={0.2}
@@ -112,22 +138,28 @@ export default function Home() {
                 </AnimatedHeading>
                 <AnimatedHeading
                   delay={0.4}
-                  className="mt-10 flex items-center justify-center gap-x-6"
+                  className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6"
                 >
-                  <Link href="/dashboard">
+                  <Link href="/api/auth/signin?callbackUrl=/dashboard">
                     <Button
                       size="lg"
-                      className="gap-2 bg-primary hover:bg-primary/90"
+                      className="text-lg px-8 py-7 gap-3 bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:to-orange-500 text-white shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-1 rounded-full border border-white/10 font-semibold"
                     >
                       Start Free
-                      <ArrowRight className="h-4 w-4" />
+                      <ArrowRight className="h-5 w-5" />
                     </Button>
                   </Link>
                   <Link
-                    href="/about"
-                    className="text-sm font-semibold leading-6 text-white"
+                    href="/features"
+                    className="text-base font-semibold leading-6 text-white bg-white/10 px-8 py-4 rounded-full border border-white/10 hover:bg-white/15 hover:text-primary transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl"
                   >
-                    Learn More <span aria-hidden="true">→</span>
+                    Learn More{" "}
+                    <span
+                      aria-hidden="true"
+                      className="ml-1"
+                    >
+                      →
+                    </span>
                   </Link>
                 </AnimatedHeading>
               </div>
@@ -136,70 +168,245 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="bg-background py-24 sm:py-32">
+        <section className="bg-gradient-to-b from-zinc-950 to-background py-24 sm:py-32 relative">
+          <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
           <FeaturesSection />
         </section>
 
-        {/* Testimonials Section */}
-        <section className="bg-background py-24 sm:py-32">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Trusted by Educators Worldwide
+        {/* Image Showcase Section */}
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto w-2/3 mb-4"></div>
+
+        <AnimatedSection className="bg-background py-24 sm:py-32 relative">
+          <div className="absolute top-10 left-1/3 w-72 h-72 bg-primary/20 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
+          <div className="absolute bottom-10 right-1/3 w-80 h-80 bg-orange-600/20 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
+
+          <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
+            <div className="mx-auto max-w-2xl text-center mb-16">
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/90">
+                See{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
+                  Quizzley
+                </span>{" "}
+                in Action
               </h2>
               <p className="mt-6 text-lg leading-8 text-gray-300">
-                See what our users have to say about Quizz AI
+                Experience our intuitive interface and powerful features
               </p>
             </div>
-            <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-              {testimonials.map((testimonial, index) => (
-                <AnimatedCard
-                  key={testimonial.name}
-                  delay={index * 0.2}
-                  className="flex flex-col justify-between bg-zinc-900 p-10 shadow-lg rounded-2xl"
-                >
-                  <div>
-                    <div className="flex items-center gap-x-4">
-                      <Image
-                        src={testimonial.image}
-                        alt={testimonial.name}
-                        width={40}
-                        height={40}
-                        className="rounded-full"
-                      />
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">
-                          {testimonial.name}
-                        </h3>
-                        <p className="text-sm text-gray-400">
-                          {testimonial.role}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="mt-6 text-base leading-7 text-gray-300">
-                      {testimonial.content}
+
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+              {/* Image Placeholder 1 */}
+              <AnimatedCard
+                delay={0.1}
+                className="flex flex-col"
+              >
+                <div className="aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-zinc-900/90 to-zinc-800/50 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-zinc-400 text-center p-8">
+                    <FileText className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                    <p className="text-lg font-medium">
+                      Document Upload Interface
+                    </p>
+                    <p className="text-sm mt-2">
+                      Image showing the easy document upload process
                     </p>
                   </div>
-                  <div className="mt-6 flex items-center gap-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-5 w-5 text-primary fill-primary"
-                      />
-                    ))}
+                </div>
+                <h3 className="mt-4 text-xl font-semibold text-white">
+                  Effortless Document Uploading
+                </h3>
+                <p className="mt-2 text-gray-300">
+                  Our intuitive drag-and-drop interface makes getting started
+                  with your quizzes quick and simple.
+                </p>
+              </AnimatedCard>
+
+              {/* Image Placeholder 2 */}
+              <AnimatedCard
+                delay={0.2}
+                className="flex flex-col"
+              >
+                <div className="aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-zinc-900/90 to-zinc-800/50 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-zinc-400 text-center p-8">
+                    <Brain className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                    <p className="text-lg font-medium">
+                      AI Processing Visualization
+                    </p>
+                    <p className="text-sm mt-2">
+                      Image showing AI analyzing document contents
+                    </p>
                   </div>
-                </AnimatedCard>
-              ))}
+                </div>
+                <h3 className="mt-4 text-xl font-semibold text-white">
+                  Advanced AI Analysis
+                </h3>
+                <p className="mt-2 text-gray-300">
+                  Watch as our AI technology intelligently processes your
+                  documents to create perfect quiz questions.
+                </p>
+              </AnimatedCard>
+
+              {/* Image Placeholder 3 */}
+              <AnimatedCard
+                delay={0.3}
+                className="flex flex-col"
+              >
+                <div className="aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-zinc-900/90 to-zinc-800/50 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-zinc-400 text-center p-8">
+                    <Sparkles className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                    <p className="text-lg font-medium">
+                      Quiz Question Showcase
+                    </p>
+                    <p className="text-sm mt-2">
+                      Image showing generated quiz questions and answer options
+                    </p>
+                  </div>
+                </div>
+                <h3 className="mt-4 text-xl font-semibold text-white">
+                  Intelligent Question Generation
+                </h3>
+                <p className="mt-2 text-gray-300">
+                  Our system creates varied question types with multiple-choice,
+                  true/false, and short answer formats.
+                </p>
+              </AnimatedCard>
+
+              {/* Image Placeholder 4 */}
+              <AnimatedCard
+                delay={0.4}
+                className="flex flex-col"
+              >
+                <div className="aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-zinc-900/90 to-zinc-800/50 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-zinc-400 text-center p-8">
+                    <BarChart3 className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                    <p className="text-lg font-medium">Analytics Dashboard</p>
+                    <p className="text-sm mt-2">
+                      Image showing detailed performance analytics
+                    </p>
+                  </div>
+                </div>
+                <h3 className="mt-4 text-xl font-semibold text-white">
+                  Comprehensive Analytics
+                </h3>
+                <p className="mt-2 text-gray-300">
+                  Track progress and performance with our detailed reporting and
+                  analytics dashboard.
+                </p>
+              </AnimatedCard>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
+
+        {/* Decorative Wave Divider */}
+        <div className="relative h-24 mb-12">
+          <div className="absolute inset-0 bg-[url('/wave-divider.svg')] bg-repeat-x bg-top w-full h-full opacity-30"></div>
+        </div>
+
+        {/* How It Works Section */}
+        <AnimatedSection className="bg-gradient-to-b from-background to-zinc-950 py-24 sm:py-32 relative">
+          <div className="absolute top-20 right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+          <div className="absolute bottom-20 left-10 w-64 h-64 bg-orange-600/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+
+          <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
+            <div className="mx-auto max-w-2xl text-center mb-16">
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/90">
+                How{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
+                  Quizzley
+                </span>{" "}
+                Works
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-gray-300">
+                Our streamlined process makes quiz creation effortless
+              </p>
+            </div>
+            <div className="relative mx-auto max-w-2xl">
+              {/* Timeline line */}
+              <div className="absolute left-0 top-4 bottom-4 rounded-full w-1 bg-gradient-to-b from-primary via-primary/50 to-primary/30"></div>
+
+              <AnimatedCard
+                delay={0.1}
+                className="relative mb-16 ml-8 pl-8"
+              >
+                <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-r from-primary to-orange-500 shadow-lg shadow-primary/20">
+                  <span className="text-white font-bold">1</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Upload Your Document
+                </h3>
+                <p className="text-gray-300">
+                  Simply upload your PDF, textbook, or article through our
+                  intuitive interface. We support various document formats to
+                  accommodate your needs.
+                </p>
+              </AnimatedCard>
+
+              <AnimatedCard
+                delay={0.2}
+                className="relative mb-16 ml-8 pl-8"
+              >
+                <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-r from-primary to-orange-500 shadow-lg shadow-primary/20">
+                  <span className="text-white font-bold">2</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  AI Analysis
+                </h3>
+                <p className="text-gray-300">
+                  Our advanced AI processes the document, identifying key
+                  concepts, important facts, and knowledge points to create
+                  meaningful questions.
+                </p>
+              </AnimatedCard>
+
+              <AnimatedCard
+                delay={0.3}
+                className="relative mb-16 ml-8 pl-8"
+              >
+                <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-r from-primary to-orange-500 shadow-lg shadow-primary/20">
+                  <span className="text-white font-bold">3</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Quiz Generation
+                </h3>
+                <p className="text-gray-300">
+                  Quizzley automatically generates relevant and challenging
+                  questions with accurate answers based on the content,
+                  customized to your preferences.
+                </p>
+              </AnimatedCard>
+
+              <AnimatedCard
+                delay={0.4}
+                className="relative ml-8 pl-8"
+              >
+                <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-r from-primary to-orange-500 shadow-lg shadow-primary/20">
+                  <span className="text-white font-bold">4</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Use and Share
+                </h3>
+                <p className="text-gray-300">
+                  Take the quiz yourself, share it with students, or analyze
+                  results through our comprehensive dashboard to track
+                  performance and progress.
+                </p>
+              </AnimatedCard>
+            </div>
+          </div>
+        </AnimatedSection>
 
         {/* Pricing Section */}
-        <section className="bg-background py-24 sm:py-32">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent mx-auto w-4/5 my-8"></div>
+
+        <section className="bg-gradient-to-b from-zinc-950 to-background py-24 sm:py-32 relative">
+          <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+
+          <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Simple, Transparent Pricing
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/90">
+                Simple, Transparent{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
+                  Pricing
+                </span>
               </h2>
               <p className="mt-6 text-lg leading-8 text-gray-300">
                 Choose the plan that works best for you
@@ -216,7 +423,7 @@ export default function Home() {
                     spotlightColor="#ff6a008d"
                   >
                     <div className="flex flex-col h-full">
-                      <div className="flex items-center justify-between mb-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
                         <h3 className="text-2xl font-semibold leading-8 text-white">
                           {plan.name}
                         </h3>
@@ -253,7 +460,7 @@ export default function Home() {
 
                       <div className="mt-8 pt-6 border-t border-white/10">
                         <Button
-                          className="w-full bg-primary hover:bg-primary/90"
+                          className="w-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:to-orange-600/90 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
                           variant="default"
                         >
                           {plan.name === "Free" ? "Get Started" : "Upgrade Now"}
@@ -263,6 +470,45 @@ export default function Home() {
                   </SpotlightCard>
                 </AnimatedCard>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="bg-gradient-to-b from-background to-zinc-950 py-16 sm:py-24 relative">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-orange-600/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+
+          <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
+            <div className="mx-auto max-w-3xl text-center mb-16">
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/90">
+                Frequently Asked{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
+                  Questions
+                </span>
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-gray-300">
+                Answers to the most common questions
+              </p>
+            </div>
+
+            <div className="mx-auto max-w-3xl">
+              <div className="grid gap-6">
+                {faqs.map((faq, index) => (
+                  <AnimatedCard
+                    key={faq.question}
+                    delay={index * 0.1}
+                    className="flex flex-col"
+                  >
+                    <div className="rounded-xl bg-gradient-to-br from-zinc-900/90 to-zinc-800/50 p-6 ring-1 ring-white/10 shadow-lg hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+                      <h3 className="text-lg font-medium text-white mb-2">
+                        {faq.question}
+                      </h3>
+                      <p className="text-gray-300">{faq.answer}</p>
+                    </div>
+                  </AnimatedCard>
+                ))}
+              </div>
             </div>
           </div>
         </section>

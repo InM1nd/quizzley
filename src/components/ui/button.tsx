@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        neo: "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white",
+        neo: "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white transition-all duration-300",
         neoOutline:
           "w-full bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 border border-zinc-800/50 hover:bg-orange-500/10 hover:border-orange-500/50 transition-all duration-300",
         neoSuccess:

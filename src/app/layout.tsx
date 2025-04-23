@@ -2,8 +2,10 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { SessionProvider } from "next-auth/react";
-import Header from "@/components/ui/header";
+
 import ClickSpark from "@/components/ui/click-spark";
+import ConditionalHeader from "@/components/ui/conditional-header";
+import { getUserSession } from "@/lib/user-session";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,11 +14,13 @@ export const metadata: Metadata = {
   description: "Generate Quizzez with AI to prepare faster!",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getUserSession();
+
   return (
     <html lang="en">
       <SessionProvider>
@@ -28,7 +32,7 @@ export default function RootLayout({
             sparkCount={8}
             duration={400}
           >
-            <Header />
+            <ConditionalHeader session={session} />
             {children}
           </ClickSpark>
         </body>

@@ -9,6 +9,7 @@ import saveQuizz from "./saveToDb";
 export async function POST(req: NextRequest) {
   const body = await req.formData();
   const document = body.get("pdf");
+  const questionCount = parseInt(body.get("questionCount") as string, 10) || 10;
 
   if (!document) {
     return NextResponse.json(
@@ -54,14 +55,25 @@ export async function POST(req: NextRequest) {
 
     // Формируем промпт с инструкциями по формату
     const prompt = `
-      Given the text, which is a summary of the document, generate a quiz based on the text.
+        Your task is to create a quiz based on the provided text, which is a summary of a document.
+        The quiz must contain EXACTLY ${questionCount} questions. No more, no less.
+        Ensure that every question is based SOLELY on the information within the provided text.
+        Follow the formatting instructions for the output.
+        You MUST return a valid JSON object.
+
+        Formatting Instructions:
+        ${formatInstructions}
+
+      Formatting Instructions:
       ${formatInstructions}
-      Text: ${texts.join("\n")}
+    
+      Text:
+      ${texts.join("\n")}
     `;
 
     const model = new ChatGoogleGenerativeAI({
       apiKey: process.env.GOOGLE_API_KEY!,
-      modelName: "gemini-2.0-flash",
+      modelName: "gemini-1.5-pro-latest",
     });
 
     const message = new HumanMessage({
