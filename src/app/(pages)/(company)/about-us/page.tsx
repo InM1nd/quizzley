@@ -19,7 +19,7 @@ import {
 const AboutUsPage = () => {
   const teamMembers = [
     {
-      name: "Alex Miller",
+      name: "Oleksandr Zabolotnyi",
       role: "Founder & Lead Developer",
       bio: "Software engineer with a passion for education and AI technology. Created Quizzley to help educators save time and improve learning outcomes.",
       image: "/placeholder-profile.jpg", // Плейсхолдер для будущей замены
@@ -56,7 +56,7 @@ const AboutUsPage = () => {
   return (
     <div className="flex flex-col min-h-screen justify-between">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 lg:pt-60">
+      <section className="relative overflow-hidden py-24 sm:pb-32 sm:pt-36">
         <div className="absolute inset-0 -z-10">
           <Aurora
             colorStops={["#FF6B00", "#FFA500", "#FF4500"]}

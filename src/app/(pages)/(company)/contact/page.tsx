@@ -12,13 +12,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import {
   Mail,
-  Phone,
-  MapPin,
   Send,
   ExternalLink,
   MessageCircle,
-  Clock,
   CheckCircle2,
+  HelpCircle,
+  Users,
 } from "lucide-react";
 
 const ContactPage = () => {
@@ -46,7 +45,7 @@ const ContactPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Имитация отправки формы
+    // Simulating form submission
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -75,14 +74,14 @@ const ContactPage = () => {
           <div className="relative z-10 py-16">
             <div className="mx-auto max-w-2xl text-center">
               <AnimatedHeading className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                Свяжитесь с <span className="text-primary">Нами</span>
+                Contact <span className="text-primary">Us</span>
               </AnimatedHeading>
               <AnimatedHeading
                 delay={0.2}
                 className="mt-6 text-lg leading-8 text-gray-300"
               >
-                У вас есть вопросы или предложения? Мы будем рады помочь и
-                выслушать ваше мнение.
+                Do you have questions or suggestions? We&apos;re happy to help
+                and hear your feedback.
               </AnimatedHeading>
             </div>
           </div>
@@ -100,7 +99,7 @@ const ContactPage = () => {
             >
               <div className="rounded-xl bg-zinc-900/80 p-8 ring-1 ring-white/10 h-full">
                 <h2 className="text-2xl font-bold text-white mb-6">
-                  Контактная информация
+                  Contact Information
                 </h2>
 
                 <div className="space-y-8">
@@ -114,39 +113,27 @@ const ContactPage = () => {
                   </div>
 
                   <div className="flex items-start">
-                    <Phone className="h-6 w-6 text-primary mr-4 mt-1" />
+                    <HelpCircle className="h-6 w-6 text-primary mr-4 mt-1" />
                     <div>
                       <h3 className="text-lg font-medium text-white">
-                        Телефон
+                        Support
                       </h3>
-                      <p className="mt-1 text-gray-300">+7 (123) 456-7890</p>
-                      <p className="mt-1 text-sm text-gray-400">
-                        Пн-Пт, 9:00-18:00
+                      <p className="mt-1 text-gray-300">
+                        Our team is available 24/7 to assist you with any
+                        questions or issues.
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start">
-                    <MapPin className="h-6 w-6 text-primary mr-4 mt-1" />
-                    <div>
-                      <h3 className="text-lg font-medium text-white">Адрес</h3>
-                      <p className="mt-1 text-gray-300">
-                        123 Технологический проспект, <br />
-                        Москва, Россия, 123456
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <Clock className="h-6 w-6 text-primary mr-4 mt-1" />
+                    <Users className="h-6 w-6 text-primary mr-4 mt-1" />
                     <div>
                       <h3 className="text-lg font-medium text-white">
-                        Время работы
+                        Community
                       </h3>
                       <p className="mt-1 text-gray-300">
-                        Понедельник - Пятница: 9:00 - 18:00
-                        <br />
-                        Суббота - Воскресенье: Выходной
+                        Join our growing community of users and share your
+                        experiences with Quizzley.
                       </p>
                     </div>
                   </div>
@@ -154,24 +141,27 @@ const ContactPage = () => {
 
                 <div className="mt-12">
                   <h3 className="text-lg font-medium text-white mb-4">
-                    Мы в социальных сетях
+                    Follow Us
                   </h3>
                   <div className="flex space-x-4">
                     <a
                       href="#"
                       className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition-colors"
+                      aria-label="Twitter"
                     >
                       <ExternalLink className="h-5 w-5 text-gray-300" />
                     </a>
                     <a
                       href="#"
                       className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition-colors"
+                      aria-label="LinkedIn"
                     >
                       <ExternalLink className="h-5 w-5 text-gray-300" />
                     </a>
                     <a
                       href="#"
                       className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition-colors"
+                      aria-label="GitHub"
                     >
                       <ExternalLink className="h-5 w-5 text-gray-300" />
                     </a>
@@ -188,24 +178,24 @@ const ContactPage = () => {
               <div className="rounded-xl bg-zinc-900/80 p-8 ring-1 ring-white/10 h-full">
                 <h2 className="text-2xl font-bold text-white mb-6">
                   <MessageCircle className="h-6 w-6 inline-block mr-2 text-primary" />
-                  Напишите нам
+                  Send Us a Message
                 </h2>
 
                 {isSubmitted ? (
                   <div className="flex flex-col items-center justify-center py-12">
                     <CheckCircle2 className="h-16 w-16 text-primary mb-4" />
                     <h3 className="text-xl font-medium text-white mb-2">
-                      Сообщение отправлено!
+                      Message Sent!
                     </h3>
                     <p className="text-gray-300 text-center">
-                      Спасибо за обращение! Мы свяжемся с вами в ближайшее
-                      время.
+                      Thank you for reaching out! We&apos;ll get back to you as
+                      soon as possible.
                     </p>
                     <Button
                       className="mt-6"
                       onClick={() => setIsSubmitted(false)}
                     >
-                      Отправить еще одно сообщение
+                      Send Another Message
                     </Button>
                   </div>
                 ) : (
@@ -218,14 +208,14 @@ const ContactPage = () => {
                         htmlFor="name"
                         className="text-zinc-400"
                       >
-                        Ваше имя
+                        Your Name
                       </Label>
                       <Input
                         id="name"
                         name="name"
                         value={formState.name}
                         onChange={handleChange}
-                        placeholder="Иван Иванов"
+                        placeholder="John Doe"
                         required
                         className="bg-zinc-900/50 border-zinc-800/50 focus:border-orange-500/50"
                         disabled={isSubmitting}
@@ -257,14 +247,14 @@ const ContactPage = () => {
                         htmlFor="subject"
                         className="text-zinc-400"
                       >
-                        Тема
+                        Subject
                       </Label>
                       <Input
                         id="subject"
                         name="subject"
                         value={formState.subject}
                         onChange={handleChange}
-                        placeholder="Тема вашего сообщения"
+                        placeholder="Your message subject"
                         required
                         className="bg-zinc-900/50 border-zinc-800/50 focus:border-orange-500/50"
                         disabled={isSubmitting}
@@ -276,14 +266,14 @@ const ContactPage = () => {
                         htmlFor="message"
                         className="text-zinc-400"
                       >
-                        Сообщение
+                        Message
                       </Label>
                       <Textarea
                         id="message"
                         name="message"
                         value={formState.message}
                         onChange={handleChange}
-                        placeholder="Напишите ваше сообщение здесь..."
+                        placeholder="Write your message here..."
                         required
                         className="min-h-[150px] bg-zinc-900/50 border-zinc-800/50 focus:border-orange-500/50"
                         disabled={isSubmitting}
@@ -297,10 +287,10 @@ const ContactPage = () => {
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
-                        "Отправка..."
+                        "Sending..."
                       ) : (
                         <>
-                          Отправить сообщение
+                          Send Message
                           <Send className="h-4 w-4" />
                         </>
                       )}

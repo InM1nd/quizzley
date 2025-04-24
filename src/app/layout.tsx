@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import ClickSpark from "@/components/ui/click-spark";
 import ConditionalHeader from "@/components/ui/conditional-header";
 import { getUserSession } from "@/lib/user-session";
+import Aurora from "@/components/ui/aurora";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +34,7 @@ export default async function RootLayout({
             duration={400}
           >
             <ConditionalHeader session={session} />
+
             {children}
           </ClickSpark>
         </body>

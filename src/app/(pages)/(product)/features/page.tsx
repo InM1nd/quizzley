@@ -108,7 +108,7 @@ const FeaturesPage = () => {
   return (
     <div className="flex flex-col min-h-screen justify-between">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20">
+      <section className="relative overflow-hidden py-24 sm:pb-32 sm:pt-36">
         <div className="absolute inset-0 -z-10">
           <Aurora
             colorStops={["#FF6B00", "#FFA500", "#FF4500"]}
@@ -138,7 +138,7 @@ const FeaturesPage = () => {
       </section>
 
       {/* Main Features Section */}
-      <section className="bg-background py-24 sm:py-32">
+      <section className="bg-background py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -172,7 +172,7 @@ const FeaturesPage = () => {
       </section>
 
       {/* Image Showcase Section */}
-      <AnimatedSection className="bg-background py-24 sm:py-32">
+      <AnimatedSection className="bg-background py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -284,7 +284,7 @@ const FeaturesPage = () => {
       </AnimatedSection>
 
       {/* Additional Features Grid */}
-      <section className="bg-background py-24 sm:py-32">
+      <section className="bg-background py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -318,7 +318,7 @@ const FeaturesPage = () => {
       </section>
 
       {/* How It Works Section */}
-      <AnimatedSection className="bg-background py-24 sm:py-32">
+      <AnimatedSection className="bg-background py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -403,7 +403,7 @@ const FeaturesPage = () => {
       </AnimatedSection>
 
       {/* CTA Section */}
-      <section className="bg-background py-24">
+      <section className="bg-background py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">

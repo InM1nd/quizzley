@@ -34,19 +34,24 @@ export function FeaturesSection() {
         </p>
       </div>
       <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-        <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3 place-items-center">
           {features.map((feature, index) => (
             <AnimatedCard
               key={feature.title}
               delay={index * 0.2}
-              className="flex flex-col"
+              className="flex flex-col text-center items-center max-w-sm mx-auto"
             >
-              <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-white">
-                <AnimatedIcon icon={feature.icon} />
+              <dt className="flex flex-col items-center gap-y-3 text-base font-semibold leading-7 text-white">
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <AnimatedIcon
+                    icon={feature.icon}
+                    className="h-6 w-6 text-primary"
+                  />
+                </div>
                 {feature.title}
               </dt>
               <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-300">
-                <p className="flex-auto">{feature.description}</p>
+                <p className="flex-auto text-center">{feature.description}</p>
               </dd>
             </AnimatedCard>
           ))}
