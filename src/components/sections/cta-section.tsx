@@ -8,7 +8,7 @@ import Magnet from "../ui/magnet";
 
 export function CTASection() {
   return (
-    <section className="relative overflow-hidden bg-background py-24">
+    <section className="relative overflow-hidden bg-background py-20 sm:py-24">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background to-background/80"></div>
       <div className="mx-auto max-w-7xl px-6 lg:px-8 h-full">
         <div className="flex flex-col items-center justify-center h-full space-y-8">

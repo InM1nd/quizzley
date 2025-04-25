@@ -22,20 +22,21 @@ import {
   Code,
   PenTool,
   Bell,
+  Mic,
 } from "lucide-react";
 
 const RoadmapPage = () => {
   // Data about planned features with estimated timelines
   const roadmapItems = [
     {
-      quarter: "Q2 2023",
+      quarter: "Q1 2025",
       title: "MVP Launch",
       description:
         "Launch of the minimum viable product with core features for creating AI-powered quizzes based on documents.",
       status: "completed",
       features: [
         {
-          title: "Basic AI for Question Creation",
+          title: "Basic AI for Quizz Creation",
           description:
             "Algorithm for generating simple multiple-choice questions",
           icon: Brain,
@@ -53,11 +54,11 @@ const RoadmapPage = () => {
       ],
     },
     {
-      quarter: "Q3 2023",
+      quarter: "Q2 2025",
       title: "Core Functionality Improvement",
       description:
         "Expansion of core features and improved user interface based on early user feedback.",
-      status: "completed",
+      status: "in-progress",
       features: [
         {
           title: "Enhanced AI Engine",
@@ -78,11 +79,11 @@ const RoadmapPage = () => {
       ],
     },
     {
-      quarter: "Q1 2024",
+      quarter: "Q3 2025",
       title: "Advanced Analytics",
       description:
         "Launch of in-depth analytics tools to help educators understand student progress and weak points.",
-      status: "in-progress",
+      status: "planned",
       features: [
         {
           title: "Detailed Performance Reports",
@@ -104,36 +105,34 @@ const RoadmapPage = () => {
       ],
     },
     {
-      quarter: "Q2 2024",
-      title: "Collaborative Features",
-      description:
-        "Implementation of tools for teamwork and collaborative test creation between educators.",
+      quarter: "Q4 2025",
+      title: "Podcast Features and Collaborative Quizzes",
+      description: "Implementation of tools for creating podcasts from text.",
       status: "planned",
       features: [
         {
-          title: "Shared Access",
-          description:
-            "Ability to share quizzes with colleagues with various access levels",
-          icon: Users,
+          title: "Podcast Creation",
+          description: "Ability to create podcasts from text and documents",
+          icon: Mic,
         },
         {
-          title: "Commenting and Feedback",
+          title: "Enhanced Quizz Creation",
           description: "Tools for discussing and improving tests within a team",
           icon: FileText,
         },
         {
-          title: "Templates and Libraries",
-          description: "Shared question libraries for organizations",
-          icon: BookOpen,
+          title: "Collaborative Quizzes",
+          description: "Ability to create quizzes with colleagues",
+          icon: Users,
         },
       ],
     },
     {
-      quarter: "Q3 2024",
+      quarter: "2026 and Beyond",
       title: "Mobile Application",
       description:
         "Launch of native mobile apps for iOS and Android for working with quizzes on the go.",
-      status: "planned",
+      status: "vision",
       features: [
         {
           title: "Mobile Editor",
@@ -152,60 +151,60 @@ const RoadmapPage = () => {
         },
       ],
     },
-    {
-      quarter: "Q4 2024",
-      title: "Integration Ecosystem",
-      description:
-        "Development of API and integrations with popular LMS and educational platforms.",
-      status: "planned",
-      features: [
-        {
-          title: "Developer API",
-          description:
-            "Public API for creating custom solutions and integrations",
-          icon: Code,
-        },
-        {
-          title: "LMS Integrations",
-          description:
-            "Direct integrations with Canvas, Moodle, Google Classroom, and others",
-          icon: LinkIcon,
-        },
-        {
-          title: "Single Sign-On (SSO)",
-          description:
-            "Support for single sign-on for educational institutions",
-          icon: ShieldCheck,
-        },
-      ],
-    },
-    {
-      quarter: "2025 and Beyond",
-      title: "Future Prospects",
-      description:
-        "Long-term ambitious plans to transform educational technology.",
-      status: "vision",
-      features: [
-        {
-          title: "AI Personalized Learning",
-          description:
-            "Fully adaptive tests that adjust to individual student needs",
-          icon: Brain,
-        },
-        {
-          title: "Global Content Library",
-          description:
-            "Community for sharing educational resources among teachers worldwide",
-          icon: Globe,
-        },
-        {
-          title: "Enhanced Accessibility",
-          description:
-            "Tools for maximum accessibility of educational content for all students",
-          icon: Users,
-        },
-      ],
-    },
+    // {
+    //   quarter: "Q4 2024",
+    //   title: "Integration Ecosystem",
+    //   description:
+    //     "Development of API and integrations with popular LMS and educational platforms.",
+    //   status: "planned",
+    //   features: [
+    //     {
+    //       title: "Developer API",
+    //       description:
+    //         "Public API for creating custom solutions and integrations",
+    //       icon: Code,
+    //     },
+    //     {
+    //       title: "LMS Integrations",
+    //       description:
+    //         "Direct integrations with Canvas, Moodle, Google Classroom, and others",
+    //       icon: LinkIcon,
+    //     },
+    //     {
+    //       title: "Single Sign-On (SSO)",
+    //       description:
+    //         "Support for single sign-on for educational institutions",
+    //       icon: ShieldCheck,
+    //     },
+    //   ],
+    // },
+    // {
+    //   quarter: "2025 and Beyond",
+    //   title: "Future Prospects",
+    //   description:
+    //     "Long-term ambitious plans to transform educational technology.",
+    //   status: "vision",
+    //   features: [
+    //     {
+    //       title: "AI Personalized Learning",
+    //       description:
+    //         "Fully adaptive tests that adjust to individual student needs",
+    //       icon: Brain,
+    //     },
+    //     {
+    //       title: "Global Content Library",
+    //       description:
+    //         "Community for sharing educational resources among teachers worldwide",
+    //       icon: Globe,
+    //     },
+    //     {
+    //       title: "Enhanced Accessibility",
+    //       description:
+    //         "Tools for maximum accessibility of educational content for all students",
+    //       icon: Users,
+    //     },
+    //   ],
+    // },
   ];
 
   // Status badge icon
@@ -244,7 +243,7 @@ const RoadmapPage = () => {
   return (
     <div className="flex flex-col min-h-screen justify-between">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20">
+      <section className="relative overflow-hidden py-24 sm:pb-32 sm:pt-36">
         <div className="absolute inset-0 -z-10">
           <Aurora
             colorStops={["#FF6B00", "#FFA500", "#FF4500"]}
@@ -263,8 +262,9 @@ const RoadmapPage = () => {
                 delay={0.2}
                 className="mt-6 text-lg leading-8 text-gray-300"
               >
-                Our development plan and future updates to create the best
-                platform for education
+                We are constantly working to improve Quizzley, based on user
+                feedback and modern trends in education. Below is our roadmap
+                with development plans for the coming years.
               </AnimatedHeading>
             </div>
           </div>
@@ -272,20 +272,19 @@ const RoadmapPage = () => {
       </section>
 
       {/* Introduction Section */}
-      <AnimatedSection className="bg-background py-12 sm:py-16">
+      <AnimatedSection className="bg-background">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <p className="text-lg text-gray-300">
-              We are constantly working to improve Quizzley, based on user
-              feedback and modern trends in education. Below is our roadmap with
-              development plans for the coming years.
+            <p className="text-xl text-gray-300">
+              Here is our development plan and future updates to create the best
+              platform for education improvement!
             </p>
           </div>
         </div>
       </AnimatedSection>
 
       {/* Timeline Section */}
-      <section className="bg-background py-12 sm:py-24">
+      <section className="bg-background py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="relative mx-auto max-w-5xl">
             <div className="absolute left-12 h-full w-0.5 -translate-x-1/2 bg-gradient-to-b from-primary/80 via-primary/40 to-primary/10 hidden md:block"></div>

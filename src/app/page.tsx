@@ -307,7 +307,7 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="bg-gradient-to-b from-zinc-950 to-background py-24 sm:py-32 relative">
+        <section className="bg-gradient-to-b from-zinc-950 to-background py-20 sm:py-24 relative">
           <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
           <FeaturesSection />
         </section>
@@ -315,7 +315,7 @@ export default function Home() {
         {/* Image Showcase Section */}
         <div className="h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto w-2/3 mb-4"></div>
 
-        <AnimatedSection className="bg-background py-24 sm:py-32 relative">
+        <AnimatedSection className="bg-background py-20 sm:py-24 relative">
           <div className="absolute top-10 left-1/3 w-72 h-72 bg-primary/20 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
           <div className="absolute bottom-10 right-1/3 w-80 h-80 bg-orange-600/20 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
 
@@ -483,13 +483,8 @@ export default function Home() {
           </div>
         </AnimatedSection>
 
-        {/* Decorative Wave Divider */}
-        <div className="relative h-24 mb-12">
-          <div className="absolute inset-0 bg-[url('/wave-divider.svg')] bg-repeat-x bg-top w-full h-full opacity-30"></div>
-        </div>
-
         {/* How It Works Section */}
-        <AnimatedSection className="bg-gradient-to-b from-background to-zinc-950 py-24 sm:py-32 relative">
+        <AnimatedSection className="bg-gradient-to-l from-background to-zinc-950 py-20 sm:py-24 relative">
           <div className="absolute top-20 right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
           <div className="absolute bottom-20 left-10 w-64 h-64 bg-orange-600/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
 
@@ -582,9 +577,9 @@ export default function Home() {
         </AnimatedSection>
 
         {/* Pricing Section */}
-        <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent mx-auto w-4/5 my-8"></div>
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent  mx-auto w-4/5 my-8"></div>
 
-        {/* <section className="bg-gradient-to-b from-zinc-950 to-background py-24 sm:py-32 relative">
+        {/* <section className="bg-gradient-to-b from-zinc-950 to-background py-20 sm:py-24 relative">
           <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
 
           <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
@@ -662,7 +657,7 @@ export default function Home() {
         </section> */}
 
         {/* FAQ Section */}
-        <section className="bg-gradient-to-b from-background to-zinc-950 py-16 sm:py-24 relative">
+        <section className="bg-gradient-to-b from-background to-zinc-950 py-20 sm:py-24 relative">
           <div className="absolute top-0 right-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-orange-600/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
 

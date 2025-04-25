@@ -14,6 +14,9 @@ import {
   Award,
   Star,
   Heart,
+  Github,
+  Linkedin,
+  Send,
 } from "lucide-react";
 
 const AboutUsPage = () => {
@@ -21,8 +24,25 @@ const AboutUsPage = () => {
     {
       name: "Oleksandr Zabolotnyi",
       role: "Founder & Lead Developer",
-      bio: "Software engineer with a passion for education and AI technology. Created Quizzley to help educators save time and improve learning outcomes.",
-      image: "/placeholder-profile.jpg", // Плейсхолдер для будущей замены
+      bio: "Front-end Developer based in Vienna. Passionate about building AI-driven tools that make education more accessible and effective. Created Quizzley to help students prepare for exams and seminars faster and smarter.",
+      image: "/placeholder-profile.jpg", // заменишь, когда будет фото
+      socialLinks: [
+        {
+          name: "GitHub",
+          url: "https://github.com/zabolotnyi-oleksandr",
+          icon: "github",
+        },
+        {
+          name: "LinkedIn",
+          url: "https://linkedin.com/in/zabolotnyi-oleksandr",
+          icon: "linkedin",
+        },
+        {
+          name: "Send",
+          url: "https://t.me/InM1nd",
+          icon: "send",
+        },
+      ],
     },
   ];
 
@@ -84,29 +104,27 @@ const AboutUsPage = () => {
       </section>
 
       {/* Our Story Section */}
-      <AnimatedSection className="bg-background">
+      <AnimatedSection>
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid grid-cols-1 gap-8 lg:grid-cols-2 items-center">
             <div>
               <p className="text-gray-300 mb-6">
-                Quizzley was born from a simple observation: educators spend
-                hours creating quizzes and assessments that could be automated
-                with the right technology. As a software developer with friends
-                in education, I witnessed firsthand the challenges teachers face
-                with limited time and resources.
+                Quizzley was created with one goal in mind: to make studying
+                easier and more efficient for students preparing for exams and
+                seminars. As a developer surrounded by friends in university, I
+                saw firsthand how overwhelming academic prep can be.
               </p>
               <p className="text-gray-300 mb-6">
-                The initial concept was straightforward - use AI to analyze
-                educational documents and automatically generate high-quality
-                quiz questions. What started as a weekend project quickly
-                evolved as early users provided valuable feedback and requested
-                more features.
+                The idea was simple — use AI to analyze study materials and
+                automatically generate high-quality quizzes. What started as a
+                weekend project quickly gained momentum thanks to feedback from
+                early users who wanted more features and flexibility.
               </p>
               <p className="text-gray-300">
-                Today, Quizzley has grown into a comprehensive platform that
-                helps educators save time, create engaging assessments, and
-                analyze student performance - all powered by cutting-edge AI
-                technology.
+                Today, Quizzley is a smart, student-focused platform that helps
+                learners study faster, retain information better, and feel more
+                confident heading into their next academic challenge — whether
+                it&apos;s a tough seminar or a final exam.
               </p>
             </div>
 
@@ -126,7 +144,7 @@ const AboutUsPage = () => {
       </AnimatedSection>
 
       {/* Mission & Vision Section */}
-      <section className="bg-background py-24 sm:py-32">
+      <section className="bg-background py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <AnimatedCard
@@ -138,12 +156,12 @@ const AboutUsPage = () => {
                   <Star className="h-6 w-6 text-primary mr-2" />
                   Our Mission
                 </h3>
-                <p className="text-gray-300">
-                  Our mission is to empower educators with AI-powered tools that
-                  save time and enhance the learning experience. We believe that
-                  by automating routine tasks like quiz creation, teachers can
-                  focus more on what truly matters - connecting with students
-                  and providing personalized guidance.
+                <p className="text-gray-300 mb-6">
+                  Our mission is to empower students with AI-driven tools that
+                  make studying smarter, faster, and more effective. By
+                  automating time-consuming tasks like quiz generation, Quizzley
+                  helps students focus on what really matters — understanding
+                  the material and feeling confident in class and during exams.
                 </p>
               </div>
             </AnimatedCard>
@@ -158,11 +176,11 @@ const AboutUsPage = () => {
                   Our Vision
                 </h3>
                 <p className="text-gray-300">
-                  We envision a future where AI seamlessly integrates with
-                  education, making high-quality learning resources accessible
-                  to everyone. Quizzley aims to be at the forefront of this
-                  transformation, continuously innovating to create tools that
-                  adapt to the evolving needs of modern education.
+                  We see a future where AI becomes a natural part of the
+                  learning journey — making high-quality, personalized study
+                  resources available to everyone. Quizzley is built to lead
+                  this shift, constantly evolving to meet the real needs of
+                  students in today&aposs fast-paced academic world.
                 </p>
               </div>
             </AnimatedCard>
@@ -171,7 +189,7 @@ const AboutUsPage = () => {
       </section>
 
       {/* Our Values Section */}
-      <AnimatedSection className="bg-background py-24 sm:py-32">
+      <AnimatedSection className="bg-background py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -205,7 +223,7 @@ const AboutUsPage = () => {
       </AnimatedSection>
 
       {/* Meet the Team Section */}
-      <section className="bg-background py-24 sm:py-32">
+      <section className="bg-background py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -235,7 +253,30 @@ const AboutUsPage = () => {
                         {member.name}
                       </h3>
                       <p className="text-primary mb-4">{member.role}</p>
-                      <p className="text-gray-300">{member.bio}</p>
+                      <p className="text-gray-300 mb-4">{member.bio}</p>
+                      <div className="flex space-x-4">
+                        {member.socialLinks &&
+                          member.socialLinks.map((link) => (
+                            <a
+                              key={link.name}
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-gray-400 hover:text-primary transition-colors"
+                              aria-label={link.name}
+                            >
+                              {link.icon === "github" && (
+                                <Github className="h-5 w-5" />
+                              )}
+                              {link.icon === "linkedin" && (
+                                <Linkedin className="h-5 w-5" />
+                              )}
+                              {link.icon === "send" && (
+                                <Send className="h-5 w-5" />
+                              )}
+                            </a>
+                          ))}
+                      </div>
                     </div>
                   </div>
                 </div>

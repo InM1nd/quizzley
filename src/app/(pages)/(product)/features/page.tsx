@@ -106,7 +106,7 @@ const FeaturesPage = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen justify-between">
+    <div className="flex flex-col min-h-screen justify-between ">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-24 sm:pb-32 sm:pt-36">
         <div className="absolute inset-0 -z-10">
@@ -172,35 +172,54 @@ const FeaturesPage = () => {
       </section>
 
       {/* Image Showcase Section */}
-      <AnimatedSection className="bg-background py-20 sm:py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <AnimatedSection className="bg-background py-20 sm:py-24 relative">
+        <div className="absolute top-10 left-1/3 w-72 h-72 bg-primary/20 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
+        <div className="absolute bottom-10 right-1/3 w-80 h-80 bg-orange-600/20 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
+
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
           <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              See Quizzley in Action
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/90">
+              See{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
+                Quizzley
+              </span>{" "}
+              in Action
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">
               Experience our intuitive interface and powerful features
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className="grid grid-cols- gap-8 lg:grid-cols-2">
             {/* Image Placeholder 1 */}
             <AnimatedCard
               delay={0.1}
               className="flex flex-col"
             >
-              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center">
-                <div className="text-zinc-500 text-center p-8">
-                  <FileText className="h-16 w-16 mx-auto mb-4 opacity-40" />
-                  <p className="text-lg font-medium">
-                    Document Upload Interface
-                  </p>
-                  <p className="text-sm mt-2">
-                    Image showing the easy document upload process
-                  </p>
-                </div>
+              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                {/* <div className="text-zinc-400 text-center p-8">
+                    <FileText className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                    <p className="text-lg font-medium">
+                      Document Upload Interface
+                    </p>
+                    <p className="text-sm mt-2">
+                      Image showing the easy document upload process
+                    </p>
+                  </div> */}
+                <Image
+                  src="/images/landing/Doc_Upload.png"
+                  alt="Quizz Dashboard"
+                  className="object-contain rounded-lg"
+                  width={600}
+                  height={338}
+                  priority
+                  style={{ maxHeight: "100%", maxWidth: "100%" }}
+                />
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-white">
+              <h3 className="mt-4 text-xl font-semibold text-white flex items-center gap-2">
+                <div className="bg-primary/10 p-1.5 rounded-md">
+                  <FileText className="h-4 w-4 text-primary" />
+                </div>{" "}
                 Effortless Document Uploading
               </h3>
               <p className="mt-2 text-gray-300">
@@ -214,9 +233,9 @@ const FeaturesPage = () => {
               delay={0.2}
               className="flex flex-col"
             >
-              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center">
-                <div className="text-zinc-500 text-center p-8">
-                  <Brain className="h-16 w-16 mx-auto mb-4 opacity-40" />
+              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                <div className="text-zinc-400 text-center p-8">
+                  <Brain className="h-16 w-16 mx-auto mb-4 text-primary/50" />
                   <p className="text-lg font-medium">
                     AI Processing Visualization
                   </p>
@@ -224,8 +243,20 @@ const FeaturesPage = () => {
                     Image showing AI analyzing document contents
                   </p>
                 </div>
+                {/* <Image
+                    src="/images/landing/AI_Processing.png"
+                    alt="AI Analysis Process"
+                    className="object-contain rounded-lg"
+                    width={600}
+                    height={338}
+                    priority
+                    style={{ maxHeight: "100%", maxWidth: "100%" }}
+                  /> */}
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-white">
+              <h3 className="mt-4 text-xl font-semibold text-white flex items-center gap-2">
+                <div className="bg-primary/10 p-1.5 rounded-md">
+                  <Brain className="h-4 w-4 text-primary" />
+                </div>{" "}
                 Advanced AI Analysis
               </h3>
               <p className="mt-2 text-gray-300">
@@ -239,16 +270,30 @@ const FeaturesPage = () => {
               delay={0.3}
               className="flex flex-col"
             >
-              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center">
-                <div className="text-zinc-500 text-center p-8">
-                  <Sparkles className="h-16 w-16 mx-auto mb-4 opacity-40" />
-                  <p className="text-lg font-medium">Quiz Question Showcase</p>
-                  <p className="text-sm mt-2">
-                    Image showing generated quiz questions and answer options
-                  </p>
-                </div>
+              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                {/* <div className="text-zinc-400 text-center p-8">
+                    <Sparkles className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                    <p className="text-lg font-medium">
+                      Quiz Question Showcase
+                    </p>
+                    <p className="text-sm mt-2">
+                      Image showing generated quiz questions and answer options
+                    </p>
+                  </div> */}
+                <Image
+                  src="/images/landing/Question_Showcase.png"
+                  alt="Quiz Generation Example"
+                  className="object-contain rounded-lg"
+                  width={600}
+                  height={338}
+                  priority
+                  style={{ maxHeight: "100%", maxWidth: "100%" }}
+                />
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-white">
+              <h3 className="mt-4 text-xl font-semibold text-white flex items-center gap-2">
+                <div className="bg-primary/10 p-1.5 rounded-md">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                </div>{" "}
                 Intelligent Question Generation
               </h3>
               <p className="mt-2 text-gray-300">
@@ -262,16 +307,28 @@ const FeaturesPage = () => {
               delay={0.4}
               className="flex flex-col"
             >
-              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center">
-                <div className="text-zinc-500 text-center p-8">
-                  <BarChart3 className="h-16 w-16 mx-auto mb-4 opacity-40" />
-                  <p className="text-lg font-medium">Analytics Dashboard</p>
-                  <p className="text-sm mt-2">
-                    Image showing detailed performance analytics
-                  </p>
-                </div>
+              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                {/* <div className="text-zinc-400 text-center p-8">
+                    <BarChart3 className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                    <p className="text-lg font-medium">Analytics Dashboard</p>
+                    <p className="text-sm mt-2">
+                      Image showing detailed performance analytics
+                    </p>
+                  </div> */}
+                <Image
+                  src="/images/landing/User_Dashboard.png"
+                  alt="Analytics Dashboard"
+                  className="object-contain rounded-lg"
+                  width={600}
+                  height={338}
+                  priority
+                  style={{ maxHeight: "100%", maxWidth: "100%" }}
+                />
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-white">
+              <h3 className="mt-4 text-xl font-semibold text-white flex items-center gap-2">
+                <div className="bg-primary/10 p-1.5 rounded-md">
+                  <BarChart3 className="h-4 w-4 text-primary" />
+                </div>{" "}
                 Comprehensive Analytics
               </h3>
               <p className="mt-2 text-gray-300">

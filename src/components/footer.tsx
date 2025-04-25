@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Instagram, Twitter, X } from "lucide-react";
+import { Instagram, Linkedin, Twitter, X } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -122,6 +122,14 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <Instagram className="h-5 w-5" />
+              </Link>
+              <Link
+                href="https://linkedin.com"
+                className="text-zinc-400 hover:text-orange-500 transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Linkedin className="h-5 w-5" />
               </Link>
             </div>
           </div>

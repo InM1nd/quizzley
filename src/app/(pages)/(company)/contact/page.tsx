@@ -18,6 +18,9 @@ import {
   CheckCircle2,
   HelpCircle,
   Users,
+  Twitter,
+  Instagram,
+  Linkedin,
 } from "lucide-react";
 
 const ContactPage = () => {
@@ -149,21 +152,21 @@ const ContactPage = () => {
                       className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition-colors"
                       aria-label="Twitter"
                     >
-                      <ExternalLink className="h-5 w-5 text-gray-300" />
+                      <Twitter className="h-5 w-5 text-gray-300" />
                     </a>
                     <a
                       href="#"
                       className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition-colors"
                       aria-label="LinkedIn"
                     >
-                      <ExternalLink className="h-5 w-5 text-gray-300" />
+                      <Instagram className="h-5 w-5 text-gray-300" />
                     </a>
                     <a
                       href="#"
                       className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition-colors"
                       aria-label="GitHub"
                     >
-                      <ExternalLink className="h-5 w-5 text-gray-300" />
+                      <Linkedin className="h-5 w-5 text-gray-300" />
                     </a>
                   </div>
                 </div>
