@@ -9,28 +9,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { NavMenu } from "@/components/NavMenu";
 import { Wand, Menu, X } from "lucide-react";
-import { signOutAction } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 function SignOut() {
   return (
-    <form action={signOutAction}>
-      <Button
-        type="submit"
-        variant="ghost"
-        className="text-white hover:text-primary hover:bg-white/10"
-      >
-        Sign Out
-      </Button>
-    </form>
+    <Button
+      type="button"
+      variant="ghost"
+      className="text-white hover:text-primary hover:bg-white/10"
+      onClick={() => signOut()}
+    >
+      Sign Out
+    </Button>
   );
 }
 
 export default function ClientHeader({ session }: { session: any }) {
   const router = useRouter();
+  const { data: sessionData } = useSession();
   const [isOpen, setIsOpen] = useState(false);
+
+  // Активная сессия имеет приоритет над пропсом session
+  const activeSession = sessionData || session;
 
   // Закрыть мобильное меню при изменении размера экрана
   useEffect(() => {
@@ -58,7 +61,9 @@ export default function ClientHeader({ session }: { session: any }) {
     { href: "/features", label: "Features" },
     { href: "/about-us", label: "About" },
     { href: "/roadmap", label: "Roadmap" },
-    ...(session?.user ? [{ href: "/dashboard", label: "Dashboard" }] : []),
+    ...(activeSession?.user
+      ? [{ href: "/dashboard", label: "Dashboard" }]
+      : []),
   ];
 
   return (
@@ -89,17 +94,17 @@ export default function ClientHeader({ session }: { session: any }) {
 
             {/* Десктопная авторизация */}
             <div className="hidden md:block">
-              {session?.user ? (
+              {activeSession?.user ? (
                 <div className="flex items-center gap-4">
-                  {session.user.name && session.user.image && (
+                  {activeSession.user.name && activeSession.user.image && (
                     <Button
                       variant="ghost"
                       className="hover:bg-white/10"
                       onClick={navigateToDashboard}
                     >
                       <Image
-                        src={session.user.image}
-                        alt={session.user.name}
+                        src={activeSession.user.image}
+                        alt={activeSession.user.name}
                         width={32}
                         height={32}
                         className="rounded-full"
@@ -109,14 +114,13 @@ export default function ClientHeader({ session }: { session: any }) {
                   <SignOut />
                 </div>
               ) : (
-                <Link href="api/auth/signin">
-                  <Button
-                    variant="outline"
-                    className="rounded-xl border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
-                  >
-                    Sign In
-                  </Button>
-                </Link>
+                <Button
+                  variant="outline"
+                  className="rounded-xl border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                  onClick={() => signIn("google")}
+                >
+                  Sign In
+                </Button>
               )}
             </div>
 
@@ -164,13 +168,13 @@ export default function ClientHeader({ session }: { session: any }) {
                     <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-2"></div>
 
                     {/* Мобильная авторизация */}
-                    {session?.user ? (
+                    {activeSession?.user ? (
                       <div className="flex flex-col space-y-4 py-2">
                         <div className="flex items-center gap-3 px-4">
-                          {session.user.image && (
+                          {activeSession.user.image && (
                             <Image
-                              src={session.user.image}
-                              alt={session.user.name || "User"}
+                              src={activeSession.user.image}
+                              alt={activeSession.user.name || "User"}
                               width={40}
                               height={40}
                               className="rounded-full"
@@ -178,39 +182,33 @@ export default function ClientHeader({ session }: { session: any }) {
                           )}
                           <div>
                             <p className="font-medium text-white">
-                              {session.user.name}
+                              {activeSession.user.name}
                             </p>
                             <p className="text-sm text-gray-400">
-                              {session.user.email}
+                              {activeSession.user.email}
                             </p>
                           </div>
                         </div>
-                        <form
-                          action={signOutAction}
-                          className="px-4"
-                        >
+                        <div className="px-4">
                           <Button
-                            type="submit"
+                            type="button"
                             variant="ghost"
                             className="w-full justify-center text-white hover:text-primary hover:bg-white/10"
+                            onClick={() => signOut()}
                           >
                             Sign Out
                           </Button>
-                        </form>
+                        </div>
                       </div>
                     ) : (
                       <div className="px-4 py-2">
-                        <Link
-                          href="api/auth/signin"
-                          onClick={handleLinkClick}
+                        <Button
+                          variant="outline"
+                          className="w-full justify-center rounded-xl border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                          onClick={() => signIn("google")}
                         >
-                          <Button
-                            variant="outline"
-                            className="w-full justify-center rounded-xl border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
-                          >
-                            Sign In
-                          </Button>
-                        </Link>
+                          Sign In
+                        </Button>
                       </div>
                     )}
                   </div>

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { SessionProvider } from "next-auth/react";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import ClickSpark from "@/components/ui/click-spark";
 import ConditionalHeader from "@/components/ui/conditional-header";
 import { getUserSession } from "@/lib/user-session";
 import Aurora from "@/components/ui/aurora";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,8 +24,8 @@ export default async function RootLayout({
   const session = await getUserSession();
 
   return (
-    <html lang="en">
-      <SessionProvider>
+    <SessionProvider>
+      <html lang="en">
         <body className={"dark"}>
           <ClickSpark
             sparkColor="#fff"
@@ -38,7 +39,7 @@ export default async function RootLayout({
             {children}
           </ClickSpark>
         </body>
-      </SessionProvider>
-    </html>
+      </html>
+    </SessionProvider>
   );
 }
