@@ -7,6 +7,7 @@ interface Quizz {
   name: string | null;
   description: string | null;
   userId: string | null;
+  status?: string | null;
   questions: {
     id: number;
     questionText: string | null;
@@ -37,7 +38,18 @@ export async function getQuizzById(id: string): Promise<Quizz | null> {
     },
   });
 
-  if (!quizz || quizz.questions.length === 0) {
+  if (!quizz) {
+    return null;
+  }
+
+  if (quizz.status === "processing") {
+    return {
+      ...quizz,
+      questions: [],
+    };
+  }
+
+  if (quizz.questions.length === 0 && quizz.status === "completed") {
     return null;
   }
 

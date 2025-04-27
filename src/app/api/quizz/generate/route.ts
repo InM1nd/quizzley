@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import { HumanMessage } from "@langchain/core/messages";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
-import { StructuredOutputParser } from "langchain/output_parsers";
-import { z } from "zod";
-import saveQuizz from "./saveToDb";
+import { db } from "@/db";
+import { quizzes } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
+// Новый маршрут для инициирования задания
 export async function POST(req: NextRequest) {
   const body = await req.formData();
   const document = body.get("pdf");
@@ -19,7 +18,55 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const pdfLoader = new PDFLoader(document as Blob, {
+    // Сохраняем PDF как Blob для дальнейшей обработки
+    const pdfBlob = document as Blob;
+
+    // Создаем запись о квизе в статусе "processing"
+    const newQuizz = await db
+      .insert(quizzes)
+      .values({
+        name: "Quiz being generated...",
+        description:
+          "Your quiz is currently being generated and will be ready soon.",
+        status: "processing",
+      })
+      .returning({ quizzId: quizzes.id });
+
+    const quizzId = newQuizz[0].quizzId;
+
+    // Запускаем фоновую задачу
+    void generateQuizInBackground(pdfBlob, questionCount, quizzId);
+
+    // Немедленно возвращаем ID квиза, который находится в обработке
+    return NextResponse.json(
+      {
+        quizzId,
+        message: "Quiz generation started",
+      },
+      { status: 202 }
+    );
+  } catch (e: any) {
+    console.error("Error starting quiz generation:", e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
+
+// Функция для фоновой генерации квиза
+async function generateQuizInBackground(
+  pdfBlob: Blob,
+  questionCount: number,
+  quizzId: number
+) {
+  try {
+    // Импортируем необходимые библиотеки динамически,
+    // чтобы не загружать их при первоначальном API запросе
+    const { ChatGoogleGenerativeAI } = await import("@langchain/google-genai");
+    const { HumanMessage } = await import("@langchain/core/messages");
+    const { StructuredOutputParser } = await import("langchain/output_parsers");
+    const { z } = await import("zod");
+    const { default: saveQuizz } = await import("./saveToDb");
+
+    const pdfLoader = new PDFLoader(pdfBlob, {
       parsedItemSeparator: "",
     });
     const docs = await pdfLoader.load();
@@ -63,9 +110,6 @@ export async function POST(req: NextRequest) {
 
         Formatting Instructions:
         ${formatInstructions}
-
-      Formatting Instructions:
-      ${formatInstructions}
     
       Text:
       ${texts.join("\n")}
@@ -87,18 +131,31 @@ export async function POST(req: NextRequest) {
     const parsedResult = await parser.parse(result.content.toString());
     console.log("Parsed result:", parsedResult);
 
-    const { quizzId } = await saveQuizz(parsedResult.quizz);
+    // Обновляем квиз данными из генерации
+    await saveQuizz({
+      ...parsedResult.quizz,
+      id: quizzId,
+      status: "completed",
+    });
 
-    return NextResponse.json(
-      {
-        quizzId,
-        data: parsedResult,
-        message: "Quiz created successfully",
-      },
-      { status: 200 }
+    // Добавляем дополнительную задержку для гарантии завершения всех транзакций базы данных
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    console.log(`Quiz generation completed for quizzId: ${quizzId}`);
+  } catch (error) {
+    console.error(
+      `Error generating quiz in background for quizzId: ${quizzId}`,
+      error
     );
-  } catch (e: any) {
-    console.error("Error:", e);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+
+    // Обновляем статус квиза в случае ошибки
+    await db
+      .update(quizzes)
+      .set({
+        status: "error",
+        description:
+          "An error occurred during quiz generation. Please try again.",
+      })
+      .where(eq(quizzes.id, quizzId));
   }
 }

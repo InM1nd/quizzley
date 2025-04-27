@@ -98,11 +98,18 @@ export const authenticator = pgTable(
 );
 
 /* Quizzes */
+export const quizzStatusEnum = pgEnum("quizz_status", [
+  "processing",
+  "completed",
+  "error",
+]);
+
 export const quizzes = pgTable("quizzes", {
   id: serial("id").primaryKey(),
   name: text("full_name"),
   description: text("description"),
   userId: text("user_id").references(() => users.id),
+  status: quizzStatusEnum("status").default("completed"),
 });
 
 export const quizzesRelations = relations(quizzes, ({ many, one }) => ({

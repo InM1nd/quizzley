@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ProgressBar from "@/components/progressBar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const loadingMessages = [
   "Conjuring questions...",
@@ -21,6 +28,7 @@ const UploadDoc = () => {
   const [error, setError] = useState<string>("");
   const [currentMessageIndex, setCurrentMessageIndex] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
+  const [questionCount, setQuestionCount] = useState<number>(10);
   const router = useRouter();
 
   useEffect(() => {
@@ -72,24 +80,82 @@ const UploadDoc = () => {
 
     const formData = new FormData();
     formData.append("pdf", document as Blob);
+    formData.append("questionCount", questionCount.toString());
+
     try {
       const res = await fetch("/api/quizz/generate", {
         method: "POST",
         body: formData,
       });
-      if (res.status === 200) {
-        setProgress(100); // Завершаем прогресс
+
+      if (res.status === 202) {
+        setProgress(30); // API принял заявку
         const data = await res.json();
         const quizzId = data.quizzId;
 
-        // Небольшая задержка перед переходом, чтобы увидеть 100% прогресс
-        setTimeout(() => {
-          router.push(`/quizz/${quizzId}`);
-        }, 500);
+        // Начинаем опрос статуса квиза
+        let isCompleted = false;
+        let attempts = 0;
+        const maxAttempts = 60; // 5 минут при интервале 5 секунд
 
-        console.log("Quizz generated successfully");
+        while (!isCompleted && attempts < maxAttempts) {
+          attempts++;
+          await new Promise((resolve) => setTimeout(resolve, 5000)); // Опрашиваем каждые 5 секунд
+
+          const statusRes = await fetch(`/api/quizz/${quizzId}/status`);
+          if (statusRes.status === 200) {
+            const statusData = await statusRes.json();
+
+            // Обновляем прогресс от 30% до 90% по мере выполнения
+            setProgress(30 + Math.min(60, attempts * 2));
+
+            if (statusData.status === "completed") {
+              isCompleted = true;
+              setProgress(100);
+
+              // Дополнительная проверка наличия вопросов перед переходом
+              let hasQuestions = false;
+              let checkAttempts = 0;
+
+              while (!hasQuestions && checkAttempts < 3) {
+                // Небольшая задержка между проверками
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+
+                try {
+                  const quizData = await fetch(`/api/quizz/${quizzId}/details`);
+                  if (quizData.ok) {
+                    const quiz = await quizData.json();
+                    if (quiz.questions && quiz.questions.length > 0) {
+                      hasQuestions = true;
+                    }
+                  }
+                } catch (e) {
+                  console.log("Error checking quiz questions:", e);
+                }
+
+                checkAttempts++;
+              }
+
+              // Увеличиваем задержку перед переходом, чтобы данные успели полностью сохраниться
+              setTimeout(() => {
+                router.push(`/quizz/${quizzId}`);
+              }, 2000);
+
+              console.log("Quizz generated successfully");
+              break;
+            } else if (statusData.status === "error") {
+              throw new Error(statusData.message || "Failed to generate quiz");
+            }
+          }
+        }
+
+        if (!isCompleted) {
+          throw new Error(
+            "Quiz generation is taking too long. Please try again later."
+          );
+        }
       } else {
-        throw new Error("Failed to generate quiz");
+        throw new Error("Failed to start quiz generation");
       }
     } catch (e) {
       console.log("Error while generating", e);
@@ -138,6 +204,33 @@ const UploadDoc = () => {
               onChange={(e) => setDocument(e?.target?.files?.[0])}
             />
           </label>
+
+          {/* <div className="mt-4">
+            <label
+              htmlFor="questionCount"
+              className="block text-sm font-medium mb-1"
+            >
+              Number of questions
+            </label>
+            <Select
+              onValueChange={(value) => setQuestionCount(Number(value))}
+              defaultValue="10"
+            >
+              <SelectTrigger
+                id="questionCount"
+                className="w-full"
+              >
+                <SelectValue placeholder="Select number of questions" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5 questions</SelectItem>
+                <SelectItem value="10">10 questions</SelectItem>
+                <SelectItem value="15">15 questions</SelectItem>
+                <SelectItem value="20">20 questions</SelectItem>
+              </SelectContent>
+            </Select>
+          </div> */}
+
           {error ? <p className="text-red-600 mt-2">{error}</p> : null}
           <Button
             size={"lg"}
