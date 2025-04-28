@@ -23,7 +23,7 @@ interface SaveQuizzData extends Quizz {
 
 export default async function saveQuizz(quizzData: SaveQuizzData) {
   try {
-    const { name, description, questions, id, status } = quizzData;
+    const { name, description, questions, id, status, userId } = quizzData;
 
     // Если передан ID, обновляем существующий квиз
     if (id) {
@@ -54,6 +54,7 @@ export default async function saveQuizz(quizzData: SaveQuizzData) {
             name,
             description,
             status: status || "completed",
+            userId: userId,
           })
           .where(eq(quizzes.id, id));
 
@@ -85,6 +86,7 @@ export default async function saveQuizz(quizzData: SaveQuizzData) {
           name,
           description,
           status: status || "completed",
+          userId: userId,
         })
         .returning({ insertedId: quizzes.id });
 

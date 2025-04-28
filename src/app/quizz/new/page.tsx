@@ -126,9 +126,9 @@ const Page = async () => {
                   Upload Your Document
                 </h2>
               </div>
-              {subscribed ? (
-                <UploadDoc />
-              ) : (
+              {/* {subscribed ? ( */}
+              <UploadDoc />
+              {/* ) : (
                 <div className="text-center">
                   <p className="text-gray-400 mb-6">
                     Upgrade your plan to unlock advanced quiz features and
@@ -136,7 +136,7 @@ const Page = async () => {
                   </p>
                   <UpgradePlan />
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

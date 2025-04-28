@@ -3,9 +3,20 @@ import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { db } from "@/db";
 import { quizzes } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { auth } from "@/auth";
 
 // Новый маршрут для инициирования задания
 export async function POST(req: NextRequest) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: "User not authenticated" },
+      { status: 401 }
+    );
+  }
+
   const body = await req.formData();
   const document = body.get("pdf");
   const questionCount = parseInt(body.get("questionCount") as string, 10) || 10;
@@ -29,13 +40,14 @@ export async function POST(req: NextRequest) {
         description:
           "Your quiz is currently being generated and will be ready soon.",
         status: "processing",
+        userId: userId,
       })
       .returning({ quizzId: quizzes.id });
 
     const quizzId = newQuizz[0].quizzId;
 
     // Запускаем фоновую задачу
-    void generateQuizInBackground(pdfBlob, questionCount, quizzId);
+    void generateQuizInBackground(pdfBlob, questionCount, quizzId, userId);
 
     // Немедленно возвращаем ID квиза, который находится в обработке
     return NextResponse.json(
@@ -55,7 +67,8 @@ export async function POST(req: NextRequest) {
 async function generateQuizInBackground(
   pdfBlob: Blob,
   questionCount: number,
-  quizzId: number
+  quizzId: number,
+  userId: string
 ) {
   try {
     // Импортируем необходимые библиотеки динамически,
@@ -136,6 +149,7 @@ async function generateQuizInBackground(
       ...parsedResult.quizz,
       id: quizzId,
       status: "completed",
+      userId: userId,
     });
 
     // Добавляем дополнительную задержку для гарантии завершения всех транзакций базы данных
@@ -159,3 +173,4 @@ async function generateQuizInBackground(
       .where(eq(quizzes.id, quizzId));
   }
 }
+

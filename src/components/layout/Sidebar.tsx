@@ -61,10 +61,10 @@ export default function Sidebar() {
   // Обработчик изменения размера экрана
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 1024);
-      if (window.innerWidth >= 1024) {
-        setIsOpen(true);
-      } else {
+      const isMobileView = window.innerWidth < 1024;
+      setIsMobile(isMobileView);
+      // На мобильных устройствах сайдбар всегда закрыт по умолчанию
+      if (isMobileView) {
         setIsOpen(false);
       }
     };
@@ -115,8 +115,12 @@ export default function Sidebar() {
       {/* Сайдбар */}
       <div
         className={cn(
-          "fixed left-0 top-0 z-40 h-full w-64 transition-transform duration-300 lg:translate-x-0",
-          isOpen ? "translate-x-0" : "-translate-x-full",
+          "fixed left-0 top-0 z-40 h-full w-64 transition-transform duration-300",
+          isMobile
+            ? isOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
+            : "translate-x-0",
           "bg-zinc-900/50 backdrop-blur-sm border-r border-zinc-800/50"
         )}
       >
