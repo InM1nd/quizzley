@@ -272,7 +272,7 @@ const RoadmapPage = () => {
       </section>
 
       {/* Introduction Section */}
-      <AnimatedSection className="bg-background">
+      <AnimatedSection className="">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-xl text-gray-300">
@@ -284,7 +284,7 @@ const RoadmapPage = () => {
       </AnimatedSection>
 
       {/* Timeline Section */}
-      <section className="bg-background py-12 sm:py-16">
+      <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="relative mx-auto max-w-5xl">
             <div className="absolute left-12 h-full w-0.5 -translate-x-1/2 bg-gradient-to-b from-primary/80 via-primary/40 to-primary/10 hidden md:block"></div>

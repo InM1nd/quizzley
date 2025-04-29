@@ -1,14 +1,17 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Nunito } from "next/font/google";
 import "./globals.css";
 
 import ClickSpark from "@/components/ui/click-spark";
 import ConditionalHeader from "@/components/ui/conditional-header";
+import ConditionalAurora from "@/components/ui/conditional-aurora";
 import { getUserSession } from "@/lib/user-session";
-import Aurora from "@/components/ui/aurora";
 import { SessionProvider } from "next-auth/react";
 
-const inter = Inter({ subsets: ["latin"] });
+const nunito = Nunito({
+  subsets: ["latin"],
+  variable: "--font-nunito",
+});
 
 export const metadata: Metadata = {
   title: "Quizzley - AI-Powered Quiz Generator",
@@ -50,8 +53,12 @@ export default async function RootLayout({
 
   return (
     <SessionProvider>
-      <html lang="en">
+      <html
+        lang="en"
+        className={nunito.variable}
+      >
         <body className={"dark"}>
+          <ConditionalAurora />
           <ClickSpark
             sparkColor="#fff"
             sparkSize={10}
@@ -60,7 +67,6 @@ export default async function RootLayout({
             duration={400}
           >
             <ConditionalHeader session={session} />
-
             {children}
           </ClickSpark>
         </body>

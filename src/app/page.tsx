@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import Footer from "@/components/footer";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { AnimatedIcon } from "@/components/ui/animated-icon";
-import Aurora from "@/components/ui/aurora";
 import { AnimatedHeading } from "@/components/ui/animated-heading";
 import { AnimatedCard } from "@/components/ui/animated-card";
 import { FeaturesSection } from "@/components/sections/features-section";
@@ -111,15 +110,6 @@ export default function Home() {
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative overflow-hidden h-screen flex items-center justify-center">
-          <div className="absolute inset-0 -z-10">
-            <Aurora
-              colorStops={["#FF6B00", "#FFA500", "#FF4500"]}
-              blend={1.0}
-              amplitude={0.5}
-              speed={0.3}
-            />
-          </div>
-
           {/* Animated Floating Elements */}
           <div className="absolute inset-0 pointer-events-none z-10">
             {/* Top Left */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -48,15 +48,44 @@ const mainNavItems: NavItem[] = [
   },
 ];
 
+// Отдельный компонент для профиля пользователя
+const UserProfile = ({ session }: { session: any }) => {
+  return (
+    <div className="mb-6 mt-2 flex items-center px-2">
+      <div className="relative w-10 h-10 mr-3">
+        {session.user?.image ? (
+          <img
+            src={session.user.image}
+            alt="Profile"
+            className="rounded-full w-10 h-10 object-cover"
+          />
+        ) : (
+          <div className="rounded-full w-10 h-10 bg-orange-500/20 flex items-center justify-center text-orange-500">
+            {session.user?.name?.charAt(0) || "U"}
+          </div>
+        )}
+      </div>
+      <div className="flex flex-col">
+        <span className="text-sm font-medium text-white truncate max-w-[140px]">
+          {session.user?.name || "Пользователь"}
+        </span>
+        <span className="text-xs text-zinc-400 truncate max-w-[140px]">
+          {session.user?.email || ""}
+        </span>
+      </div>
+    </div>
+  );
+};
+
 export default function Sidebar() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleSidebar = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
 
   // Обработчик изменения размера экрана
   useEffect(() => {
@@ -82,11 +111,61 @@ export default function Sidebar() {
   }, []);
 
   // Закрываем сайдбар на мобильных после клика по ссылке
-  const handleNavClick = () => {
+  const handleNavClick = useCallback(() => {
     if (isMobile) {
       setIsOpen(false);
     }
-  };
+  }, [isMobile]);
+
+  // Мемоизируем классы сайдбара
+  const sidebarClasses = useMemo(() => {
+    return cn(
+      "fixed left-0 top-0 z-40 h-full w-64 transition-transform duration-300",
+      isMobile
+        ? isOpen
+          ? "translate-x-0"
+          : "-translate-x-full"
+        : "translate-x-0",
+      "bg-zinc-900/50 backdrop-blur-sm border-r border-zinc-800/50"
+    );
+  }, [isMobile, isOpen]);
+
+  // Мемоизируем навигационные элементы
+  const navItems = useMemo(() => {
+    return mainNavItems.map((item) => (
+      <Link
+        key={item.href}
+        href={item.href}
+        onClick={handleNavClick}
+        className={cn(
+          "flex items-center px-3 py-2 text-sm font-medium rounded-md group transition-colors",
+          pathname === item.href
+            ? "bg-orange-500/10 text-orange-500"
+            : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+        )}
+      >
+        <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
+        {item.title}
+      </Link>
+    ));
+  }, [pathname, handleNavClick]);
+
+  // Если сессия еще загружается, показываем плейсхолдер
+  if (status === "loading") {
+    return (
+      <div className="fixed left-0 top-0 z-40 h-full w-64 bg-zinc-900/50 backdrop-blur-sm border-r border-zinc-800/50">
+        <div className="flex flex-col h-full px-4 py-6">
+          <div className="mb-6 mt-2 flex items-center px-2">
+            <div className="w-10 h-10 mr-3 bg-zinc-800 rounded-full animate-pulse" />
+            <div className="flex flex-col">
+              <div className="w-24 h-4 bg-zinc-800 rounded animate-pulse" />
+              <div className="w-32 h-3 bg-zinc-800 rounded animate-pulse mt-1" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Если пользователь не авторизован, не отображаем сайдбар
   if (!session) {
@@ -113,43 +192,10 @@ export default function Sidebar() {
       )}
 
       {/* Сайдбар */}
-      <div
-        className={cn(
-          "fixed left-0 top-0 z-40 h-full w-64 transition-transform duration-300",
-          isMobile
-            ? isOpen
-              ? "translate-x-0"
-              : "-translate-x-full"
-            : "translate-x-0",
-          "bg-zinc-900/50 backdrop-blur-sm border-r border-zinc-800/50"
-        )}
-      >
+      <div className={sidebarClasses}>
         {/* Контент сайдбара */}
         <div className="flex flex-col h-full px-4 py-6">
-          {/* Профиль пользователя */}
-          <div className="mb-6 mt-2 flex items-center px-2">
-            <div className="relative w-10 h-10 mr-3">
-              {session.user?.image ? (
-                <img
-                  src={session.user.image}
-                  alt="Profile"
-                  className="rounded-full w-10 h-10 object-cover"
-                />
-              ) : (
-                <div className="rounded-full w-10 h-10 bg-orange-500/20 flex items-center justify-center text-orange-500">
-                  {session.user?.name?.charAt(0) || "U"}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-white truncate max-w-[140px]">
-                {session.user?.name || "Пользователь"}
-              </span>
-              <span className="text-xs text-zinc-400 truncate max-w-[140px]">
-                {session.user?.email || ""}
-              </span>
-            </div>
-          </div>
+          <UserProfile session={session} />
 
           {/* Основная навигация */}
           <nav className="space-y-1 flex-1">
@@ -159,22 +205,7 @@ export default function Sidebar() {
               </h3>
             </div>
 
-            {mainNavItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={handleNavClick}
-                className={cn(
-                  "flex items-center px-3 py-2 text-sm font-medium rounded-md group transition-colors",
-                  pathname === item.href
-                    ? "bg-orange-500/10 text-orange-500"
-                    : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
-                )}
-              >
-                <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
-                {item.title}
-              </Link>
-            ))}
+            {navItems}
           </nav>
 
           {/* Нижняя часть сайдбара */}
