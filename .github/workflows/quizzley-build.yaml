@@ -1,0 +1,64 @@
+# To better understand this file read this:
+# https://docs.ionos.space/docs/github-actions-customization/
+
+name: "Deploy Now: Execute Build"
+
+on:
+  workflow_call:
+    inputs:
+      site-url:
+        required: true
+        type: string
+      branch-id:
+        required: true
+        type: string
+
+env:
+  DEPLOYMENT_FOLDER: public
+
+jobs:
+# Please do not rename this job
+  build-project:
+    name: build quizzley
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: v22.x
+
+      - name: Build Node assets
+        env:
+          AUTH_SECRET: y8PcrcWVBUbFLuepE3JCG/fH6QqTxxKNDknFjPK+lIQ=
+          CI: true
+          DATABASE_URL: postgresql://postgres.nympjknsekwfjlbvcfsv:shzH._c8QCXYELB@aws-0-us-west-1.pooler.supabase.com:6543/postgres
+          GOOGLE_API_KEY: AIzaSyCtj8Yh7LoR0dFJl0z4LqYrgRUIeBbo-RQ
+          GOOGLE_CLIENT_ID: 684850725395-bgj0eo3fmk55e30hj8iq84s2v2ng0cdu.apps.googleusercontent.com
+          GOOGLE_CLIENT_SECRET: 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
+          NEXT_PUBLIC_PUBLISHABLE_KEY: pk_test_51PA9THBVanHArmp8dl4Pe28djm0aihBXpAolRQk8lMwhM5pwIaWa6cZiTUHwQ7MeF590ockeBvNll07AF1pbLfbT00qwuyjkMv
+          NEXTAUTH_URL: https://quizzley.vercel.app/
+          SITE_URL: ${{ inputs.site-url }}
+          STRIPE_SECRET_KEY: sk_test_51PA9THBVanHArmp8W8bjFpG2Q877FpSMsKesk968kAkwojLCWKiXNUKe6GRasi2ZH52L3z130F2UOcD5uzfudH1Y00JTFYb9v9
+          STRIPE_WEBHOOK_LOCAL_SERCRET: whsec_d44061dd92971fe9bb7285ec2d55f94b845f875cc25bb16e5bf50142a54ec2a5
+          STRIPE_WEBHOOK_SECRET: whsec_oDgeQnh0Otsb2G8bF5U4nvwYjWm982Yo
+        run: |
+          npm ci
+          npm run build
+
+# Please do not touch the following action
+      - name: Store deployment content
+        uses: ionos-deploy-now/artifact-action@v1
+        with:
+          api-key: ${{ secrets.IONOS_API_KEY }}
+          service-host: api-eu.ionos.space
+          project-id: bae0c279-a01a-46db-97cb-943850fa4653
+          branch-id: ${{ inputs.branch-id }}
+          version: ${{ github.sha }}
+          folder: ${{ env.DEPLOYMENT_FOLDER }}
+          config-file: .deploy-now/quizzley/config.yaml
+          action: upload
