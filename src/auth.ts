@@ -12,10 +12,11 @@ export const {
   adapter: DrizzleAdapter(db),
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  trustHost: true,
   callbacks: {
     async session({ session, user }: { session: Session; user?: User }) {
       if (user && session?.user) {
