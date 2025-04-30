@@ -7,6 +7,7 @@ import ConditionalHeader from "@/components/ui/conditional-header";
 import ConditionalAurora from "@/components/ui/conditional-aurora";
 import { getUserSession } from "@/lib/user-session";
 import { SessionProvider } from "next-auth/react";
+import { Providers } from "./providers";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -58,17 +59,19 @@ export default async function RootLayout({
         className={nunito.variable}
       >
         <body className={"dark"}>
-          <ConditionalAurora />
-          <ClickSpark
-            sparkColor="#fff"
-            sparkSize={10}
-            sparkRadius={15}
-            sparkCount={8}
-            duration={400}
-          >
-            <ConditionalHeader session={session} />
-            {children}
-          </ClickSpark>
+          <Providers>
+            <ConditionalAurora />
+            <ClickSpark
+              sparkColor="#fff"
+              sparkSize={10}
+              sparkRadius={15}
+              sparkCount={8}
+              duration={400}
+            >
+              <ConditionalHeader session={session} />
+              {children}
+            </ClickSpark>
+          </Providers>
         </body>
       </html>
     </SessionProvider>

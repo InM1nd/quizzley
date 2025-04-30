@@ -103,7 +103,7 @@ export default function QuizzQuestions(props: Props) {
     );
   }
   return (
-    <div className="container max-w-4xl mx-auto mt-24 p-6">
+    <div className="container max-w-4xl mx-auto p-6">
       <div className="fixed inset-0 -z-10 h-full w-full bg-white dark:bg-zinc-900 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
       <div className="flex flex-col flex-1">
         <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 mb-6">

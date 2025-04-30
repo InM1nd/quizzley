@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+import { useQuery } from "@tanstack/react-query";
 import {
   BarChart2,
   CreditCard,
@@ -18,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { logoutUser } from "@/app/actions/auth-actions";
+import { sessionKeys, getSessionData } from "@/lib/session-cache";
 
 type NavItem = {
   title: string;
@@ -48,38 +51,28 @@ const mainNavItems: NavItem[] = [
   },
 ];
 
-// Отдельный компонент для профиля пользователя
-const UserProfile = ({ session }: { session: any }) => {
-  return (
+// Ленивая загрузка компонента профиля
+const UserProfile = dynamic(() => import("./UserProfile"), {
+  loading: () => (
     <div className="mb-6 mt-2 flex items-center px-2">
-      <div className="relative w-10 h-10 mr-3">
-        {session.user?.image ? (
-          <img
-            src={session.user.image}
-            alt="Profile"
-            className="rounded-full w-10 h-10 object-cover"
-          />
-        ) : (
-          <div className="rounded-full w-10 h-10 bg-orange-500/20 flex items-center justify-center text-orange-500">
-            {session.user?.name?.charAt(0) || "U"}
-          </div>
-        )}
-      </div>
+      <div className="w-10 h-10 mr-3 bg-zinc-800 rounded-full animate-pulse" />
       <div className="flex flex-col">
-        <span className="text-sm font-medium text-white truncate max-w-[140px]">
-          {session.user?.name || "Пользователь"}
-        </span>
-        <span className="text-xs text-zinc-400 truncate max-w-[140px]">
-          {session.user?.email || ""}
-        </span>
+        <div className="w-24 h-4 bg-zinc-800 rounded animate-pulse" />
+        <div className="w-32 h-3 bg-zinc-800 rounded animate-pulse mt-1" />
       </div>
     </div>
-  );
-};
+  ),
+  ssr: false,
+});
 
 export default function Sidebar() {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useQuery({
+    queryKey: sessionKeys.user(),
+    queryFn: getSessionData,
+    staleTime: 1000 * 60 * 5, // 5 минут
+  });
   const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -87,26 +80,29 @@ export default function Sidebar() {
     setIsOpen((prev) => !prev);
   }, []);
 
-  // Обработчик изменения размера экрана
+  // Оптимизированный обработчик изменения размера экрана с debounce
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     const checkScreenSize = () => {
       const isMobileView = window.innerWidth < 1024;
       setIsMobile(isMobileView);
-      // На мобильных устройствах сайдбар всегда закрыт по умолчанию
       if (isMobileView) {
         setIsOpen(false);
       }
     };
 
-    // Первоначальная проверка
+    const debouncedCheck = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkScreenSize, 100);
+    };
+
     checkScreenSize();
+    window.addEventListener("resize", debouncedCheck);
 
-    // Добавляем слушатель изменения размера
-    window.addEventListener("resize", checkScreenSize);
-
-    // Очистка при размонтировании
     return () => {
-      window.removeEventListener("resize", checkScreenSize);
+      window.removeEventListener("resize", debouncedCheck);
+      clearTimeout(timeoutId);
     };
   }, []);
 
@@ -150,19 +146,20 @@ export default function Sidebar() {
     ));
   }, [pathname, handleNavClick]);
 
-  // Если сессия еще загружается, показываем плейсхолдер
-  if (status === "loading") {
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      router.push("/");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
+  // Оптимизированный плейсхолдер загрузки
+  if (status === "pending") {
     return (
-      <div className="fixed left-0 top-0 z-40 h-full w-64 bg-zinc-900/50 backdrop-blur-sm border-r border-zinc-800/50">
-        <div className="flex flex-col h-full px-4 py-6">
-          <div className="mb-6 mt-2 flex items-center px-2">
-            <div className="w-10 h-10 mr-3 bg-zinc-800 rounded-full animate-pulse" />
-            <div className="flex flex-col">
-              <div className="w-24 h-4 bg-zinc-800 rounded animate-pulse" />
-              <div className="w-32 h-3 bg-zinc-800 rounded animate-pulse mt-1" />
-            </div>
-          </div>
-        </div>
+      <div className="fixed left-0 top-0 z-40 h-full w-64 bg-zinc-900/50">
+        <div className="animate-pulse h-full" />
       </div>
     );
   }
@@ -193,9 +190,8 @@ export default function Sidebar() {
 
       {/* Сайдбар */}
       <div className={sidebarClasses}>
-        {/* Контент сайдбара */}
         <div className="flex flex-col h-full px-4 py-6">
-          <UserProfile session={session} />
+          {session && <UserProfile session={session} />}
 
           {/* Основная навигация */}
           <nav className="space-y-1 flex-1">
@@ -219,16 +215,13 @@ export default function Sidebar() {
               Home Page
             </Link>
 
-            <form action={logoutUser}>
-              <button
-                type="submit"
-                onClick={handleNavClick}
-                className="flex w-full items-center px-3 py-2 mt-1 text-sm font-medium text-red-400 rounded-md hover:text-red-300 hover:bg-red-500/10 group transition-colors"
-              >
-                <LogOut className="mr-3 h-5 w-5 flex-shrink-0" />
-                Log out
-              </button>
-            </form>
+            <button
+              onClick={handleLogout}
+              className="flex w-full items-center px-3 py-2 mt-1 text-sm font-medium text-red-400 rounded-md hover:text-red-300 hover:bg-red-500/10 group transition-colors"
+            >
+              <LogOut className="mr-3 h-5 w-5 flex-shrink-0" />
+              Log out
+            </button>
           </div>
         </div>
       </div>
