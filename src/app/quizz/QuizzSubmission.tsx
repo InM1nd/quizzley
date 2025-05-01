@@ -76,8 +76,8 @@ const QuizzSubmission = (props: Props) => {
         exit={{ opacity: 0 }}
         className="flex flex-col flex-1 min-h-screen"
       >
-        <div className="sticky top-0 z-10 max-w-7xl ">
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 backdrop-blur-sm border border-zinc-800/50">
+        <div className="sticky top-0 z-10 w-full">
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 max-w-7xl mx-auto">
             <header className="grid grid-cols-[auto,1fr,auto] grid-flow-col items-center justify-between p-4 gap-4">
               <Button
                 size={"icon"}

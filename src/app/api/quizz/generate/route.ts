@@ -130,7 +130,7 @@ async function generateQuizInBackground(
 
     const model = new ChatGoogleGenerativeAI({
       apiKey: process.env.GOOGLE_API_KEY!,
-      modelName: "gemini-1.5-pro-latest",
+      modelName: "gemini-2.0-flash",
     });
 
     const message = new HumanMessage({
