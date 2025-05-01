@@ -100,7 +100,7 @@ const Page = async () => {
                     1
                   </div>
                   <p className="text-gray-400">
-                    Upload your document (PDF, DOCX, or text)
+                    Upload your document (only PDF is supported)
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
