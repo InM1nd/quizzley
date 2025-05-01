@@ -204,33 +204,6 @@ const UploadDoc = () => {
               onChange={(e) => setDocument(e?.target?.files?.[0])}
             />
           </label>
-
-          {/* <div className="mt-4">
-            <label
-              htmlFor="questionCount"
-              className="block text-sm font-medium mb-1"
-            >
-              Number of questions
-            </label>
-            <Select
-              onValueChange={(value) => setQuestionCount(Number(value))}
-              defaultValue="10"
-            >
-              <SelectTrigger
-                id="questionCount"
-                className="w-full"
-              >
-                <SelectValue placeholder="Select number of questions" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="5">5 questions</SelectItem>
-                <SelectItem value="10">10 questions</SelectItem>
-                <SelectItem value="15">15 questions</SelectItem>
-                <SelectItem value="20">20 questions</SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
-
           {error ? <p className="text-red-600 mt-2">{error}</p> : null}
           <Button
             size={"lg"}
