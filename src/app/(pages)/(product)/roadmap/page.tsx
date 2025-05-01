@@ -23,9 +23,13 @@ import {
   PenTool,
   Bell,
   Mic,
+  Link,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const RoadmapPage = () => {
+  const router = useRouter();
   // Data about planned features with estimated timelines
   const roadmapItems = [
     {
@@ -351,11 +355,14 @@ const RoadmapPage = () => {
               suggestions about features you would like to see in Quizzley, we
               would love to hear your opinion!
             </p>
-            <div className="mt-8 inline-block rounded-md bg-zinc-800 p-0.5 ring-1 ring-white/10">
-              <p className="px-4 py-2 text-sm text-gray-300">
-                Contact us at{" "}
-                <span className="text-primary">feedback@quizzley.com</span>
-              </p>
+            <div className="mt-8 inline-block ">
+              <Button
+                size="lg"
+                className="text-lg px-8 py-7 gap-3 bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:to-orange-500 text-white shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-1 rounded-full border border-white/10 font-semibold"
+                onClick={() => router.push("/contact")}
+              >
+                Contact us
+              </Button>
             </div>
           </div>
         </div>

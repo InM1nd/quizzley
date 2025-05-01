@@ -64,7 +64,7 @@ const ContactPage = () => {
   return (
     <div className="flex flex-col min-h-screen justify-between">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20">
+      <section className="relative overflow-hidden py-24 sm:pb-0 sm:pt-36">
         <div className="absolute inset-0 -z-10">
           <Aurora
             colorStops={["#FF6B00", "#FFA500", "#FF4500"]}
@@ -92,7 +92,7 @@ const ContactPage = () => {
       </section>
 
       {/* Contact Information and Form Section */}
-      <section className="bg-background py-16 sm:py-24">
+      <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-5xl grid-cols-1 gap-x-12 gap-y-12 lg:grid-cols-2">
             {/* Contact Information */}
@@ -106,14 +106,14 @@ const ContactPage = () => {
                 </h2>
 
                 <div className="space-y-8">
-                  <div className="flex items-start">
+                  {/* <div className="flex items-start">
                     <Mail className="h-6 w-6 text-primary mr-4 mt-1" />
                     <div>
                       <h3 className="text-lg font-medium text-white">Email</h3>
-                      <p className="mt-1 text-gray-300">info@quizzley.com</p>
-                      <p className="mt-1 text-gray-300">support@quizzley.com</p>
+                      <p className="mt-1 text-gray-300">info@quizzley.io</p>
+                      <p className="mt-1 text-gray-300">support@quizzley.io</p>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="flex items-start">
                     <HelpCircle className="h-6 w-6 text-primary mr-4 mt-1" />
