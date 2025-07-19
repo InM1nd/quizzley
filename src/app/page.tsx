@@ -266,10 +266,10 @@ export default function Home() {
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <button className="text-sm text-gray-400 hover:text-white transition-colors">
+                    <button className="text-sm text-gray-400 hover:text-white transition-colors cursor-none">
                       Skip
                     </button>
-                    <button className="bg-gradient-to-r from-primary to-orange-600 px-4 py-2 rounded-lg text-white font-medium">
+                    <button className="bg-gradient-to-r from-primary to-orange-600 px-4 py-2 rounded-lg text-white font-medium cursor-default">
                       Next Question
                     </button>
                   </div>

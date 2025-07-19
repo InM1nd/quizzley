@@ -115,11 +115,19 @@ async function generateQuizInBackground(
 
     // Формируем промпт с инструкциями по формату
     const prompt = `
-        Your task is to create a quiz based on the provided text, which is a summary of a document.
-        The quiz must contain EXACTLY ${questionCount} questions. No more, no less.
-        Ensure that every question is based SOLELY on the information within the provided text.
-        Follow the formatting instructions for the output.
-        You MUST return a valid JSON object.
+        You are an expert quiz creator. Create a quiz based on the provided document text.
+
+        CRITICAL REQUIREMENTS:
+        - Create EXACTLY ${questionCount} questions. No more, no less.
+        - Each question must have exactly 4 answer options.
+        - Only ONE answer per question should be correct.
+        - All questions must be based SOLELY on the information provided in the text.
+        - Do not create questions about information not present in the text.
+
+        QUESTION GUIDELINES:
+        - Make questions diverse in difficulty and topic coverage
+        - Ensure questions test different aspects: facts, understanding, and application
+        - Make incorrect answers plausible but clearly wrong
 
         Formatting Instructions:
         ${formatInstructions}
@@ -131,6 +139,7 @@ async function generateQuizInBackground(
     const model = new ChatGoogleGenerativeAI({
       apiKey: process.env.GOOGLE_API_KEY!,
       modelName: "gemini-2.0-flash",
+      temperature: 0.3,
     });
 
     const message = new HumanMessage({

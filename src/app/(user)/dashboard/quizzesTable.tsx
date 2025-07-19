@@ -5,11 +5,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-export type Quizz = InferSelectModel<typeof quizzes>;
+import { UserQuizzes } from "@/app/actions/getUserQuizzes";
 
 type Props = {
-  quizzes: Quizz[];
+  quizzes: UserQuizzes[];
 };
 
 const ITEMS_PER_PAGE = 4;
@@ -45,13 +44,16 @@ const QuizzesTable = (props: Props) => {
               <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
                 #
               </th>
-              <th className="text-zinc-400 text-left py-4 px-6 font-medium">
+              <th className="text-zinc-400 text-left py-4 md:px-6 font-medium">
                 Name
               </th>
               <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
                 Description
               </th>
               <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
+                Questions
+              </th>
+              <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell ">
                 Created
               </th>
               <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
@@ -60,7 +62,7 @@ const QuizzesTable = (props: Props) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-800/50">
-            {visibleQuizzes.map((quizz: Quizz, index: number) => (
+            {visibleQuizzes.map((quizz: UserQuizzes, index: number) => (
               <tr
                 key={quizz.id}
                 className="group hover:bg-orange-500/5 transition-colors duration-200"
@@ -68,18 +70,43 @@ const QuizzesTable = (props: Props) => {
                 <td className="py-4 px-6 hidden md:table-cell">
                   {startIndex + index + 1}
                 </td>
-                <td className="py-4 px-6">
+                <td className="py-4 md:px-6 ">
                   <Link href={`/quizz/${quizz.id}`}>
                     <p className="text-orange-500 hover:text-orange-400 transition-colors font-medium">
                       {quizz.name}
                     </p>
                   </Link>
-                  <div className="md:hidden mt-2 text-sm text-zinc-400">
+                  <div className="md:hidden mt-2 text-sm text-zinc-400 gap-2">
                     <p className="line-clamp-2 mb-2 md:mb-0">
                       {quizz.description || "No description"}
                     </p>
-                    <p>Created: Coming soon</p>
-                    <p>Score: Not taken</p>
+                    <p className="text-sm text-zinc-400">
+                      Questions: {quizz.questionCount}
+                    </p>
+                    <p>
+                      Created:{" "}
+                      {quizz.createdAt
+                        ? new Date(quizz.createdAt).toLocaleDateString()
+                        : "Not taken"}
+                    </p>
+                    <p className="text-sm text-zinc-400">
+                      Score:{" "}
+                      {quizz.score !== null ? (
+                        <span
+                          className={`font-medium ${
+                            quizz.score >= 80
+                              ? "text-green-500"
+                              : quizz.score >= 60
+                              ? "text-yellow-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          {quizz.score}%
+                        </span>
+                      ) : (
+                        "Not taken"
+                      )}
+                    </p>
                   </div>
                 </td>
                 <td className="py-4 px-6 text-zinc-400 hidden md:table-cell">
@@ -87,11 +114,30 @@ const QuizzesTable = (props: Props) => {
                     {quizz.description || "No description"}
                   </p>
                 </td>
-                <td className="py-4 px-6 text-zinc-400 hidden md:table-cell">
-                  Coming soon
+                <td className="py-4 px-6 text-zinc-400 hidden md:table-cell text-center">
+                  {quizz.questionCount}
                 </td>
                 <td className="py-4 px-6 text-zinc-400 hidden md:table-cell">
-                  Not taken
+                  {quizz.createdAt
+                    ? new Date(quizz.createdAt).toLocaleDateString()
+                    : "Not taken"}
+                </td>
+                <td className="py-4 px-6 text-zinc-400 hidden md:table-cell">
+                  {quizz.score !== null ? (
+                    <span
+                      className={`font-medium ${
+                        quizz.score >= 80
+                          ? "text-green-500"
+                          : quizz.score >= 60
+                          ? "text-yellow-500"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {quizz.score}%
+                    </span>
+                  ) : (
+                    "Not taken"
+                  )}
                 </td>
               </tr>
             ))}

@@ -19,6 +19,7 @@ const getHeatMapData = async () => {
     .from(quizzSubmitions)
     .innerJoin(quizzes, eq(quizzSubmitions.quizzId, quizzes.id))
     .innerJoin(users, eq(quizzes.userId, users.id))
+    .where(eq(quizzes.userId, userId))
     .groupBy(quizzSubmitions.createdAt);
 
   return { data };

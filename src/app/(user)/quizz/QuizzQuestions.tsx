@@ -12,7 +12,7 @@ import {
   quizzes,
 } from "@/db/schema";
 import { useRouter } from "next/navigation";
-import { saveSubmission } from "../actions/saveSubmissions";
+import { saveSubmission } from "../../actions/saveSubmissions";
 
 type Answer = InferSelectModel<typeof questionAnswers>;
 type Question = InferSelectModel<typeof DbQuestions> & { answers: Answer[] };
@@ -35,6 +35,8 @@ export default function QuizzQuestions(props: Props) {
       answerId: number;
     }[]
   >([]);
+
+  const currentQuestionNumber = currentQuestion + 1;
 
   const handleNext = () => {
     if (!started) {
@@ -118,6 +120,11 @@ export default function QuizzQuestions(props: Props) {
               <ChevronLeft />
             </Button>
             <ProgressBar value={(currentQuestion / questions.length) * 100} />
+            {started && (
+              <div className="text-sm text-zinc-400 font-medium">
+                {currentQuestionNumber} / {questions.length}
+              </div>
+            )}
             <Button
               size={"icon"}
               variant={"default"}

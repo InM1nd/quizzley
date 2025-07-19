@@ -1,21 +1,29 @@
+"use client";
+
 import UploadDoc from "../UploadDoc";
 import { auth, signIn } from "@/auth";
 import { getUserSubscription } from "@/app/actions/userSubscription";
 import UpgradePlan from "../UpgradePlan";
 import { FileText, Brain, Settings, Sparkles } from "lucide-react";
+import { useQuizGenerationStore } from "@/lib/stores/quiz-generation-store";
 
-const Page = async () => {
-  const session = await auth();
-  const userId = session?.user?.id;
+const Page = () => {
+  // const session = await auth();
+  // const userId = session?.user?.id;
 
-  if (!session) {
-    signIn();
-    return;
-  }
+  const questionCount = useQuizGenerationStore((state) => state.questionCount);
+  const setQuestionCount = useQuizGenerationStore(
+    (state) => state.setQuestionCount
+  );
 
-  const subscribed: boolean | null | undefined = await getUserSubscription({
-    userId: userId!,
-  });
+  // if (!session) {
+  //   signIn();
+  //   return;
+  // }
+
+  // const subscribed: boolean | null | undefined = await getUserSubscription({
+  //   userId: userId!,
+  // });
 
   return (
     <div className="flex flex-col flex-1">
@@ -68,19 +76,27 @@ const Page = async () => {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  <div>
                     <div className="flex justify-between text-sm text-gray-400">
-                      <span>Number of Questions</span>
-                      <span>10</span>
+                      <span className="text-gray-400 font-semibold">
+                        Number of Questions
+                      </span>
+                      <span className="text-gray-400 font-semibold">
+                        {questionCount}
+                      </span>
                     </div>
                     <input
                       type="range"
                       min="5"
-                      max="50"
-                      defaultValue="10"
-                      className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-not-allowed"
-                      disabled
+                      max="30"
+                      value={questionCount}
+                      onChange={(e) => setQuestionCount(Number(e.target.value))}
+                      className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer slider"
                     />
+                    <div className="flex justify-between text-sm text-gray-400">
+                      <p className="text-gray-400">5</p>
+                      <p className="text-gray-400">30</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -146,4 +162,3 @@ const Page = async () => {
 };
 
 export default Page;
-
