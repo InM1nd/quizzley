@@ -3,60 +3,43 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ProgressBar from "@/components/progressBar";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const loadingMessages = [
-  "Conjuring questions...",
-  "Analyzing document...",
-  "Crafting the quiz...",
-  "Selecting the best questions...",
-  "Almost there...",
-  "Finalizing your quiz...",
-];
+import { useQuizGenerationStore } from "@/lib/stores/quiz-generation-store";
 
 const UploadDoc = () => {
-  const [document, setDocument] = useState<Blob | File | null | undefined>(
-    null
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [currentMessageIndex, setCurrentMessageIndex] = useState<number>(0);
-  const [progress, setProgress] = useState<number>(0);
-  const [questionCount, setQuestionCount] = useState<number>(10);
   const router = useRouter();
+  const {
+    isLoading,
+    progress,
+    currentMessageIndex,
+    error,
+    questionCount,
+    document,
+    setLoading,
+    setProgress,
+    setError,
+    setDocument,
+    incrementMessageIndex,
+    reset,
+    currentMessage,
+  } = useQuizGenerationStore();
 
   useEffect(() => {
     if (isLoading) {
-      // Плавно увеличиваем прогресс до 95% (оставляем 5% для финального завершения)
       const progressInterval = setInterval(() => {
         setProgress((prevProgress) => {
           if (prevProgress >= 95) {
             clearInterval(progressInterval);
             return 95;
           }
-          // Увеличиваем медленнее по мере приближения к 95%
+
           const increment = Math.max(0.5, (95 - prevProgress) / 20);
           return prevProgress + increment;
         });
       }, 300);
 
-      // Меняем сообщения с определенными интервалами
       const messageInterval = setInterval(() => {
-        setCurrentMessageIndex((prevIndex) => {
-          const nextIndex = prevIndex + 1;
-          // Если достигли последнего сообщения, останавливаем таймер
-          if (nextIndex >= loadingMessages.length - 1) {
-            clearInterval(messageInterval);
-          }
-          return nextIndex < loadingMessages.length ? nextIndex : prevIndex;
-        });
-      }, 3000); // Меняем сообщение каждые 3 секунды
+        incrementMessageIndex();
+      }, 3000); // 3 seconds
 
       return () => {
         clearInterval(progressInterval);
@@ -65,9 +48,8 @@ const UploadDoc = () => {
     } else {
       // Сбрасываем состояния при завершении загрузки
       setProgress(0);
-      setCurrentMessageIndex(0);
     }
-  }, [isLoading]);
+  }, [isLoading, setProgress, incrementMessageIndex]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -75,8 +57,9 @@ const UploadDoc = () => {
       setError("Please upload the document first");
       return;
     }
-    setIsLoading(true);
-    setProgress(5); // Начинаем с 5% прогресса
+    setLoading(true);
+    setError(null);
+    setProgress(5); // Start with 5% progress
 
     const formData = new FormData();
     formData.append("pdf", document as Blob);
@@ -89,36 +72,33 @@ const UploadDoc = () => {
       });
 
       if (res.status === 202) {
-        setProgress(30); // API принял заявку
+        setProgress(30);
         const data = await res.json();
         const quizzId = data.quizzId;
 
         // Начинаем опрос статуса квиза
         let isCompleted = false;
         let attempts = 0;
-        const maxAttempts = 60; // 5 минут при интервале 5 секунд
+        const maxAttempts = 60;
 
         while (!isCompleted && attempts < maxAttempts) {
           attempts++;
-          await new Promise((resolve) => setTimeout(resolve, 5000)); // Опрашиваем каждые 5 секунд
+          await new Promise((resolve) => setTimeout(resolve, 5000));
 
           const statusRes = await fetch(`/api/quizz/${quizzId}/status`);
           if (statusRes.status === 200) {
             const statusData = await statusRes.json();
 
-            // Обновляем прогресс от 30% до 90% по мере выполнения
             setProgress(30 + Math.min(60, attempts * 2));
 
             if (statusData.status === "completed") {
               isCompleted = true;
               setProgress(100);
 
-              // Дополнительная проверка наличия вопросов перед переходом
               let hasQuestions = false;
               let checkAttempts = 0;
 
               while (!hasQuestions && checkAttempts < 3) {
-                // Небольшая задержка между проверками
                 await new Promise((resolve) => setTimeout(resolve, 1000));
 
                 try {
@@ -136,7 +116,6 @@ const UploadDoc = () => {
                 checkAttempts++;
               }
 
-              // Увеличиваем задержку перед переходом, чтобы данные успели полностью сохраниться
               setTimeout(() => {
                 router.push(`/quizz/${quizzId}`);
               }, 2000);
@@ -164,7 +143,8 @@ const UploadDoc = () => {
       );
     } finally {
       setTimeout(() => {
-        setIsLoading(false);
+        setLoading(false);
+        reset();
       }, 500);
     }
   };
@@ -176,7 +156,7 @@ const UploadDoc = () => {
           <ProgressBar value={progress} />
           <div className="text-center">
             <p className="text-lg font-medium min-h-[28px] text-primary">
-              {loadingMessages[currentMessageIndex]}
+              {currentMessage}
             </p>
             <p className="text-sm text-muted-foreground mt-1">
               This may take a few moments...
@@ -201,7 +181,7 @@ const UploadDoc = () => {
               type="file"
               id="document"
               className="relative block w-full h-full z-50 opacity-0"
-              onChange={(e) => setDocument(e?.target?.files?.[0])}
+              onChange={(e) => setDocument(e?.target?.files?.[0] || null)}
             />
           </label>
           {error ? <p className="text-red-600 mt-2">{error}</p> : null}

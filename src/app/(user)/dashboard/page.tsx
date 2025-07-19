@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { quizzes } from "@/db/schema";
 import { auth } from "@/auth";
-import QuizzesTable, { Quizz } from "./quizzesTable";
+import QuizzesTable from "./quizzesTable";
 import getUserMetrics from "@/app/actions/getUserMetrics";
 import MetricCard from "./metricCard";
 import getHeatMapData from "@/app/actions/getHeatMapData";
@@ -16,6 +16,7 @@ import {
   HeatMapSkeleton,
   QuizzesSkeleton,
 } from "@/components/skeletons/dashboard-skeleton";
+import getUserQuizzes, { UserQuizzes } from "@/app/actions/getUserQuizzes";
 
 // Компонент профиля
 const ProfileSection = async () => {
@@ -98,9 +99,7 @@ const QuizzesSection = async () => {
     return <p>User not found!</p>;
   }
 
-  const userQuizzes: Quizz[] = await db.query.quizzes.findMany({
-    where: eq(quizzes.userId, userId),
-  });
+  const userQuizzes: UserQuizzes[] = await getUserQuizzes();
 
   return (
     <div className="bg-zinc-900/50 rounded-xl p-6 backdrop-blur-sm border border-zinc-800 mt-4 md:mt-0">

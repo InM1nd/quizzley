@@ -118,4 +118,72 @@ body {
   .animate-float-fast {
     animation: float-fast 4s ease-in-out infinite;
   }
+  
+  /* Стили для ползунка */
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: hsl(var(--primary));
+    cursor: pointer;
+    border: 2px solid hsl(var(--primary));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: hsl(var(--primary));
+    cursor: pointer;
+    border: 2px solid hsl(var(--primary));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .slider::-webkit-slider-track {
+    background: hsl(var(--muted));
+    border-radius: 8px;
+    height: 8px;
+  }
+  
+  .slider::-moz-range-track {
+    background: hsl(var(--muted));
+    border-radius: 8px;
+    height: 8px;
+  }
+  
+  /* Блокировка скролла для мобильных устройств */
+  .scroll-locked {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+    touch-action: none !important;
+  }
+  
+  /* Предотвращение скролла на iOS Safari */
+  .scroll-locked body {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Дополнительная защита от скролла на мобильных */
+  @media (max-width: 1023px) {
+    .sidebar-open {
+      overflow: hidden !important;
+      position: fixed !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
 }

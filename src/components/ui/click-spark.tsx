@@ -173,7 +173,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     >
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none z-50"
       />
       {children}
     </div>

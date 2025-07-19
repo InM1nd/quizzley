@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { useQuery } from "@tanstack/react-query";
 import {
   BarChart2,
   CreditCard,
@@ -20,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { logoutUser } from "@/app/actions/auth-actions";
-import { sessionKeys, getSessionData } from "@/lib/session-cache";
+import { useUIStore } from "@/lib/stores/ui-store";
 
 type NavItem = {
   title: string;
@@ -66,31 +65,26 @@ const UserProfile = dynamic(() => import("./UserProfile"), {
 });
 
 export default function Sidebar() {
-  const { data: session, status } = useQuery({
-    queryKey: sessionKeys.user(),
-    queryFn: getSessionData,
-    staleTime: 1000 * 60 * 5, // 5 минут
-  });
+  const { data: session, status } = useSession();
   const pathname = usePathname();
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
-  const toggleSidebar = useCallback(() => {
-    setIsOpen((prev) => !prev);
-  }, []);
+  // UI Store
+  const {
+    sidebarOpen,
+    isMobile,
+    toggleSidebar,
+    setSidebarOpen,
+    setMobile,
+    lockScroll,
+    unlockScroll,
+    closeSidebar,
+    checkScreenSize,
+  } = useUIStore();
 
   // Оптимизированный обработчик изменения размера экрана с debounce
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
-
-    const checkScreenSize = () => {
-      const isMobileView = window.innerWidth < 1024;
-      setIsMobile(isMobileView);
-      if (isMobileView) {
-        setIsOpen(false);
-      }
-    };
 
     const debouncedCheck = () => {
       clearTimeout(timeoutId);
@@ -104,29 +98,61 @@ export default function Sidebar() {
       window.removeEventListener("resize", debouncedCheck);
       clearTimeout(timeoutId);
     };
-  }, []);
+  }, [checkScreenSize]);
 
-  // Закрываем сайдбар на мобильных после клика по ссылке
+  useEffect(() => {
+    if (isMobile) {
+      if (sidebarOpen) {
+        lockScroll();
+      } else {
+        unlockScroll();
+      }
+    }
+
+    // Очистка при размонтировании компонента
+    return () => {
+      if (isMobile) {
+        unlockScroll();
+      }
+    };
+  }, [sidebarOpen, isMobile, lockScroll, unlockScroll]);
+
   const handleNavClick = useCallback(() => {
     if (isMobile) {
-      setIsOpen(false);
+      closeSidebar();
     }
-  }, [isMobile]);
+  }, [isMobile, closeSidebar]);
 
-  // Мемоизируем классы сайдбара
+  const handleOverlayClick = useCallback(() => {
+    if (isMobile && sidebarOpen) {
+      closeSidebar();
+    }
+  }, [isMobile, sidebarOpen, closeSidebar]);
+
+  // Обработчик для предотвращения скролла внутри сайдбара
+  const handleSidebarTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (isMobile) {
+        e.stopPropagation();
+      }
+    },
+    [isMobile]
+  );
+
+  // Memoized sidebar classes
   const sidebarClasses = useMemo(() => {
     return cn(
-      "fixed left-0 top-0 z-40 h-full w-64 transition-transform duration-300",
+      "fixed left-0 top-0 z-40 h-full w-full md:w-64 transition-transform duration-300 ",
       isMobile
-        ? isOpen
+        ? sidebarOpen
           ? "translate-x-0"
           : "-translate-x-full"
         : "translate-x-0",
-      "bg-zinc-900/50 backdrop-blur-sm border-r border-zinc-800/50"
+      "bg-zinc-900/50 backdrop-blur-md border-r border-zinc-800/50"
     );
-  }, [isMobile, isOpen]);
+  }, [isMobile, sidebarOpen]);
 
-  // Мемоизируем навигационные элементы
+  // memoized nav items
   const navItems = useMemo(() => {
     return mainNavItems.map((item) => (
       <Link
@@ -134,7 +160,7 @@ export default function Sidebar() {
         href={item.href}
         onClick={handleNavClick}
         className={cn(
-          "flex items-center px-3 py-2 text-sm font-medium rounded-md group transition-colors",
+          "flex items-center px-3 py-2 text-md md:text-sm font-medium rounded-md group transition-colors",
           pathname === item.href
             ? "bg-orange-500/10 text-orange-500"
             : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
@@ -154,9 +180,8 @@ export default function Sidebar() {
       console.error("Error logging out:", error);
     }
   };
-
-  // Оптимизированный плейсхолдер загрузки
-  if (status === "pending") {
+  // Optimized loading placeholder
+  if (status === "loading") {
     return (
       <div className="fixed left-0 top-0 z-40 h-full w-64 bg-zinc-900/50">
         <div className="animate-pulse h-full" />
@@ -164,23 +189,22 @@ export default function Sidebar() {
     );
   }
 
-  // Если пользователь не авторизован, не отображаем сайдбар
   if (!session) {
     return null;
   }
 
   return (
     <>
-      {/* Кнопка мобильного меню */}
+      {/* Mobile menu button */}
       {isMobile && (
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden fixed top-4 left-4 z-50 bg-zinc-900/50 backdrop-blur-sm hover:bg-zinc-800/70 ring-1 ring-white/10"
+          className="lg:hidden fixed top-4 right-4 z-50 bg-zinc-900/50 backdrop-blur-sm hover:bg-zinc-800/70 ring-1 ring-white/10"
           onClick={toggleSidebar}
           aria-label="Toggle Menu"
         >
-          {isOpen ? (
+          {sidebarOpen ? (
             <X className="h-5 w-5 text-white" />
           ) : (
             <Menu className="h-5 w-5 text-white" />
@@ -188,15 +212,19 @@ export default function Sidebar() {
         </Button>
       )}
 
-      {/* Сайдбар */}
-      <div className={sidebarClasses}>
+      {/* Sidebar */}
+      <div
+        className={sidebarClasses}
+        onTouchMove={handleSidebarTouchMove}
+        onClick={handleOverlayClick}
+      >
         <div className="flex flex-col h-full px-4 py-6">
           {session && <UserProfile session={session} />}
 
-          {/* Основная навигация */}
+          {/* Main navigation */}
           <nav className="space-y-1 flex-1">
             <div className="px-3 py-2">
-              <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              <h3 className="text-md md:text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                 Main
               </h3>
             </div>
@@ -204,12 +232,12 @@ export default function Sidebar() {
             {navItems}
           </nav>
 
-          {/* Нижняя часть сайдбара */}
+          {/* Sidebar bottom */}
           <div className="pt-2 mt-6 border-t border-zinc-800">
             <Link
               href="/"
               onClick={handleNavClick}
-              className="flex items-center px-3 py-2 mt-1 text-sm font-medium text-zinc-400 rounded-md hover:text-white hover:bg-zinc-800/50 group transition-colors"
+              className="flex items-center px-3 py-2 mt-1 text-md md:text-xs font-medium text-zinc-400 rounded-md hover:text-white hover:bg-zinc-800/50 group transition-colors"
             >
               <Home className="mr-3 h-5 w-5 flex-shrink-0" />
               Home Page
@@ -217,7 +245,7 @@ export default function Sidebar() {
 
             <button
               onClick={handleLogout}
-              className="flex w-full items-center px-3 py-2 mt-1 text-sm font-medium text-red-400 rounded-md hover:text-red-300 hover:bg-red-500/10 group transition-colors"
+              className="flex w-full items-center px-3 py-2 mt-1 text-md md:text-sm font-medium text-red-400 rounded-md hover:text-red-300 hover:bg-red-500/10 group transition-colors"
             >
               <LogOut className="mr-3 h-5 w-5 flex-shrink-0" />
               Log out
@@ -227,13 +255,13 @@ export default function Sidebar() {
       </div>
 
       {/* Затемнение фона на мобильных */}
-      {isOpen && isMobile && (
+      {/* {sidebarOpen && isMobile && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
           onClick={toggleSidebar}
           aria-hidden="true"
         />
-      )}
+      )} */}
     </>
   );
 }
