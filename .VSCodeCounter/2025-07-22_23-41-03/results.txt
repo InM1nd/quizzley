@@ -1,0 +1,188 @@
+Date : 2025-07-22 23:41:03
+Directory : c:\Users\zabol\Documents\GitHub\quizzley\src
+Total : 107 files,  8568 codes, 528 comments, 1000 blanks, all 10096 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| TypeScript JSX |         74 |      6,903 |        453 |        733 |      8,089 |
+| TypeScript     |         32 |      1,505 |         68 |        245 |      1,818 |
+| CSS            |          1 |        160 |          7 |         22 |        189 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                     | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                        |        107 |      8,568 |        528 |      1,000 |     10,096 |
+| . (Files)                                                                                |          1 |         39 |          0 |          2 |         41 |
+| app                                                                                      |         49 |      5,094 |        460 |        535 |      6,089 |
+| app (Files)                                                                              |          3 |        246 |          7 |         30 |        283 |
+| app\(pages)                                                                              |          8 |      1,782 |        350 |        118 |      2,250 |
+| app\(pages) (Files)                                                                      |          2 |        507 |        169 |         41 |        717 |
+| app\(pages)\(company)                                                                    |          2 |        538 |         76 |         37 |        651 |
+| app\(pages)\(company)\about-us                                                           |          1 |        266 |         63 |         16 |        345 |
+| app\(pages)\(company)\contact                                                            |          1 |        272 |         13 |         21 |        306 |
+| app\(pages)\(legal)                                                                      |          2 |         20 |          0 |          6 |         26 |
+| app\(pages)\(legal)\privacy                                                              |          1 |         10 |          0 |          3 |         13 |
+| app\(pages)\(legal)\terms                                                                |          1 |         10 |          0 |          3 |         13 |
+| app\(pages)\(product)                                                                    |          2 |        717 |        105 |         34 |        856 |
+| app\(pages)\(product)\features                                                           |          1 |        422 |         45 |         20 |        487 |
+| app\(pages)\(product)\roadmap                                                            |          1 |        295 |         60 |         14 |        369 |
+| app\(user)                                                                               |         21 |      2,100 |         50 |        223 |      2,373 |
+| app\(user) (Files)                                                                       |          1 |         37 |          0 |          6 |         43 |
+| app\(user)\billing                                                                       |          4 |        259 |          6 |         38 |        303 |
+| app\(user)\billing (Files)                                                               |          3 |        239 |          6 |         35 |        280 |
+| app\(user)\billing\payment                                                               |          1 |         20 |          0 |          3 |         23 |
+| app\(user)\billing\payment\success                                                       |          1 |         20 |          0 |          3 |         23 |
+| app\(user)\dashboard                                                                     |          4 |        472 |          9 |         51 |        532 |
+| app\(user)\feedback                                                                      |          2 |        234 |          3 |         19 |        256 |
+| app\(user)\flashcards                                                                    |          1 |         10 |          0 |          2 |         12 |
+| app\(user)\podcasts                                                                      |          1 |         11 |          0 |          3 |         14 |
+| app\(user)\quizz                                                                         |          8 |      1,077 |         32 |        104 |      1,213 |
+| app\(user)\quizz (Files)                                                                 |          6 |        856 |          8 |         82 |        946 |
+| app\(user)\quizz\[quizzId]                                                               |          1 |         55 |          2 |          9 |         66 |
+| app\(user)\quizz\new                                                                     |          1 |        166 |         22 |         13 |        201 |
+| app\actions                                                                              |          7 |        249 |         17 |         50 |        316 |
+| app\api                                                                                  |         10 |        717 |         36 |        114 |        867 |
+| app\api\auth                                                                             |          1 |          1 |          0 |          1 |          2 |
+| app\api\auth\[...nextauth]                                                               |          1 |          1 |          0 |          1 |          2 |
+| app\api\cron                                                                             |          1 |         79 |         10 |         12 |        101 |
+| app\api\cron\check-premium                                                               |          1 |         79 |         10 |         12 |        101 |
+| app\api\quizz                                                                            |          5 |        382 |         26 |         68 |        476 |
+| app\api\quizz\[quizzId]                                                                  |          3 |         94 |          1 |         15 |        110 |
+| app\api\quizz\[quizzId]\delete                                                           |          1 |         13 |          1 |          3 |         17 |
+| app\api\quizz\[quizzId]\details                                                          |          1 |         46 |          0 |          6 |         52 |
+| app\api\quizz\[quizzId]\status                                                           |          1 |         35 |          0 |          6 |         41 |
+| app\api\quizz\generate                                                                   |          2 |        288 |         25 |         53 |        366 |
+| app\api\stripe                                                                           |          3 |        255 |          0 |         33 |        288 |
+| app\api\stripe\checkout-session                                                          |          1 |         79 |          0 |          9 |         88 |
+| app\api\stripe\create-portal                                                             |          1 |         78 |          0 |         13 |         91 |
+| app\api\stripe\webhooks                                                                  |          1 |         98 |          0 |         11 |        109 |
+| components                                                                               |         42 |      2,835 |         45 |        367 |      3,247 |
+| components (Files)                                                                       |          5 |        259 |          5 |         25 |        289 |
+| components\layout                                                                        |          2 |        277 |         20 |         31 |        328 |
+| components\sections                                                                      |          2 |        110 |          0 |          7 |        117 |
+| components\skeletons                                                                     |          1 |         72 |          0 |          8 |         80 |
+| components\ui                                                                            |         32 |      2,117 |         20 |        296 |      2,433 |
+| constants                                                                                |          1 |         41 |          0 |          3 |         44 |
+| db                                                                                       |          2 |        175 |          4 |         20 |        199 |
+| lib                                                                                      |         12 |        384 |         19 |         73 |        476 |
+| lib (Files)                                                                              |          9 |        229 |         10 |         44 |        283 |
+| lib\stores                                                                               |          3 |        155 |          9 |         29 |        193 |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                 | language       | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(company)\about-us\page.tsx     | TypeScript JSX |        266 |         63 |         16 |        345 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(company)\contact\page.tsx      | TypeScript JSX |        272 |         13 |         21 |        306 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(legal)\privacy\page.tsx        | TypeScript JSX |         10 |          0 |          3 |         13 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(legal)\terms\page.tsx          | TypeScript JSX |         10 |          0 |          3 |         13 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(product)\features\page.tsx     | TypeScript JSX |        422 |         45 |         20 |        487 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(product)\roadmap\page.tsx      | TypeScript JSX |        295 |         60 |         14 |        369 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\layout.tsx                      | TypeScript JSX |         18 |          0 |          4 |         22 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\page.tsx                        | TypeScript JSX |        489 |        169 |         37 |        695 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\billing\ManageSubscription.tsx   | TypeScript JSX |         62 |          0 |         13 |         75 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\billing\SubscribeBtn.tsx         | TypeScript JSX |         51 |          0 |         10 |         61 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\billing\page.tsx                 | TypeScript JSX |        126 |          6 |         12 |        144 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\billing\payment\success\page.tsx | TypeScript JSX |         20 |          0 |          3 |         23 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\dashboard\heatMap.tsx            | TypeScript JSX |         50 |          0 |          7 |         57 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\dashboard\metricCard.tsx         | TypeScript JSX |         15 |          0 |          5 |         20 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\dashboard\page.tsx               | TypeScript JSX |        117 |          4 |         16 |        137 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\dashboard\quizzesTable.tsx       | TypeScript JSX |        290 |          5 |         23 |        318 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\feedback\feedbackForm.tsx        | TypeScript JSX |        224 |          3 |         17 |        244 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\feedback\page.tsx                | TypeScript JSX |         10 |          0 |          2 |         12 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\flashcards\page.tsx              | TypeScript JSX |         10 |          0 |          2 |         12 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\layout.tsx                       | TypeScript JSX |         37 |          0 |          6 |         43 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\podcasts\page.tsx                | TypeScript JSX |         11 |          0 |          3 |         14 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\QuizzQuestions.tsx         | TypeScript JSX |        202 |          0 |         13 |        215 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\QuizzSubmission.tsx        | TypeScript JSX |        214 |          6 |         18 |        238 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\ResultCard.tsx             | TypeScript JSX |         38 |          0 |          8 |         46 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\UpgradePlan.tsx            | TypeScript JSX |         48 |          0 |          6 |         54 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\UploadDoc.tsx              | TypeScript JSX |        201 |          2 |         28 |        231 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\[quizzId]\page.tsx         | TypeScript JSX |         55 |          2 |          9 |         66 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\new\page.tsx               | TypeScript JSX |        166 |         22 |         13 |        201 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\page.tsx                   | TypeScript JSX |        153 |          0 |          9 |        162 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\auth-actions.ts                 | TypeScript     |          7 |          0 |          3 |         10 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\getHeatMapData.ts               | TypeScript     |         23 |          0 |          5 |         28 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\getUserMetrics.ts               | TypeScript     |         40 |          4 |          9 |         53 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\getUserQuizzes.ts               | TypeScript     |         45 |          0 |          7 |         52 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\saveFeedback.ts                 | TypeScript     |         86 |         13 |         17 |        116 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\saveSubmissions.ts              | TypeScript     |         15 |          0 |          5 |         20 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\userSubscription.ts             | TypeScript     |         33 |          0 |          4 |         37 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\auth\[...nextauth]\route.ts         | TypeScript     |          1 |          0 |          1 |          2 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\cron\check-premium\route.ts         | TypeScript     |         79 |         10 |         12 |        101 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\[quizzId]\delete\route.ts     | TypeScript     |         13 |          1 |          3 |         17 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\[quizzId]\details\route.ts    | TypeScript     |         46 |          0 |          6 |         52 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\[quizzId]\status\route.ts     | TypeScript     |         35 |          0 |          6 |         41 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\generate\route.ts             | TypeScript     |        188 |         17 |         36 |        241 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\generate\saveToDb.tsx         | TypeScript JSX |        100 |          8 |         17 |        125 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\stripe\checkout-session\route.ts    | TypeScript     |         79 |          0 |          9 |         88 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\stripe\create-portal\route.ts       | TypeScript     |         78 |          0 |         13 |         91 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\stripe\webhooks\route.ts            | TypeScript     |         98 |          0 |         11 |        109 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\globals.css                             | CSS            |        160 |          7 |         22 |        189 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\layout.tsx                              | TypeScript JSX |         71 |          0 |          5 |         76 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\app\providers.tsx                           | TypeScript JSX |         15 |          0 |          3 |         18 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\auth.ts                                     | TypeScript     |         39 |          0 |          2 |         41 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\Bar.tsx                          | TypeScript JSX |         28 |          0 |          5 |         33 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\NavMenu.tsx                      | TypeScript JSX |         63 |          0 |          3 |         66 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\animated-section.tsx             | TypeScript JSX |         23 |          0 |          5 |         28 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\footer.tsx                       | TypeScript JSX |        130 |          5 |          8 |        143 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\layout\Sidebar.tsx               | TypeScript JSX |        246 |         20 |         27 |        293 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\layout\UserProfile.tsx           | TypeScript JSX |         31 |          0 |          4 |         35 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\progressBar.tsx                  | TypeScript JSX |         15 |          0 |          4 |         19 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\sections\cta-section.tsx         | TypeScript JSX |         51 |          0 |          3 |         54 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\sections\features-section.tsx    | TypeScript JSX |         59 |          0 |          4 |         63 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\skeletons\dashboard-skeleton.tsx | TypeScript JSX |         72 |          0 |          8 |         80 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\alert.tsx                     | TypeScript JSX |         53 |          0 |          7 |         60 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\animated-card.tsx             | TypeScript JSX |         24 |          0 |          4 |         28 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\animated-heading.tsx          | TypeScript JSX |         23 |          0 |          4 |         27 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\animated-icon.tsx             | TypeScript JSX |         22 |          0 |          4 |         26 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\animated-section.tsx          | TypeScript JSX |         22 |          0 |          4 |         26 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\aurora-landing.tsx            | TypeScript JSX |         35 |          0 |          8 |         43 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\aurora.tsx                    | TypeScript JSX |        202 |          1 |         19 |        222 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\button.tsx                    | TypeScript JSX |         60 |          0 |          5 |         65 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\card.tsx                      | TypeScript JSX |         71 |          0 |          9 |         80 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\checkbox.tsx                  | TypeScript JSX |         26 |          0 |          5 |         31 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\click-spark.tsx               | TypeScript JSX |        147 |          6 |         31 |        184 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\conditional-aurora.tsx        | TypeScript JSX |         13 |          0 |          5 |         18 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\conditional-header.tsx        | TypeScript JSX |         15 |          3 |          6 |         24 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\confirm-delete-dialog.tsx     | TypeScript JSX |         55 |          0 |          3 |         58 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\dialog.tsx                    | TypeScript JSX |        109 |          0 |         14 |        123 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\dropdown-menu.tsx             | TypeScript JSX |        182 |          0 |         19 |        201 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\form.tsx                      | TypeScript JSX |        152 |          0 |         25 |        177 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\gradient-background.tsx       | TypeScript JSX |         49 |          0 |         16 |         65 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\header.tsx                    | TypeScript JSX |        197 |         10 |         17 |        224 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\input.tsx                     | TypeScript JSX |         21 |          0 |          5 |         26 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\label.tsx                     | TypeScript JSX |         21 |          0 |          6 |         27 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\lamp.tsx                      | TypeScript JSX |         82 |          0 |          4 |         86 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\magnet.tsx                    | TypeScript JSX |         84 |          0 |         12 |         96 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\radio-group.tsx               | TypeScript JSX |         39 |          0 |          6 |         45 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\select.tsx                    | TypeScript JSX |        146 |          0 |         15 |        161 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\server-header.tsx             | TypeScript JSX |          6 |          0 |          2 |          8 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\skeleton.tsx                  | TypeScript JSX |         10 |          0 |          3 |         13 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\soon.tsx                      | TypeScript JSX |         38 |          0 |          4 |         42 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\spotlight-card.tsx            | TypeScript JSX |         61 |          0 |         13 |         74 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\switch.tsx                    | TypeScript JSX |         25 |          0 |          5 |         30 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\table.tsx                     | TypeScript JSX |        107 |          0 |         11 |        118 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\textarea.tsx                  | TypeScript JSX |         20 |          0 |          5 |         25 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\constants\quiz-settings.ts                  | TypeScript     |         41 |          0 |          3 |         44 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\db\index.ts                                 | TypeScript     |          8 |          0 |          3 |         11 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\db\schema.ts                                | TypeScript     |        167 |          4 |         17 |        188 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\actions.ts                              | TypeScript     |          5 |          0 |          3 |          8 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\checkPremiumStatus.ts                   | TypeScript     |         52 |          7 |          8 |         67 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\quizz.ts                                | TypeScript     |         53 |          0 |          8 |         61 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\session-cache.ts                        | TypeScript     |         18 |          0 |          4 |         22 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\sort-quizzes.ts                         | TypeScript     |         52 |          3 |          9 |         64 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stores\form-store.ts                    | TypeScript     |         32 |          0 |          6 |         38 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stores\quiz-generation-store.ts         | TypeScript     |         74 |          2 |         11 |         87 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stores\ui-store.ts                      | TypeScript     |         49 |          7 |         12 |         68 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stripe-client.ts                        | TypeScript     |         15 |          0 |          4 |         19 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stripe.ts                               | TypeScript     |          5 |          0 |          1 |          6 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\user-session.ts                         | TypeScript     |          5 |          0 |          2 |          7 |
+| c:\Users\zabol\Documents\GitHub\quizzley\src\lib\utils.ts                                | TypeScript     |         24 |          0 |          5 |         29 |
+| Total                                                                                    |                |      8,568 |        528 |      1,000 |     10,096 |
++------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
