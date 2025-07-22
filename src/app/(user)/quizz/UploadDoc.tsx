@@ -7,6 +7,10 @@ import { useQuizGenerationStore } from "@/lib/stores/quiz-generation-store";
 
 const UploadDoc = () => {
   const router = useRouter();
+  const quizOptions = useQuizGenerationStore.getState().quizOptions;
+  const selectedDifficulty =
+    useQuizGenerationStore.getState().selectedDifficulty;
+
   const {
     isLoading,
     progress,
@@ -14,13 +18,15 @@ const UploadDoc = () => {
     error,
     questionCount,
     document,
+    quizTitle,
+    setQuizTitle,
     setLoading,
     setProgress,
     setError,
     setDocument,
     incrementMessageIndex,
     reset,
-    currentMessage,
+    getCurrentMessage,
   } = useQuizGenerationStore();
 
   useEffect(() => {
@@ -53,10 +59,17 @@ const UploadDoc = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!quizTitle) {
+      setError("Please enter the name of your quizz");
+      return;
+    }
+
     if (!document) {
       setError("Please upload the document first");
       return;
     }
+
     setLoading(true);
     setError(null);
     setProgress(5); // Start with 5% progress
@@ -64,6 +77,9 @@ const UploadDoc = () => {
     const formData = new FormData();
     formData.append("pdf", document as Blob);
     formData.append("questionCount", questionCount.toString());
+    formData.append("quizTitle", quizTitle);
+    formData.append("quizOptions", quizOptions);
+    formData.append("selectedDifficulty", selectedDifficulty);
 
     try {
       const res = await fetch("/api/quizz/generate", {
@@ -156,7 +172,7 @@ const UploadDoc = () => {
           <ProgressBar value={progress} />
           <div className="text-center">
             <p className="text-lg font-medium min-h-[28px] text-primary">
-              {currentMessage}
+              {getCurrentMessage()}
             </p>
             <p className="text-sm text-muted-foreground mt-1">
               This may take a few moments...
@@ -169,8 +185,21 @@ const UploadDoc = () => {
           onSubmit={handleSubmit}
         >
           <label
+            className="block text-zinc-400 mb-2 font-medium"
+            htmlFor="quizTitle"
+          >
+            <input
+              id="quizTitle"
+              type="text"
+              className="w-full border rounded-md px-3 py-2 mb-4 text-zinc-400 bg-zinc-900"
+              placeholder="Enter the name of your quizz"
+              value={quizTitle}
+              onChange={(e) => setQuizTitle(e.target.value)}
+            />
+          </label>
+          <label
             htmlFor="document"
-            className="bg-secondary w-full flex h-20 rounded-md border-2 border-dashed border-gray-600 relative"
+            className="bg-secondary w-full flex h-20 rounded-md border-2 border-dashed border-orange-700 relative"
           >
             <div className="absolute inset-0 m-auto flex justify-center items-center">
               {document && document instanceof File

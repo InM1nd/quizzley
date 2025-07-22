@@ -12,7 +12,9 @@ import {
   X,
   Home,
   Plus,
-  Settings,
+  Zap,
+  Podcast,
+  Clock,
   LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,11 +22,13 @@ import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { logoutUser } from "@/app/actions/auth-actions";
 import { useUIStore } from "@/lib/stores/ui-store";
+import Flashcards from "@/app/(user)/flashcards/page";
 
 type NavItem = {
   title: string;
   href: string;
   icon: React.ElementType;
+  status: "in-progress" | "done";
 };
 
 const mainNavItems: NavItem[] = [
@@ -32,21 +36,37 @@ const mainNavItems: NavItem[] = [
     title: "Dashboard",
     href: "/dashboard",
     icon: BarChart2,
+    status: "done",
   },
   {
     title: "New Quizz",
     href: "/quizz/new",
     icon: Plus,
+    status: "done",
+  },
+  {
+    title: "Flashcards",
+    href: "/flashcards",
+    icon: Zap,
+    status: "in-progress",
+  },
+  {
+    title: "Podcasts",
+    href: "/podcasts",
+    icon: Podcast,
+    status: "in-progress",
   },
   {
     title: "Billing",
     href: "/billing",
     icon: CreditCard,
+    status: "done",
   },
   {
     title: "Feedback",
     href: "/feedback",
     icon: Star,
+    status: "done",
   },
 ];
 
@@ -168,6 +188,9 @@ export default function Sidebar() {
       >
         <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
         {item.title}
+        {item.status === "in-progress" && (
+          <Clock className="ml-2 h-4 w-4 text-orange-500 animate-pulse" />
+        )}
       </Link>
     ));
   }, [pathname, handleNavClick]);
@@ -176,8 +199,10 @@ export default function Sidebar() {
     try {
       await logoutUser();
       router.push("/");
+      window.location.reload();
     } catch (error) {
       console.error("Error logging out:", error);
+      window.location.href = "/";
     }
   };
   // Optimized loading placeholder

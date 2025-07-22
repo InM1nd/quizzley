@@ -1,24 +1,120 @@
 "use client";
-import { quizzes } from "@/db/schema";
-import { InferSelectModel } from "drizzle-orm";
+
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  Trash2,
+} from "lucide-react";
 import { UserQuizzes } from "@/app/actions/getUserQuizzes";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+} from "@/components/ui/table";
+import { ConfirmDeleteDialog } from "@/components/ui/confirm-delete-dialog";
+import { toast } from "sonner";
+import { sortQuizzes } from "@/lib/sort-quizzes";
 
 type Props = {
   quizzes: UserQuizzes[];
 };
 
-const ITEMS_PER_PAGE = 4;
+type SortField = "name" | "createdAt" | "score" | "questionCount";
+type SortOrder = "asc" | "desc";
+
+const ITEMS_PER_PAGE = 5;
+
+function truncateWords(text: string, maxWords: number): string {
+  if (!text) return "";
+  const words = text.split(" ");
+  if (words.length <= maxWords) return text;
+  return words.slice(0, maxWords).join(" ") + " ...";
+}
+
+function parseDate(dateStr: string | number | Date | null | undefined): number {
+  if (!dateStr || dateStr === "Not taken") return 0;
+
+  if (typeof dateStr === "string") {
+    // Если формат "дд.мм.гггг"
+    if (/^\d{2}\.\d{2}\.\d{4}$/.test(dateStr)) {
+      const [day, month, year] = dateStr.split(".");
+      return new Date(+year, +month - 1, +day).getTime();
+    }
+    // Если ISO-строка
+    const parsed = Date.parse(dateStr);
+    if (!isNaN(parsed)) return parsed;
+  }
+
+  // Если это Date или число
+  const dateObj = new Date(dateStr as any);
+  if (!isNaN(dateObj.getTime())) return dateObj.getTime();
+
+  return 0;
+}
 
 const QuizzesTable = (props: Props) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [sortField, setSortField] = useState<SortField>("createdAt");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [localQuizzes, setLocalQuizzes] = useState(props.quizzes);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [quizToDelete, setQuizToDelete] = useState<string | null>(null);
 
-  const totalPages = Math.ceil(props.quizzes.length / ITEMS_PER_PAGE);
+  const sortedQuizzes = useMemo(() => {
+    return [...localQuizzes].sort((a, b) =>
+      sortQuizzes(a, b, sortField, sortOrder)
+    );
+  }, [localQuizzes, sortField, sortOrder]);
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("desc");
+    }
+    setCurrentPage(1);
+  };
+
+  const getSortIcon = (field: SortField) => {
+    const isActive = sortField === field;
+    const iconProps = isActive
+      ? "inline h-4 w-4 ml-1 text-orange-500"
+      : "inline h-4 w-4 ml-1 text-zinc-500 opacity-50";
+    if (isActive) {
+      return sortOrder === "asc" ? (
+        <ChevronUp className={iconProps} />
+      ) : (
+        <ChevronDown className={iconProps} />
+      );
+    }
+    // Для неактивных всегда показываем down (или up — на твой вкус)
+    return <ChevronDown className={iconProps} />;
+  };
+
+  const handleDelete = async (id: string) => {
+    const res = await fetch(`/api/quizz/${id}/delete`, { method: "DELETE" });
+    if (res.ok) {
+      setLocalQuizzes((prev) => prev.filter((q) => q.id.toString() !== id));
+      toast.success("Quiz deleted successfully");
+    } else {
+      toast.error("Error deleting quiz");
+    }
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(sortedQuizzes.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const visibleQuizzes = props.quizzes.slice(
+  const visibleQuizzes = sortedQuizzes.slice(
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
@@ -35,42 +131,59 @@ const QuizzesTable = (props: Props) => {
     }
   };
 
+  console.log("props.quizzes", props.quizzes.length);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="rounded-xl overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-zinc-900/50 border-b border-zinc-800/50 sticky top-0 z-10">
-            <tr>
-              <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
-                #
-              </th>
-              <th className="text-zinc-400 text-left py-4 md:px-6 font-medium">
-                Name
-              </th>
-              <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
+        <Table className="w-full">
+          <TableHeader className="bg-zinc-900/50 border-b border-zinc-800/50 sticky top-0 z-10">
+            <TableRow>
+              <TableHead className="text-zinc-400 text-center py-4 px-6 font-medium hidden md:table-cell">
+                №
+              </TableHead>
+              <TableHead
+                className="text-zinc-400 text-left py-4 md:px-6 font-medium cursor-pointer"
+                onClick={() => handleSort("name")}
+              >
+                <span className="inline-flex items-center gap-1">
+                  Name {getSortIcon("name")}
+                </span>
+              </TableHead>
+              <TableHead className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
                 Description
-              </th>
-              <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
+              </TableHead>
+              <TableHead className="text-zinc-400 text-center py-4 px-6 font-medium hidden md:table-cell">
                 Questions
-              </th>
-              <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell ">
-                Created
-              </th>
-              <th className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
-                Score
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-zinc-800/50">
+              </TableHead>
+              <TableHead
+                className="text-zinc-400 items-center justify-center text-center py-4 px-6 font-medium hidden md:table-cell cursor-pointer"
+                onClick={() => handleSort("createdAt")}
+              >
+                <span className="inline-flex items-center gap-1">
+                  Created {getSortIcon("createdAt")}
+                </span>
+              </TableHead>
+              <TableHead
+                className="text-zinc-400 text-center py-4 px-6 font-medium hidden md:table-cell cursor-pointer"
+                onClick={() => handleSort("score")}
+              >
+                <span className="inline-flex items-center gap-1">
+                  Score {getSortIcon("score")}
+                </span>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody className="divide-y divide-zinc-800/50">
             {visibleQuizzes.map((quizz: UserQuizzes, index: number) => (
-              <tr
+              <TableRow
                 key={quizz.id}
                 className="group hover:bg-orange-500/5 transition-colors duration-200"
               >
-                <td className="py-4 px-6 hidden md:table-cell">
+                <TableCell className="py-4 px-6 text-center hidden md:table-cell">
                   {startIndex + index + 1}
-                </td>
-                <td className="py-4 md:px-6 ">
+                </TableCell>
+                <TableCell className="py-4 md:px-6 ">
                   <Link href={`/quizz/${quizz.id}`}>
                     <p className="text-orange-500 hover:text-orange-400 transition-colors font-medium">
                       {quizz.name}
@@ -78,7 +191,7 @@ const QuizzesTable = (props: Props) => {
                   </Link>
                   <div className="md:hidden mt-2 text-sm text-zinc-400 gap-2">
                     <p className="line-clamp-2 mb-2 md:mb-0">
-                      {quizz.description || "No description"}
+                      {truncateWords(quizz.description || "No description", 10)}
                     </p>
                     <p className="text-sm text-zinc-400">
                       Questions: {quizz.questionCount}
@@ -108,21 +221,21 @@ const QuizzesTable = (props: Props) => {
                       )}
                     </p>
                   </div>
-                </td>
-                <td className="py-4 px-6 text-zinc-400 hidden md:table-cell">
+                </TableCell>
+                <TableCell className="py-4 px-6 text-zinc-400 hidden md:table-cell">
                   <p className="line-clamp-2">
-                    {quizz.description || "No description"}
+                    {truncateWords(quizz.description || "No description", 10)}
                   </p>
-                </td>
-                <td className="py-4 px-6 text-zinc-400 hidden md:table-cell text-center">
+                </TableCell>
+                <TableCell className="py-4 px-6 text-zinc-400 hidden md:table-cell text-center">
                   {quizz.questionCount}
-                </td>
-                <td className="py-4 px-6 text-zinc-400 hidden md:table-cell">
+                </TableCell>
+                <TableCell className="py-4 px-6 text-zinc-400 hidden md:table-cell text-center">
                   {quizz.createdAt
                     ? new Date(quizz.createdAt).toLocaleDateString()
                     : "Not taken"}
-                </td>
-                <td className="py-4 px-6 text-zinc-400 hidden md:table-cell">
+                </TableCell>
+                <TableCell className="py-4 px-6 text-zinc-400 hidden md:table-cell text-center">
                   {quizz.score !== null ? (
                     <span
                       className={`font-medium ${
@@ -138,11 +251,20 @@ const QuizzesTable = (props: Props) => {
                   ) : (
                     "Not taken"
                   )}
-                </td>
-              </tr>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="ghost"
+                    className="text-red-500 hover:underline"
+                    onClick={() => setQuizToDelete(quizz.id.toString())}
+                  >
+                    <Trash2 />
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       {/* Пагинация */}
@@ -155,7 +277,7 @@ const QuizzesTable = (props: Props) => {
           </div>
           <div className="flex gap-2">
             <Button
-              variant="outline"
+              variant="secondary"
               size="sm"
               onClick={goToPreviousPage}
               disabled={currentPage === 1}
@@ -167,7 +289,7 @@ const QuizzesTable = (props: Props) => {
               Page {currentPage} of {totalPages}
             </div>
             <Button
-              variant="outline"
+              variant="secondary"
               size="sm"
               onClick={goToNextPage}
               disabled={currentPage === totalPages}
@@ -178,6 +300,16 @@ const QuizzesTable = (props: Props) => {
           </div>
         </div>
       )}
+
+      <ConfirmDeleteDialog
+        open={quizToDelete !== null}
+        onCancel={() => setQuizToDelete(null)}
+        onConfirm={async () => {
+          if (!quizToDelete) return;
+          await handleDelete(quizToDelete);
+          setQuizToDelete(null);
+        }}
+      />
     </div>
   );
 };

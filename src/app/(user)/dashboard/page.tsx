@@ -112,8 +112,6 @@ const QuizzesSection = async () => {
 const page = () => {
   return (
     <div className="container mx-auto p-0 md:space-y-6 md:p-6 ">
-      <div className="fixed inset-0 -z-10 h-full w-full bg-white dark:bg-zinc-900 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
-
       <div className="grid grid-cols-1 md:grid-cols-3 md:gap-6">
         <Suspense fallback={<ProfileSkeleton />}>
           <ProfileSection />

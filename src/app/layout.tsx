@@ -3,11 +3,10 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 
 import ClickSpark from "@/components/ui/click-spark";
-import ConditionalHeader from "@/components/ui/conditional-header";
 import ConditionalAurora from "@/components/ui/conditional-aurora";
-import { getUserSession } from "@/lib/user-session";
 import { SessionProvider } from "next-auth/react";
 import { Providers } from "./providers";
+import { Toaster } from "sonner";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -45,22 +44,15 @@ export const metadata: Metadata = {
   robots: "index, follow",
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const session = await getUserSession();
-
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <SessionProvider>
-      <html
-        lang="en"
-        className={nunito.variable}
-      >
-        <body className={"dark"}>
+    <html
+      lang="en"
+      className={nunito.variable}
+    >
+      <body className={"dark"}>
+        <SessionProvider>
           <Providers>
-            <ConditionalAurora />
             <ClickSpark
               sparkColor="#fff"
               sparkSize={10}
@@ -68,12 +60,16 @@ export default async function RootLayout({
               sparkCount={8}
               duration={400}
             >
-              <ConditionalHeader session={session} />
               {children}
             </ClickSpark>
+            <Toaster
+              position="bottom-right"
+              richColors
+              className="z-[1000]"
+            />
           </Providers>
-        </body>
-      </html>
-    </SessionProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }
