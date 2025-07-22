@@ -22,10 +22,7 @@ export async function POST(req: NextRequest) {
   const quizTitle = (body.get("quizTitle") as string) || "Quiz";
   const document = body.get("pdf");
   const questionCount = parseInt(body.get("questionCount") as string, 10) || 10;
-  const quizOptionsRaw = body.get("quizOptions") as string | null;
-  const quizOptions: string[] = quizOptionsRaw
-    ? JSON.parse(quizOptionsRaw)
-    : [];
+  const quizOptions = body.get("quizOptions") as string;
   const selectedDifficulty = body.get("selectedDifficulty") as string;
 
   if (!document) {
@@ -85,7 +82,7 @@ async function generateQuizInBackground(
   quizzId: number,
   userId: string,
   quizTitle: string,
-  quizOptions: string[],
+  quizOptions: string,
   selectedDifficulty: string
 ) {
   try {
@@ -98,12 +95,8 @@ async function generateQuizInBackground(
     const { default: saveQuizz } = await import("./saveToDb");
 
     const selectedInstructions = quizOptions
-      .map((opt) => {
-        const found = QUIZ_OPTIONS.find((q) => q.value === opt);
-        return found?.instruction;
-      })
-      .filter(Boolean)
-      .join("\n");
+      ? QUIZ_OPTIONS.find((q) => q.value === quizOptions)?.instruction || ""
+      : "";
 
     const difficultyInstruction =
       DIFFICULTY_OPTIONS.find((d) => d.value === selectedDifficulty)

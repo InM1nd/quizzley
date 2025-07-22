@@ -1,0 +1,109 @@
+"filename", "language", "TypeScript", "TypeScript JSX", "CSS", "comment", "blank", "total"
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(company)\about-us\page.tsx", "TypeScript JSX", 0, 266, 0, 63, 16, 345
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(company)\contact\page.tsx", "TypeScript JSX", 0, 272, 0, 13, 21, 306
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(legal)\privacy\page.tsx", "TypeScript JSX", 0, 10, 0, 0, 3, 13
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(legal)\terms\page.tsx", "TypeScript JSX", 0, 10, 0, 0, 3, 13
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(product)\features\page.tsx", "TypeScript JSX", 0, 422, 0, 45, 20, 487
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\(product)\roadmap\page.tsx", "TypeScript JSX", 0, 295, 0, 60, 14, 369
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\layout.tsx", "TypeScript JSX", 0, 18, 0, 0, 4, 22
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(pages)\page.tsx", "TypeScript JSX", 0, 489, 0, 169, 37, 695
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\billing\ManageSubscription.tsx", "TypeScript JSX", 0, 62, 0, 0, 13, 75
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\billing\SubscribeBtn.tsx", "TypeScript JSX", 0, 51, 0, 0, 10, 61
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\billing\page.tsx", "TypeScript JSX", 0, 126, 0, 6, 12, 144
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\billing\payment\success\page.tsx", "TypeScript JSX", 0, 20, 0, 0, 3, 23
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\dashboard\heatMap.tsx", "TypeScript JSX", 0, 50, 0, 0, 7, 57
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\dashboard\metricCard.tsx", "TypeScript JSX", 0, 15, 0, 0, 5, 20
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\dashboard\page.tsx", "TypeScript JSX", 0, 117, 0, 4, 16, 137
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\dashboard\quizzesTable.tsx", "TypeScript JSX", 0, 290, 0, 5, 23, 318
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\feedback\feedbackForm.tsx", "TypeScript JSX", 0, 224, 0, 3, 17, 244
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\feedback\page.tsx", "TypeScript JSX", 0, 10, 0, 0, 2, 12
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\flashcards\page.tsx", "TypeScript JSX", 0, 10, 0, 0, 2, 12
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\layout.tsx", "TypeScript JSX", 0, 37, 0, 0, 6, 43
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\podcasts\page.tsx", "TypeScript JSX", 0, 11, 0, 0, 3, 14
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\QuizzQuestions.tsx", "TypeScript JSX", 0, 202, 0, 0, 13, 215
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\QuizzSubmission.tsx", "TypeScript JSX", 0, 214, 0, 6, 18, 238
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\ResultCard.tsx", "TypeScript JSX", 0, 38, 0, 0, 8, 46
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\UpgradePlan.tsx", "TypeScript JSX", 0, 48, 0, 0, 6, 54
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\UploadDoc.tsx", "TypeScript JSX", 0, 201, 0, 2, 28, 231
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\[quizzId]\page.tsx", "TypeScript JSX", 0, 55, 0, 2, 9, 66
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\new\page.tsx", "TypeScript JSX", 0, 166, 0, 22, 13, 201
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\(user)\quizz\page.tsx", "TypeScript JSX", 0, 153, 0, 0, 9, 162
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\auth-actions.ts", "TypeScript", 7, 0, 0, 0, 3, 10
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\getHeatMapData.ts", "TypeScript", 23, 0, 0, 0, 5, 28
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\getUserMetrics.ts", "TypeScript", 40, 0, 0, 4, 9, 53
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\getUserQuizzes.ts", "TypeScript", 45, 0, 0, 0, 7, 52
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\saveFeedback.ts", "TypeScript", 86, 0, 0, 13, 17, 116
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\saveSubmissions.ts", "TypeScript", 15, 0, 0, 0, 5, 20
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\actions\userSubscription.ts", "TypeScript", 33, 0, 0, 0, 4, 37
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\auth\[...nextauth]\route.ts", "TypeScript", 1, 0, 0, 0, 1, 2
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\cron\check-premium\route.ts", "TypeScript", 79, 0, 0, 10, 12, 101
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\[quizzId]\delete\route.ts", "TypeScript", 13, 0, 0, 1, 3, 17
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\[quizzId]\details\route.ts", "TypeScript", 46, 0, 0, 0, 6, 52
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\[quizzId]\status\route.ts", "TypeScript", 35, 0, 0, 0, 6, 41
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\generate\route.ts", "TypeScript", 188, 0, 0, 17, 36, 241
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\quizz\generate\saveToDb.tsx", "TypeScript JSX", 0, 100, 0, 8, 17, 125
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\stripe\checkout-session\route.ts", "TypeScript", 79, 0, 0, 0, 9, 88
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\stripe\create-portal\route.ts", "TypeScript", 78, 0, 0, 0, 13, 91
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\api\stripe\webhooks\route.ts", "TypeScript", 98, 0, 0, 0, 11, 109
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\globals.css", "CSS", 0, 0, 160, 7, 22, 189
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\layout.tsx", "TypeScript JSX", 0, 71, 0, 0, 5, 76
+"c:\Users\zabol\Documents\GitHub\quizzley\src\app\providers.tsx", "TypeScript JSX", 0, 15, 0, 0, 3, 18
+"c:\Users\zabol\Documents\GitHub\quizzley\src\auth.ts", "TypeScript", 39, 0, 0, 0, 2, 41
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\Bar.tsx", "TypeScript JSX", 0, 28, 0, 0, 5, 33
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\NavMenu.tsx", "TypeScript JSX", 0, 63, 0, 0, 3, 66
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\animated-section.tsx", "TypeScript JSX", 0, 23, 0, 0, 5, 28
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\footer.tsx", "TypeScript JSX", 0, 130, 0, 5, 8, 143
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\layout\Sidebar.tsx", "TypeScript JSX", 0, 246, 0, 20, 27, 293
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\layout\UserProfile.tsx", "TypeScript JSX", 0, 31, 0, 0, 4, 35
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\progressBar.tsx", "TypeScript JSX", 0, 15, 0, 0, 4, 19
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\sections\cta-section.tsx", "TypeScript JSX", 0, 51, 0, 0, 3, 54
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\sections\features-section.tsx", "TypeScript JSX", 0, 59, 0, 0, 4, 63
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\skeletons\dashboard-skeleton.tsx", "TypeScript JSX", 0, 72, 0, 0, 8, 80
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\alert.tsx", "TypeScript JSX", 0, 53, 0, 0, 7, 60
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\animated-card.tsx", "TypeScript JSX", 0, 24, 0, 0, 4, 28
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\animated-heading.tsx", "TypeScript JSX", 0, 23, 0, 0, 4, 27
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\animated-icon.tsx", "TypeScript JSX", 0, 22, 0, 0, 4, 26
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\animated-section.tsx", "TypeScript JSX", 0, 22, 0, 0, 4, 26
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\aurora-landing.tsx", "TypeScript JSX", 0, 35, 0, 0, 8, 43
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\aurora.tsx", "TypeScript JSX", 0, 202, 0, 1, 19, 222
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\button.tsx", "TypeScript JSX", 0, 60, 0, 0, 5, 65
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\card.tsx", "TypeScript JSX", 0, 71, 0, 0, 9, 80
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\checkbox.tsx", "TypeScript JSX", 0, 26, 0, 0, 5, 31
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\click-spark.tsx", "TypeScript JSX", 0, 147, 0, 6, 31, 184
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\conditional-aurora.tsx", "TypeScript JSX", 0, 13, 0, 0, 5, 18
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\conditional-header.tsx", "TypeScript JSX", 0, 15, 0, 3, 6, 24
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\confirm-delete-dialog.tsx", "TypeScript JSX", 0, 55, 0, 0, 3, 58
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\dialog.tsx", "TypeScript JSX", 0, 109, 0, 0, 14, 123
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\dropdown-menu.tsx", "TypeScript JSX", 0, 182, 0, 0, 19, 201
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\form.tsx", "TypeScript JSX", 0, 152, 0, 0, 25, 177
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\gradient-background.tsx", "TypeScript JSX", 0, 49, 0, 0, 16, 65
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\header.tsx", "TypeScript JSX", 0, 197, 0, 10, 17, 224
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\input.tsx", "TypeScript JSX", 0, 21, 0, 0, 5, 26
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\label.tsx", "TypeScript JSX", 0, 21, 0, 0, 6, 27
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\lamp.tsx", "TypeScript JSX", 0, 82, 0, 0, 4, 86
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\magnet.tsx", "TypeScript JSX", 0, 84, 0, 0, 12, 96
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\radio-group.tsx", "TypeScript JSX", 0, 39, 0, 0, 6, 45
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\select.tsx", "TypeScript JSX", 0, 146, 0, 0, 15, 161
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\server-header.tsx", "TypeScript JSX", 0, 6, 0, 0, 2, 8
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\skeleton.tsx", "TypeScript JSX", 0, 10, 0, 0, 3, 13
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\soon.tsx", "TypeScript JSX", 0, 38, 0, 0, 4, 42
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\spotlight-card.tsx", "TypeScript JSX", 0, 61, 0, 0, 13, 74
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\switch.tsx", "TypeScript JSX", 0, 25, 0, 0, 5, 30
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\table.tsx", "TypeScript JSX", 0, 107, 0, 0, 11, 118
+"c:\Users\zabol\Documents\GitHub\quizzley\src\components\ui\textarea.tsx", "TypeScript JSX", 0, 20, 0, 0, 5, 25
+"c:\Users\zabol\Documents\GitHub\quizzley\src\constants\quiz-settings.ts", "TypeScript", 41, 0, 0, 0, 3, 44
+"c:\Users\zabol\Documents\GitHub\quizzley\src\db\index.ts", "TypeScript", 8, 0, 0, 0, 3, 11
+"c:\Users\zabol\Documents\GitHub\quizzley\src\db\schema.ts", "TypeScript", 167, 0, 0, 4, 17, 188
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\actions.ts", "TypeScript", 5, 0, 0, 0, 3, 8
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\checkPremiumStatus.ts", "TypeScript", 52, 0, 0, 7, 8, 67
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\quizz.ts", "TypeScript", 53, 0, 0, 0, 8, 61
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\session-cache.ts", "TypeScript", 18, 0, 0, 0, 4, 22
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\sort-quizzes.ts", "TypeScript", 52, 0, 0, 3, 9, 64
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stores\form-store.ts", "TypeScript", 32, 0, 0, 0, 6, 38
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stores\quiz-generation-store.ts", "TypeScript", 74, 0, 0, 2, 11, 87
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stores\ui-store.ts", "TypeScript", 49, 0, 0, 7, 12, 68
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stripe-client.ts", "TypeScript", 15, 0, 0, 0, 4, 19
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\stripe.ts", "TypeScript", 5, 0, 0, 0, 1, 6
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\user-session.ts", "TypeScript", 5, 0, 0, 0, 2, 7
+"c:\Users\zabol\Documents\GitHub\quizzley\src\lib\utils.ts", "TypeScript", 24, 0, 0, 0, 5, 29
+"Total", "-", 1505, 6903, 160, 528, 1000, 10096
