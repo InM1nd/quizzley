@@ -6,6 +6,10 @@ import { getUserSubscription } from "@/app/actions/userSubscription";
 import UpgradePlan from "../UpgradePlan";
 import { FileText, Brain, Settings, Sparkles } from "lucide-react";
 import { useQuizGenerationStore } from "@/lib/stores/quiz-generation-store";
+import { QUIZ_OPTIONS, DIFFICULTY_OPTIONS } from "@/constants/quiz-settings";
+import { get } from "http";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const Page = () => {
   // const session = await auth();
@@ -14,6 +18,19 @@ const Page = () => {
   const questionCount = useQuizGenerationStore((state) => state.questionCount);
   const setQuestionCount = useQuizGenerationStore(
     (state) => state.setQuestionCount
+  );
+  const selectedQuizOption = useQuizGenerationStore(
+    (state) => state.quizOptions
+  );
+  const setSelectedQuizOption = useQuizGenerationStore(
+    (state) => state.setQuizOptions
+  );
+
+  const selectedDifficulty = useQuizGenerationStore(
+    (state) => state.selectedDifficulty
+  );
+  const setSelectedDifficulty = useQuizGenerationStore(
+    (state) => state.setSelectedDifficulty
   );
 
   // if (!session) {
@@ -28,7 +45,6 @@ const Page = () => {
   return (
     <div className="flex flex-col flex-1">
       <main className="py-11 flex flex-col items-center flex-1">
-        <div className="fixed inset-0 -z-10 h-full w-full bg-white dark:bg-zinc-900 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="max-w-4xl mx-auto px-4">
           <h1 className="py-12 text-center text-3xl font-bold text-primary">
             Generate Your Quizz
@@ -41,48 +57,68 @@ const Page = () => {
                   <div className="flex items-center gap-3">
                     <Settings className="h-6 w-6 text-primary" />
                     <h2 className="text-xl font-semibold text-white">
-                      Quiz Settings
+                      Quizz Settings
                     </h2>
                   </div>
-                  <span className="text-sm font-medium text-primary">
-                    Coming Soon
-                  </span>
                 </div>
-                <div className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        className="rounded border-gray-600"
-                        disabled
-                      />
-                      <span className="text-gray-400">Exam Preparation</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        className="rounded border-gray-600"
-                        disabled
-                      />
-                      <span className="text-gray-400">Interview Practice</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        className="rounded border-gray-600"
-                        disabled
-                      />
-                      <span className="text-gray-400">General Knowledge</span>
-                    </div>
+                <div className="space-y-5">
+                  <div className="flex flex-row gap-10">
+                    <RadioGroup
+                      value={selectedQuizOption}
+                      onValueChange={setSelectedQuizOption}
+                    >
+                      <h3 className="text-md font-medium text-primary">Type</h3>
+                      {QUIZ_OPTIONS.map((option) => (
+                        <div
+                          className="flex items-center gap-2"
+                          key={option.value}
+                        >
+                          <RadioGroupItem
+                            className="rounded-full border-orange-600"
+                            value={option.value}
+                            id={option.value}
+                          />
+                          <label
+                            htmlFor={option.value}
+                            className="text-gray-400"
+                          >
+                            {option.label}
+                          </label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+
+                    <RadioGroup
+                      value={selectedDifficulty}
+                      onValueChange={setSelectedDifficulty}
+                    >
+                      <h3 className="text-md font-medium text-primary">
+                        Difficulty
+                      </h3>
+                      {DIFFICULTY_OPTIONS.map((option) => (
+                        <div
+                          className="flex items-center gap-2"
+                          key={option.value}
+                        >
+                          <RadioGroupItem
+                            value={option.value}
+                            id={option.value}
+                          />
+                          <label
+                            htmlFor={option.value}
+                            className="text-gray-400 cursor-pointer"
+                          >
+                            {option.label}
+                          </label>
+                        </div>
+                      ))}
+                    </RadioGroup>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-sm text-gray-400">
+                    <div className="flex gap-4 text-sm text-gray-400">
                       <span className="text-gray-400 font-semibold">
-                        Number of Questions
-                      </span>
-                      <span className="text-gray-400 font-semibold">
-                        {questionCount}
+                        Number of Questions - {questionCount}
                       </span>
                     </div>
                     <input

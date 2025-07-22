@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { quizzes } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/auth";
+import { QUIZ_OPTIONS, DIFFICULTY_OPTIONS } from "@/constants/quiz-settings";
 
 // Новый маршрут для инициирования задания
 export async function POST(req: NextRequest) {
@@ -18,8 +19,14 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.formData();
+  const quizTitle = (body.get("quizTitle") as string) || "Quiz";
   const document = body.get("pdf");
   const questionCount = parseInt(body.get("questionCount") as string, 10) || 10;
+  const quizOptionsRaw = body.get("quizOptions") as string | null;
+  const quizOptions: string[] = quizOptionsRaw
+    ? JSON.parse(quizOptionsRaw)
+    : [];
+  const selectedDifficulty = body.get("selectedDifficulty") as string;
 
   if (!document) {
     return NextResponse.json(
@@ -47,7 +54,15 @@ export async function POST(req: NextRequest) {
     const quizzId = newQuizz[0].quizzId;
 
     // Запускаем фоновую задачу
-    void generateQuizInBackground(pdfBlob, questionCount, quizzId, userId);
+    void generateQuizInBackground(
+      pdfBlob,
+      questionCount,
+      quizzId,
+      userId,
+      quizTitle,
+      quizOptions,
+      selectedDifficulty
+    );
 
     // Немедленно возвращаем ID квиза, который находится в обработке
     return NextResponse.json(
@@ -68,7 +83,10 @@ async function generateQuizInBackground(
   pdfBlob: Blob,
   questionCount: number,
   quizzId: number,
-  userId: string
+  userId: string,
+  quizTitle: string,
+  quizOptions: string[],
+  selectedDifficulty: string
 ) {
   try {
     // Импортируем необходимые библиотеки динамически,
@@ -78,6 +96,18 @@ async function generateQuizInBackground(
     const { StructuredOutputParser } = await import("langchain/output_parsers");
     const { z } = await import("zod");
     const { default: saveQuizz } = await import("./saveToDb");
+
+    const selectedInstructions = quizOptions
+      .map((opt) => {
+        const found = QUIZ_OPTIONS.find((q) => q.value === opt);
+        return found?.instruction;
+      })
+      .filter(Boolean)
+      .join("\n");
+
+    const difficultyInstruction =
+      DIFFICULTY_OPTIONS.find((d) => d.value === selectedDifficulty)
+        ?.instruction || "";
 
     const pdfLoader = new PDFLoader(pdfBlob, {
       parsedItemSeparator: "",
@@ -115,19 +145,34 @@ async function generateQuizInBackground(
 
     // Формируем промпт с инструкциями по формату
     const prompt = `
-        You are an expert quiz creator. Create a quiz based on the provided document text.
+        You are an expert quiz creator. Your task is to generate a high-quality, diverse, and challenging quiz strictly based on the provided document text.
 
         CRITICAL REQUIREMENTS:
+        - The quiz title must be: "${quizTitle}"
         - Create EXACTLY ${questionCount} questions. No more, no less.
         - Each question must have exactly 4 answer options.
         - Only ONE answer per question should be correct.
-        - All questions must be based SOLELY on the information provided in the text.
-        - Do not create questions about information not present in the text.
+        - All questions and answers must be based SOLELY on the information provided in the text. Do NOT use any outside knowledge or assumptions.
+        - Do NOT invent facts or details not present in the text ("no hallucinations").
+        - If the text is insufficient for the required number of questions, focus on rephrasing or combining information, but never invent content.
+
+        ${
+          selectedInstructions
+            ? `ADDITIONAL INSTRUCTIONS:\n${selectedInstructions}`
+            : ""
+        }
+        ${difficultyInstruction ? `DIFFICULTY: ${difficultyInstruction}` : ""}
 
         QUESTION GUIDELINES:
-        - Make questions diverse in difficulty and topic coverage
-        - Ensure questions test different aspects: facts, understanding, and application
-        - Make incorrect answers plausible but clearly wrong
+        - Cover a broad range of topics and difficulty levels from the text.
+        - Include a mix of factual, conceptual, and application-based questions.
+        - Avoid trivial or repetitive questions.
+        - Ensure each question is clear, unambiguous, and tests understanding of the material.
+        - Phrase questions and answers in a professional, academic style.
+        - Incorrect answers must be plausible but clearly incorrect when compared to the correct answer.
+        - Avoid using the exact wording from the text for both questions and answers; paraphrase where possible.
+        - Do not include "All of the above", "None of the above", or similar options.
+
 
         Formatting Instructions:
         ${formatInstructions}
@@ -149,13 +194,23 @@ async function generateQuizInBackground(
     // Получаем ответ от модели
     const result = await model.invoke([message]);
 
+    function cleanJsonResponse(text: string): string {
+      return text
+        .replace(/^```json\s*/i, "") // убирает ```json в начале
+        .replace(/```$/i, "") // убирает ``` в конце
+        .trim();
+    }
+
+    const cleaned = cleanJsonResponse(result.content.toString());
+
     // Парсим результат
-    const parsedResult = await parser.parse(result.content.toString());
+    const parsedResult = await parser.parse(cleaned);
     console.log("Parsed result:", parsedResult);
 
     // Обновляем квиз данными из генерации
     await saveQuizz({
       ...parsedResult.quizz,
+      name: quizTitle,
       id: quizzId,
       status: "completed",
       userId: userId,

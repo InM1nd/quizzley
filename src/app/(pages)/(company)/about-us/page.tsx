@@ -3,7 +3,6 @@
 import { AnimatedCard } from "@/components/ui/animated-card";
 import { AnimatedHeading } from "@/components/ui/animated-heading";
 import { AnimatedSection } from "@/components/ui/animated-section";
-import Aurora from "@/components/ui/aurora";
 import Footer from "@/components/footer";
 import Image from "next/image";
 import {
@@ -77,14 +76,7 @@ const AboutUsPage = () => {
     <div className="flex flex-col min-h-screen justify-between">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-24 sm:pb-32 sm:pt-36">
-        <div className="absolute inset-0 -z-10">
-          <Aurora
-            colorStops={["#FF6B00", "#FFA500", "#FF4500"]}
-            blend={1.0}
-            amplitude={0.5}
-            speed={0.3}
-          />
-        </div>
+        <div className="absolute inset-0 -z-10"></div>
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="relative z-10 py-16">
             <div className="mx-auto max-w-2xl text-center">

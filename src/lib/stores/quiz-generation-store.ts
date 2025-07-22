@@ -16,6 +16,9 @@ interface QuizGenerationState {
   error: string | null;
 
   questionCount: number;
+  quizTitle: string;
+  quizOptions: string;
+  selectedDifficulty: string;
 
   document: Blob | File | null;
 
@@ -24,11 +27,15 @@ interface QuizGenerationState {
   setProgress: (progress: number | ((prev: number) => number)) => void;
   setError: (error: string | null) => void;
   setQuestionCount: (count: number) => void;
+  setQuizTitle: (title: string) => void;
   setDocument: (doc: Blob | File | null) => void;
+  setQuizOptions: (options: string) => void;
+  setSelectedDifficulty: (difficulty: string) => void;
   incrementMessageIndex: () => void;
+
   reset: () => void;
 
-  currentMessage: string;
+  getCurrentMessage: () => string;
 }
 
 export const useQuizGenerationStore = create<QuizGenerationState>(
@@ -38,6 +45,9 @@ export const useQuizGenerationStore = create<QuizGenerationState>(
     currentMessageIndex: 0,
     error: null,
     questionCount: 10,
+    quizTitle: "",
+    quizOptions: "exam",
+    selectedDifficulty: "easy",
     document: null,
 
     // Actions
@@ -49,6 +59,10 @@ export const useQuizGenerationStore = create<QuizGenerationState>(
       })),
     setError: (error) => set({ error }),
     setQuestionCount: (count) => set({ questionCount: count }),
+    setQuizTitle: (title) => set({ quizTitle: title }),
+    setQuizOptions: (options) => set({ quizOptions: options }),
+    setSelectedDifficulty: (difficulty) =>
+      set({ selectedDifficulty: difficulty }),
     setDocument: (doc) => set({ document: doc }),
     incrementMessageIndex: () =>
       set((state) => ({
@@ -62,11 +76,11 @@ export const useQuizGenerationStore = create<QuizGenerationState>(
         isLoading: false,
         progress: 0,
         currentMessageIndex: 0,
+        quizOptions: "exam",
+        selectedDifficulty: "easy",
         error: null,
       }),
 
-    get currentMessage() {
-      return loadingMessages[get().currentMessageIndex];
-    },
+    getCurrentMessage: () => loadingMessages[get().currentMessageIndex],
   })
 );
