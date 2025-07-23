@@ -32,7 +32,7 @@ const RoadmapPage = () => {
   // Data about planned features with estimated timelines
   const roadmapItems = [
     {
-      quarter: "Q1 2025",
+      quarter: "Q2 2025",
       title: "MVP Launch",
       description:
         "Launch of the minimum viable product with core features for creating AI-powered quizzes based on documents.",
@@ -41,11 +41,11 @@ const RoadmapPage = () => {
         {
           title: "Basic AI for Quizz Creation",
           description:
-            "Algorithm for generating simple multiple-choice questions",
+            "Algorithm for generating simple single-choice questions",
           icon: Brain,
         },
         {
-          title: "Simple Document Editor",
+          title: "Simple Document Analyzer",
           description: "Ability to upload and analyze PDF documents",
           icon: FileText,
         },
@@ -57,7 +57,7 @@ const RoadmapPage = () => {
       ],
     },
     {
-      quarter: "Q2 2025",
+      quarter: "Q3 2025",
       title: "Core Functionality Improvement",
       description:
         "Expansion of core features and improved user interface based on early user feedback.",
@@ -76,13 +76,13 @@ const RoadmapPage = () => {
         },
         {
           title: "Improved UX/UI",
-          description: "User interface redesign for greater intuitiveness",
+          description: "User interface improvements for greater intuitiveness",
           icon: PenTool,
         },
       ],
     },
     {
-      quarter: "Q3 2025",
+      quarter: "Q4 2025",
       title: "Advanced Analytics",
       description:
         "Launch of in-depth analytics tools to help educators understand student progress and weak points.",
@@ -108,7 +108,7 @@ const RoadmapPage = () => {
       ],
     },
     {
-      quarter: "Q4 2025",
+      quarter: "Q1 2026",
       title: "Podcast Features and Collaborative Quizzes",
       description: "Implementation of tools for creating podcasts from text.",
       status: "planned",
@@ -124,9 +124,9 @@ const RoadmapPage = () => {
           icon: FileText,
         },
         {
-          title: "Collaborative Quizzes",
-          description: "Ability to create quizzes with colleagues",
-          icon: Users,
+          title: "Flashcards",
+          description: "Ability to create flashcards from documents",
+          icon: Zap,
         },
       ],
     },
@@ -214,28 +214,28 @@ const RoadmapPage = () => {
   const StatusBadge = ({ status }: { status: string }) => {
     if (status === "completed") {
       return (
-        <span className="inline-flex items-center rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20">
+        <span className="inline-flex items-center rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20 w-24">
           <CheckCircle2 className="h-3 w-3 mr-1" />
           Completed
         </span>
       );
     } else if (status === "in-progress") {
       return (
-        <span className="inline-flex items-center rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-500/20">
+        <span className="inline-flex items-center rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-500/20 w-24">
           <Clock className="h-3 w-3 mr-1" />
           In Progress
         </span>
       );
     } else if (status === "planned") {
       return (
-        <span className="inline-flex items-center rounded-full bg-orange-500/10 px-2 py-1 text-xs font-medium text-orange-400 ring-1 ring-inset ring-orange-500/20">
+        <span className="inline-flex items-center rounded-full bg-orange-500/10 px-2 py-1 text-xs font-medium text-orange-400 ring-1 ring-inset ring-orange-500/20 w-24">
           <Clock className="h-3 w-3 mr-1" />
           Planned
         </span>
       );
     } else {
       return (
-        <span className="inline-flex items-center rounded-full bg-purple-500/10 px-2 py-1 text-xs font-medium text-purple-400 ring-1 ring-inset ring-purple-500/20">
+        <span className="inline-flex items-center rounded-full bg-purple-500/10 px-2 py-1 text-xs font-medium text-purple-400 ring-1 ring-inset ring-purple-500/20 w-24">
           <Zap className="h-3 w-3 mr-1" />
           Vision
         </span>
@@ -295,8 +295,8 @@ const RoadmapPage = () => {
                   <ChevronRight className="h-5 w-5 text-white" />
                 </div>
 
-                <div className="rounded-xl bg-zinc-900/80 p-8 ring-1 ring-white/10">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                <div className="rounded-xl bg-zinc-900/80 p-6 ring-1 ring-white/10">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                     <div>
                       <span className="text-sm text-primary font-medium inline-block mb-2">
                         {item.quarter}

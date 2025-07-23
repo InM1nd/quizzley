@@ -306,8 +306,15 @@ export default function Home() {
         <div className="h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto w-2/3 mb-4"></div>
 
         <AnimatedSection className="bg-background py-20 sm:py-24 relative">
-          <div className="absolute top-10 left-1/3 w-72 h-72 bg-primary/20 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
-          <div className="absolute bottom-10 right-1/3 w-80 h-80 bg-orange-600/20 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
+          <div
+            className="absolute top-2 left-1/2 sm:top-10 sm:left-1/3 w-32 h-32 sm:w-72 sm:h-72
+                bg-primary/20 rounded-full blur-xl sm:blur-3xl opacity-20 sm:opacity-30 pointer-events-none
+              "
+          ></div>
+          <div
+            className="absolute bottom-2 right-1/2 sm:bottom-10 sm:right-1/3 w-36 h-36 sm:w-80 sm:h-80 bg-orange-600/20 rounded-full blur-xl sm:blur-3xl opacity-20 sm:opacity-30 pointer-events-none
+              "
+          ></div>
 
           <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
             <div className="mx-auto max-w-2xl text-center mb-16">

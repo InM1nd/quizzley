@@ -36,7 +36,7 @@ export function CTASection() {
               asChild
             >
               <Link
-                href="/signup"
+                href="/api/auth/signin?callbackUrl=/dashboard"
                 target="_blank"
               >
                 <span className="flex items-center justify-center gap-2">
