@@ -10,7 +10,7 @@ import { Toaster } from "sonner";
 
 const nunito = Nunito({
   subsets: ["latin"],
-  variable: "--font-nunito",
+  // variable: "--font-nunito",
 });
 
 export const metadata: Metadata = {
@@ -44,11 +44,15 @@ export const metadata: Metadata = {
   robots: "index, follow",
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
-      className={nunito.variable}
+      className={nunito.className}
     >
       <body className={"dark"}>
         <SessionProvider>
