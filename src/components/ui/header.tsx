@@ -19,7 +19,7 @@ function SignOut() {
     <Button
       type="button"
       variant="ghost"
-      className="text-white hover:text-primary hover:bg-white/10"
+      className="text-white font-semibold text-md hover:text-primary hover:bg-white/10"
       onClick={() => signOut()}
     >
       Sign Out
@@ -73,10 +73,16 @@ export default function ClientHeader({ session }: { session: any }) {
           <nav className="relative z-10 flex items-center justify-between rounded-2xl bg-zinc-900/50 p-4 backdrop-blur-sm ring-1 ring-white/10">
             <Link
               href="/"
-              className="flex items-center gap-2"
+              className="flex items-center gap-1"
             >
-              <Wand className="text-primary w-8 h-8" />
-              <h1 className="text-2xl font-bold text-white">Quizzley</h1>
+              {/* <Wand className="text-primary w-8 h-8" /> */}
+              <Image
+                src={" /logo.png"}
+                alt="Quizzley"
+                width={40}
+                height={40}
+              />
+              <h1 className="text-2xl font-extrabold text-white">Quizzley</h1>
             </Link>
 
             {/* Десктопная навигация */}
@@ -85,7 +91,7 @@ export default function ClientHeader({ session }: { session: any }) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-white hover:text-primary transition-colors duration-200"
+                  className="text-white font-semibold text-lg hover:text-primary transition-colors duration-200"
                 >
                   {link.label}
                 </Link>
@@ -116,7 +122,7 @@ export default function ClientHeader({ session }: { session: any }) {
               ) : (
                 <Button
                   variant="outline"
-                  className="rounded-xl border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                  className="rounded-xl font-semibold text-md border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
                   onClick={() => signIn("google")}
                 >
                   Sign In
