@@ -22,6 +22,11 @@ import {
   Linkedin,
 } from "lucide-react";
 
+import { RiTwitterXFill } from "react-icons/ri";
+import { IoLogoInstagram } from "react-icons/io5";
+import { FaLinkedinIn } from "react-icons/fa";
+import { FaTiktok } from "react-icons/fa";
+
 const ContactPage = () => {
   const [formState, setFormState] = useState({
     name: "",
@@ -140,24 +145,31 @@ const ContactPage = () => {
                   <div className="flex space-x-4">
                     <a
                       href="#"
-                      className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition-colors"
+                      className="bg-zinc-800 hover:bg-orange-700 p-2 rounded-full transition-colors"
                       aria-label="Twitter"
                     >
-                      <Twitter className="h-5 w-5 text-gray-300" />
+                      <RiTwitterXFill className="h-5 w-5 text-gray-300" />
                     </a>
                     <a
-                      href="#"
-                      className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition-colors"
+                      href="https://www.instagram.com/quizzley.io?igsh=NTc4MTIwNjQ2YQ=="
+                      className="bg-zinc-800 hover:bg-orange-700 p-2 rounded-full transition-colors"
+                      aria-label="Instagram"
+                    >
+                      <IoLogoInstagram className="h-5 w-5 text-gray-300" />
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/company/quizzley-io/"
+                      className="bg-zinc-800 hover:bg-orange-700 p-2 rounded-full transition-colors"
                       aria-label="LinkedIn"
                     >
-                      <Instagram className="h-5 w-5 text-gray-300" />
+                      <FaLinkedinIn className="h-5 w-5 text-gray-300" />
                     </a>
                     <a
-                      href="#"
-                      className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition-colors"
-                      aria-label="GitHub"
+                      href="https://www.tiktok.com/@quizzley.io?_t=ZN-8yGcgrOVXPS&_r=1"
+                      className="bg-zinc-800 hover:bg-orange-700 p-2 rounded-full transition-colors"
+                      aria-label="TikTok"
                     >
-                      <Linkedin className="h-5 w-5 text-gray-300" />
+                      <FaTiktok className="h-5 w-5 text-gray-300" />
                     </a>
                   </div>
                 </div>

@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { Instagram, Linkedin, Twitter, X } from "lucide-react";
+import { RiTwitterXFill } from "react-icons/ri";
+import { IoLogoInstagram } from "react-icons/io5";
+import { FaLinkedinIn } from "react-icons/fa";
+import { FaTiktok } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -113,23 +116,31 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Twitter className="h-5 w-5" />
+                <RiTwitterXFill className="h-5 w-5" />
               </Link>
               <Link
-                href="https://github.com"
+                href="https://www.instagram.com/quizzley.io?igsh=NTc4MTIwNjQ2YQ=="
                 className="text-zinc-400 hover:text-orange-500 transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Instagram className="h-5 w-5" />
+                <IoLogoInstagram className="h-5 w-5" />
               </Link>
               <Link
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/quizzley-io/"
                 className="text-zinc-400 hover:text-orange-500 transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Linkedin className="h-5 w-5" />
+                <FaLinkedinIn className="h-5 w-5" />
+              </Link>
+              <Link
+                href="https://www.tiktok.com/@quizzley.io?_t=ZN-8yGcgrOVXPS&_r=1"
+                className="text-zinc-400 hover:text-orange-500 transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaTiktok className="h-5 w-5" />
               </Link>
             </div>
           </div>

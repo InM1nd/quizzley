@@ -192,6 +192,7 @@ export default function QuizzQuestions(props: Props) {
                 variant={"default"}
                 size={"lg"}
                 onClick={handleSubmit}
+                disabled={!selectedAnswer}
                 className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-300"
               >
                 Submit Quiz
@@ -201,6 +202,7 @@ export default function QuizzQuestions(props: Props) {
                 variant={"default"}
                 size={"lg"}
                 onClick={handleNext}
+                disabled={!started ? false : !selectedAnswer}
                 className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-300"
               >
                 {!started ? "Start Quiz" : "Next Question"}

@@ -138,46 +138,54 @@ async function generateQuizInBackground(
 
     // Формируем промпт с инструкциями по формату
     const prompt = `
-        You are an expert quiz creator. Your task is to generate a high-quality, diverse, and challenging quiz strictly based on the provided document text.
+      You are a professional quiz designer. Your task is to create a well-structured, high-quality quiz strictly based on the provided document text.
 
-        CRITICAL REQUIREMENTS:
-        - The quiz title must be: "${quizTitle}"
-        - Create EXACTLY ${questionCount} questions. No more, no less.
-        - Each question must have exactly 4 answer options.
-        - Only ONE answer per question should be correct.
-        - All questions and answers must be based SOLELY on the information provided in the text. Do NOT use any outside knowledge or assumptions.
-        - Do NOT invent facts or details not present in the text ("no hallucinations").
-        - If the text is insufficient for the required number of questions, focus on rephrasing or combining information, but never invent content.
+      CRITICAL REQUIREMENTS:
+      - The quiz title must be: "${quizTitle}".
+      - Generate EXACTLY ${questionCount} questions. No more, no less.
+      - Each question must have exactly 4 answer options (A, B, C, D).
+      - Only ONE correct answer per question. Clearly indicate the correct answer.
+      - All questions and answers must be based EXCLUSIVELY on the provided text. Do NOT use outside knowledge or assumptions.
+      - Do NOT invent or assume facts not present in the text ("no hallucinations").
+      - If the document lacks enough information for ${questionCount} unique questions:
+        - Rephrase existing facts in different ways.
+        - Combine multiple related facts into a single question.
+        - Create conceptual or applied questions derived ONLY from the text.
+        - Never include any content not directly supported by the document.
 
-        ${
-          selectedInstructions
-            ? `ADDITIONAL INSTRUCTIONS:\n${selectedInstructions}`
-            : ""
-        }
-        ${difficultyInstruction ? `DIFFICULTY: ${difficultyInstruction}` : ""}
+      ${selectedInstructions ? `QUIZ STYLE:\n${selectedInstructions}` : ""}
 
-        QUESTION GUIDELINES:
-        - Cover a broad range of topics and difficulty levels from the text.
-        - Include a mix of factual, conceptual, and application-based questions.
-        - Avoid trivial or repetitive questions.
-        - Ensure each question is clear, unambiguous, and tests understanding of the material.
-        - Phrase questions and answers in a professional, academic style.
-        - Incorrect answers must be plausible but clearly incorrect when compared to the correct answer.
-        - Avoid using the exact wording from the text for both questions and answers; paraphrase where possible.
-        - Do not include "All of the above", "None of the above", or similar options.
+      ${difficultyInstruction ? `DIFFICULTY:\n${difficultyInstruction}` : ""}
 
+      QUESTION & ANSWER GUIDELINES:
+      - Cover a broad range of key topics and concepts from the text.
+      - Include a balance of factual, conceptual, and application-based questions.
+      - Avoid trivial, redundant, or overly similar questions — ensure each question tests a distinct aspect of the text.
+      - Phrase both questions and answers in clear, concise, and professional language.
+      - Ensure incorrect answers are:
+        - Plausible within the context of the document.
+        - Clearly incorrect compared to the correct answer.
+        - Not misleading due to ambiguity.
+      - Avoid answers like "All of the above" or "None of the above".
+      - Paraphrase the document’s content instead of copying sentences verbatim.
+      - Each question must be standalone and understandable without additional context.
 
-        Formatting Instructions:
-        ${formatInstructions}
-    
-      Text:
+      FORMATTING REQUIREMENTS:
+      - Your response MUST strictly follow this structure:
+      ${formatInstructions}
+      - Do NOT include any extra commentary, explanations, or notes — output only the quiz content in the correct format.
+
+      DOCUMENT TEXT:
       ${texts.join("\n")}
     `;
 
     const model = new ChatGoogleGenerativeAI({
       apiKey: process.env.GOOGLE_API_KEY!,
-      modelName: "gemini-2.0-flash",
+      modelName: "gemini-2.5-pro",
       temperature: 0.3,
+      topP: 0.8,
+      topK: 40,
+      maxOutputTokens: 2048,
     });
 
     const message = new HumanMessage({
