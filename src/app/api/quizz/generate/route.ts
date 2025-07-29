@@ -181,7 +181,7 @@ async function generateQuizInBackground(
 
     const model = new ChatGoogleGenerativeAI({
       apiKey: process.env.GOOGLE_API_KEY!,
-      modelName: "gemini-2.5-pro",
+      modelName: "gemini-2.0-flash",
       temperature: 0.3,
       topP: 0.8,
       topK: 40,
@@ -195,17 +195,25 @@ async function generateQuizInBackground(
     // Получаем ответ от модели
     const result = await model.invoke([message]);
 
-    function cleanJsonResponse(text: string): string {
-      return text
-        .replace(/^```json\s*/i, "") // убирает ```json в начале
-        .replace(/```$/i, "") // убирает ``` в конце
-        .trim();
+    let contentText: string;
+
+    if (typeof result.content === "string") {
+      contentText = result.content;
+    } else if (Array.isArray(result.content)) {
+      // Если content - это массив объектов с полем text
+      contentText = result.content.map((item: any) => item.text || "").join("");
+    } else if (result.content && typeof result.content === "object") {
+      // Если content - это объект с полем text
+      contentText =
+        (result.content as any).text || JSON.stringify(result.content);
+    } else {
+      contentText = String(result.content);
     }
 
-    const cleaned = cleanJsonResponse(result.content.toString());
+    console.log("Extracted content text:", contentText);
 
     // Парсим результат
-    const parsedResult = await parser.parse(cleaned);
+    const parsedResult = await parser.parse(contentText);
     console.log("Parsed result:", parsedResult);
 
     // Обновляем квиз данными из генерации
