@@ -23,10 +23,17 @@ export const users = pgTable("user", {
   image: text("image"),
   stripeCustomerId: text("stripe_customer_id"),
   subscribed: boolean("subscribed"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  lastLoginAt: timestamp("last_login_at"),
+  loginCount: integer("login_count").default(0),
+  totalQuizzesCreated: integer("total_quizzes_created").default(0),
+  premiumExpiresAt: timestamp("premium_expires_at", { mode: "date" }),
+
 });
 
 export const userRelations = relations(users, ({ many }) => ({
   quizzes: many(quizzes),
+  activityLogs: many(userActivityLogs),
 }));
 
 export const accounts = pgTable(
@@ -186,3 +193,22 @@ export const feedbacksRelations = relations(feedbacks, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const userActivityLogs = pgTable("user_activity_logs", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
+  activityType: text("activity_type").notNull(),
+  description: text("description"),
+  metadata: text("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const userActivityLogsRelations = relations(
+  userActivityLogs,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userActivityLogs.userId],
+      references: [users.id],
+    }),
+  })
+);

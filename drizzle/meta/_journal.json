@@ -43,6 +43,27 @@
       "when": 1745773876114,
       "tag": "0005_married_phalanx",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1753969051280,
+      "tag": "0006_broad_ultimates",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1753969449787,
+      "tag": "0007_regular_mikhail_rasputin",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1753982103397,
+      "tag": "0008_perpetual_maddog",
+      "breakpoints": true
     }
   ]
 }

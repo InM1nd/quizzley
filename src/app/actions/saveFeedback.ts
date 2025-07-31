@@ -1,18 +1,18 @@
 "use server";
 
 import { db } from "@/db";
-import { feedbacks, users } from "@/db/schema";
+import { feedbacks } from "@/db/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
-import { stripe } from "@/lib/stripe";
+import { grantFeedbackPremium } from "@/lib/premium-manager";
 
 type FeedbackData = {
   rating: string;
   feedback: string;
 };
 
-export async function saveFeedback(data: FeedbackData) {
+export async function saveFeedback(feedbackData: FeedbackData) {
   try {
     const session = await auth();
     const userId = session?.user?.id;
@@ -46,56 +46,46 @@ export async function saveFeedback(data: FeedbackData) {
         userId,
         name: userName || "User",
         email: userEmail,
-        rating: data.rating,
-        feedback: data.feedback,
-        premiumGranted: true,
-        // Дата окончания премиума (2 недели от текущей даты)
-        premiumEndDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+        rating: feedbackData.rating,
+        feedback: feedbackData.feedback,
+        // Пока не устанавливаем premiumGranted и premiumEndDate
+        // Это сделает функция grantFeedbackPremium
       })
-      .returning();
+      .returning({ id: feedbacks.id });
 
     if (!savedFeedback) {
       return { success: false, message: "Failed to save feedback" };
     }
 
-    // Получаем информацию о пользователе
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-    });
+    // Используем новую накапливающуюся систему - добавляем 5 дней премиума
+    try {
+      const newExpirationDate = await grantFeedbackPremium(
+        userId,
+        savedFeedback.id
+      );
 
-    if (!user) {
-      return { success: false, message: "User not found" };
-    }
+      revalidatePath("/feedback");
+      revalidatePath("/billing");
+      revalidatePath("/dashboard");
 
-    // Если пользователь уже имеет активную подписку,
-    // добавляем 2 недели к текущей дате окончания подписки
-    if (user.subscribed && savedFeedback.premiumEndDate) {
-      const newPremiumEndDate = new Date(savedFeedback.premiumEndDate);
-      newPremiumEndDate.setDate(newPremiumEndDate.getDate() + 14);
+      return {
+        success: true,
+        premiumGranted: true,
+        message:
+          "Thank you for your feedback! You've been granted 5 days of premium access.",
+        expirationDate: newExpirationDate,
+      };
+    } catch (premiumError) {
+      console.error("Error granting premium for feedback:", premiumError);
 
-      await db
-        .update(feedbacks)
-        .set({
-          premiumEndDate: newPremiumEndDate,
-        })
-        .where(eq(feedbacks.id, savedFeedback.id));
-
+      // Отзыв сохранен, но премиум не добавлен
       return {
         success: true,
         premiumGranted: false,
         message:
-          "Thank you for your feedback! Your subscription has been extended by 2 weeks.",
+          "Thank you for your feedback! However, there was an issue with granting premium access.",
       };
     }
-
-    // Иначе - активируем премиум через подписку пользователя
-    await db
-      .update(users)
-      .set({ subscribed: true })
-      .where(eq(users.id, userId));
-
-    revalidatePath("/");
-    return { success: true, premiumGranted: true };
   } catch (error) {
     console.error("Error saving feedback:", error);
     return {
@@ -105,11 +95,37 @@ export async function saveFeedback(data: FeedbackData) {
   }
 }
 
-// Функция для создания задачи, которая отключит премиум через 14 дней
-async function createPremiumExpiration(userId: string, feedbackId: number) {
-  // В реальном проекте здесь можно использовать Cron-задачи
-  // или специальные сервисы для планирования задач
-  // Для простоты можно использовать базу данных и проверять срок действия при каждом запросе
-  // Но более надежным решением будет использование внешнего сервиса планирования задач
-  // или серверных функций, запускаемых по расписанию (например, Vercel Cron Jobs)
+// Функция для получения статистики отзывов (опционально)
+export async function getFeedbackStats(userId: string) {
+  try {
+    const feedbackCount = await db.query.feedbacks.findMany({
+      where: eq(feedbacks.userId, userId),
+    });
+
+    const recentFeedback = await db.query.feedbacks.findFirst({
+      where: and(
+        eq(feedbacks.userId, userId),
+        gt(feedbacks.createdAt, new Date(Date.now() - 30 * 24 * 60 * 60 * 1000))
+      ),
+    });
+
+    return {
+      totalFeedbacks: feedbackCount.length,
+      canSubmitFeedback: !recentFeedback,
+      daysUntilNextFeedback: recentFeedback
+        ? Math.ceil(
+            (30 * 24 * 60 * 60 * 1000 -
+              (Date.now() - recentFeedback.createdAt.getTime())) /
+              (24 * 60 * 60 * 1000)
+          )
+        : 0,
+    };
+  } catch (error) {
+    console.error("Error getting feedback stats:", error);
+    return {
+      totalFeedbacks: 0,
+      canSubmitFeedback: false,
+      daysUntilNextFeedback: 30,
+    };
+  }
 }

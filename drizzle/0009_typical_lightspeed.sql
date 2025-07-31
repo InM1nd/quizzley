@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD COLUMN "premium_end_date" timestamp;

@@ -5,17 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Check, Medal } from "lucide-react";
 import { saveFeedback } from "@/app/actions/saveFeedback";
 import { useSession } from "next-auth/react";
+import { ThankYouDialog } from "@/components/ui/thank-you-dialog";
 
 export function FeedbackForm() {
   const { data: session } = useSession();
@@ -99,8 +91,8 @@ export function FeedbackForm() {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
-          <div className="space-y-2">
-            <Label className="text-zinc-400">
+          <div className="space-y-4">
+            <Label className="text-zinc-300 text-lg font-medium">
               How would you rate your experience?
             </Label>
             <RadioGroup
@@ -108,59 +100,66 @@ export function FeedbackForm() {
               onValueChange={(value) =>
                 setFormData({ ...formData, rating: value })
               }
-              className="flex flex-wrap gap-4"
+              className="grid grid-cols-2 md:grid-cols-4 gap-4"
               disabled={isSubmitting}
             >
-              <div className="flex items-center space-x-2">
+              <div className="relative">
                 <RadioGroupItem
                   value="excellent"
                   id="excellent"
-                  className="border-zinc-800/50 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
+                  className="peer sr-only"
                 />
                 <Label
                   htmlFor="excellent"
-                  className="text-zinc-400"
+                  className="flex flex-col items-center justify-center w-full h-20 p-4 text-zinc-400 bg-zinc-800/30 border-2 border-zinc-700 rounded-xl cursor-pointer hover:bg-zinc-800/50 hover:border-orange-500/50 transition-all duration-300 peer-checked:bg-gradient-to-br peer-checked:from-orange-500/20 peer-checked:to-orange-600/20 peer-checked:border-orange-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-orange-500/25"
                 >
-                  Excellent
+                  <div className="text-2xl mb-1">⭐</div>
+                  <span className="text-sm font-medium">Excellent</span>
                 </Label>
               </div>
-              <div className="flex items-center space-x-2">
+
+              <div className="relative">
                 <RadioGroupItem
                   value="good"
                   id="good"
-                  className="border-zinc-800/50 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
+                  className="peer sr-only"
                 />
                 <Label
                   htmlFor="good"
-                  className="text-zinc-400"
+                  className="flex flex-col items-center justify-center w-full h-20 p-4 text-zinc-400 bg-zinc-800/30 border-2 border-zinc-700 rounded-xl cursor-pointer hover:bg-zinc-800/50 hover:border-orange-500/50 transition-all duration-300 peer-checked:bg-gradient-to-br peer-checked:from-orange-500/20 peer-checked:to-orange-600/20 peer-checked:border-orange-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-orange-500/25"
                 >
-                  Good
+                  <div className="text-2xl mb-1">👍</div>
+                  <span className="text-sm font-medium">Good</span>
                 </Label>
               </div>
-              <div className="flex items-center space-x-2">
+
+              <div className="relative">
                 <RadioGroupItem
                   value="average"
                   id="average"
-                  className="border-zinc-800/50 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
+                  className="peer sr-only"
                 />
                 <Label
                   htmlFor="average"
-                  className="text-zinc-400"
+                  className="flex flex-col items-center justify-center w-full h-20 p-4 text-zinc-400 bg-zinc-800/30 border-2 border-zinc-700 rounded-xl cursor-pointer hover:bg-zinc-800/50 hover:border-orange-500/50 transition-all duration-300 peer-checked:bg-gradient-to-br peer-checked:from-orange-500/20 peer-checked:to-orange-600/20 peer-checked:border-orange-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-orange-500/25"
                 >
-                  Average
+                  <div className="text-2xl mb-1">😐</div>
+                  <span className="text-sm font-medium">Average</span>
                 </Label>
               </div>
-              <div className="flex items-center space-x-2">
+
+              <div className="relative">
                 <RadioGroupItem
                   value="poor"
                   id="poor"
-                  className="border-zinc-800/50 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
+                  className="peer sr-only"
                 />
                 <Label
                   htmlFor="poor"
-                  className="text-zinc-400"
+                  className="flex flex-col items-center justify-center w-full h-20 p-4 text-zinc-400 bg-zinc-800/30 border-2 border-zinc-700 rounded-xl cursor-pointer hover:bg-zinc-800/50 hover:border-orange-500/50 transition-all duration-300 peer-checked:bg-gradient-to-br peer-checked:from-orange-500/20 peer-checked:to-orange-600/20 peer-checked:border-orange-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-orange-500/25"
                 >
-                  Poor
+                  <div className="text-2xl mb-1">👎</div>
+                  <span className="text-sm font-medium">Poor</span>
                 </Label>
               </div>
             </RadioGroup>
@@ -169,7 +168,7 @@ export function FeedbackForm() {
           <div className="space-y-2">
             <Label
               htmlFor="feedback"
-              className="text-zinc-400"
+              className="text-zinc-300 text-lg font-medium"
             >
               Your Feedback
             </Label>
@@ -181,7 +180,7 @@ export function FeedbackForm() {
                 setFormData({ ...formData, feedback: e.target.value })
               }
               required
-              className="min-h-[150px] bg-zinc-900/50 border-zinc-800/50 focus:border-orange-500/50"
+              className="min-h-[150px] bg-zinc-900/50 border-zinc-800/50 focus:border-orange-500/50 focus:ring-orange-500/20 transition-all duration-300"
               disabled={isSubmitting}
             />
           </div>
@@ -189,7 +188,7 @@ export function FeedbackForm() {
           <Button
             type="submit"
             size={"lg"}
-            className="mt-4 w-full"
+            className="mt-6 w-full bg-gradient-to-r from-primary to-orange-500 hover:from-orange-500 hover:to-primary text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-primary/25"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Submitting..." : "Submit Feedback"}
@@ -197,47 +196,11 @@ export function FeedbackForm() {
         </form>
       </div>
 
-      {/* Диалог благодарности остается без изменений */}
-      <Dialog
+      {/* Используем вынесенный компонент диалога */}
+      <ThankYouDialog
         open={showThankYouDialog}
         onOpenChange={setShowThankYouDialog}
-      >
-        <DialogContent className="bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 text-white max-w-md rounded-xl">
-          <DialogHeader>
-            <div className="flex justify-center my-4">
-              <div className="h-20 w-20 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 flex items-center justify-center">
-                <Check className="h-10 w-10 text-white" />
-              </div>
-            </div>
-            <DialogTitle className="text-xl text-center font-bold text-white">
-              Thank You for Your Feedback!
-            </DialogTitle>
-            <DialogDescription className="text-center text-zinc-400 mt-2">
-              We appreciate your time and thoughts. As a token of our gratitude,
-              we&apos;ve added 2 weeks of premium subscription to your account.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="bg-zinc-800/50 p-4 rounded-lg flex items-center gap-3 my-4">
-            <Medal className="h-6 w-6 text-orange-500" />
-            <div>
-              <p className="text-white font-medium">Premium Benefits Added</p>
-              <p className="text-zinc-400 text-sm">
-                2 weeks of free premium access
-              </p>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              className="w-full bg-gradient-to-r from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700"
-              onClick={() => setShowThankYouDialog(false)}
-            >
-              Continue to Quizzley
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      />
     </>
   );
 }

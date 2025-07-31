@@ -5,18 +5,47 @@ import { quizzes } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/auth";
 import { QUIZ_OPTIONS, DIFFICULTY_OPTIONS } from "@/constants/quiz-settings";
+import {
+  createQuizGenerationPrompt,
+  ERROR_MESSAGES,
+} from "@/constants/quiz-prompts";
+import { logger } from "@/lib/logger"; // 🆕 Импортируем logger
+import { getUserSubscription } from "@/app/actions/userSubscription";
 
-// Новый маршрут для инициирования задания
 export async function POST(req: NextRequest) {
   const session = await auth();
   const userId = session?.user?.id;
 
   if (!userId) {
+    logger.api.error(
+      "POST",
+      "/api/quizz/generate",
+      new Error("User not authenticated")
+    );
     return NextResponse.json(
       { error: "User not authenticated" },
       { status: 401 }
     );
   }
+
+  const hasSubscription = await getUserSubscription({ userId });
+
+  if (!hasSubscription) {
+    logger.api.error(
+      "POST",
+      "/api/quizz/generate",
+      new Error("User has no active subscription")
+    );
+    return NextResponse.json(
+      {
+        error: "Active subscription required",
+        message: "Please upgrade your plan to generate quizzes",
+      },
+      { status: 403 }
+    );
+  }
+
+  logger.api.request("POST", "/api/quizz/generate", userId);
 
   const body = await req.formData();
   const quizTitle = (body.get("quizTitle") as string) || "Quiz";
@@ -26,6 +55,11 @@ export async function POST(req: NextRequest) {
   const selectedDifficulty = body.get("selectedDifficulty") as string;
 
   if (!document) {
+    logger.api.error(
+      "POST",
+      "/api/quizz/generate",
+      new Error("No PDF file provided")
+    );
     return NextResponse.json(
       { error: "No PDF file provided" },
       { status: 400 }
@@ -33,10 +67,8 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // Сохраняем PDF как Blob для дальнейшей обработки
     const pdfBlob = document as Blob;
 
-    // Создаем запись о квизе в статусе "processing"
     const newQuizz = await db
       .insert(quizzes)
       .values({
@@ -50,7 +82,9 @@ export async function POST(req: NextRequest) {
 
     const quizzId = newQuizz[0].quizzId;
 
-    // Запускаем фоновую задачу
+    // 🆕 Используем специальный метод для генерации квиза
+    logger.quizGeneration.started(quizzId, userId);
+
     void generateQuizInBackground(
       pdfBlob,
       questionCount,
@@ -61,7 +95,8 @@ export async function POST(req: NextRequest) {
       selectedDifficulty
     );
 
-    // Немедленно возвращаем ID квиза, который находится в обработке
+    logger.api.response("POST", "/api/quizz/generate", 202);
+
     return NextResponse.json(
       {
         quizzId,
@@ -70,12 +105,11 @@ export async function POST(req: NextRequest) {
       { status: 202 }
     );
   } catch (e: any) {
-    console.error("Error starting quiz generation:", e);
+    logger.api.error("POST", "/api/quizz/generate", e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
 
-// Функция для фоновой генерации квиза
 async function generateQuizInBackground(
   pdfBlob: Blob,
   questionCount: number,
@@ -86,13 +120,13 @@ async function generateQuizInBackground(
   selectedDifficulty: string
 ) {
   try {
-    // Импортируем необходимые библиотеки динамически,
-    // чтобы не загружать их при первоначальном API запросе
     const { ChatGoogleGenerativeAI } = await import("@langchain/google-genai");
     const { HumanMessage } = await import("@langchain/core/messages");
     const { StructuredOutputParser } = await import("langchain/output_parsers");
     const { z } = await import("zod");
     const { default: saveQuizz } = await import("./saveToDb");
+
+    logger.info("Starting background quiz generation", { quizzId, userId });
 
     const selectedInstructions = quizOptions
       ? QUIZ_OPTIONS.find((q) => q.value === quizOptions)?.instruction || ""
@@ -111,7 +145,13 @@ async function generateQuizInBackground(
       .filter((doc) => doc.pageContent !== undefined)
       .map((doc) => doc.pageContent);
 
-    // Определяем схему для парсинга
+    // 🆕 Используем специальный метод
+    logger.quizGeneration.pdfProcessed(
+      quizzId,
+      texts.length,
+      texts.join("").length
+    );
+
     const quizSchema = z.object({
       quizz: z.object({
         name: z.string(),
@@ -130,120 +170,181 @@ async function generateQuizInBackground(
       }),
     });
 
-    // Создаем парсер
     const parser = StructuredOutputParser.fromZodSchema(quizSchema);
-
-    // Получаем формат для промпта
     const formatInstructions = parser.getFormatInstructions();
 
-    // Формируем промпт с инструкциями по формату
-    const prompt = `
-      You are a professional quiz designer. Your task is to create a well-structured, high-quality quiz strictly based on the provided document text.
-
-      CRITICAL REQUIREMENTS:
-      - The quiz title must be: "${quizTitle}".
-      - Generate EXACTLY ${questionCount} questions. No more, no less.
-      - Each question must have exactly 4 answer options (A, B, C, D).
-      - Only ONE correct answer per question. Clearly indicate the correct answer.
-      - All questions and answers must be based EXCLUSIVELY on the provided text. Do NOT use outside knowledge or assumptions.
-      - Do NOT invent or assume facts not present in the text ("no hallucinations").
-      - If the document lacks enough information for ${questionCount} unique questions:
-        - Rephrase existing facts in different ways.
-        - Combine multiple related facts into a single question.
-        - Create conceptual or applied questions derived ONLY from the text.
-        - Never include any content not directly supported by the document.
-
-      ${selectedInstructions ? `QUIZ STYLE:\n${selectedInstructions}` : ""}
-
-      ${difficultyInstruction ? `DIFFICULTY:\n${difficultyInstruction}` : ""}
-
-      QUESTION & ANSWER GUIDELINES:
-      - Cover a broad range of key topics and concepts from the text.
-      - Include a balance of factual, conceptual, and application-based questions.
-      - Avoid trivial, redundant, or overly similar questions — ensure each question tests a distinct aspect of the text.
-      - Phrase both questions and answers in clear, concise, and professional language.
-      - Ensure incorrect answers are:
-        - Plausible within the context of the document.
-        - Clearly incorrect compared to the correct answer.
-        - Not misleading due to ambiguity.
-      - Avoid answers like "All of the above" or "None of the above".
-      - Paraphrase the document’s content instead of copying sentences verbatim.
-      - Each question must be standalone and understandable without additional context.
-
-      FORMATTING REQUIREMENTS:
-      - Your response MUST strictly follow this structure:
-      ${formatInstructions}
-      - Do NOT include any extra commentary, explanations, or notes — output only the quiz content in the correct format.
-
-      DOCUMENT TEXT:
-      ${texts.join("\n")}
-    `;
+    const prompt = createQuizGenerationPrompt({
+      quizTitle,
+      questionCount,
+      selectedInstructions,
+      difficultyInstruction,
+      formatInstructions,
+      documentText: texts.join("\n"),
+    });
 
     const model = new ChatGoogleGenerativeAI({
       apiKey: process.env.GOOGLE_API_KEY!,
-      modelName: "gemini-2.0-flash",
+      modelName: "gemini-2.5-pro",
       temperature: 0.3,
       topP: 0.8,
       topK: 40,
-      maxOutputTokens: 2048,
+      maxOutputTokens: 8192,
     });
 
     const message = new HumanMessage({
       content: prompt,
     });
 
-    // Получаем ответ от модели
+    logger.info("Sending request to AI model", { quizzId });
     const result = await model.invoke([message]);
 
-    let contentText: string;
+    let contentText: string = "";
 
     if (typeof result.content === "string") {
       contentText = result.content;
     } else if (Array.isArray(result.content)) {
-      // Если content - это массив объектов с полем text
-      contentText = result.content.map((item: any) => item.text || "").join("");
+      contentText = result.content
+        .map((item: any) => {
+          if (typeof item === "string") {
+            return item;
+          } else if (item && typeof item === "object") {
+            return (
+              item.text || item.content || item.message || JSON.stringify(item)
+            );
+          }
+          return String(item);
+        })
+        .join("");
     } else if (result.content && typeof result.content === "object") {
-      // Если content - это объект с полем text
+      const contentObj = result.content as any;
       contentText =
-        (result.content as any).text || JSON.stringify(result.content);
+        contentObj.text ||
+        contentObj.content ||
+        contentObj.message ||
+        JSON.stringify(contentObj);
     } else {
-      contentText = String(result.content);
+      contentText = String(result.content || "");
     }
 
-    console.log("Extracted content text:", contentText);
+    // 🆕 Используем специальный метод
+    logger.quizGeneration.aiResponseReceived(quizzId, contentText.length);
 
-    // Парсим результат
-    const parsedResult = await parser.parse(contentText);
-    console.log("Parsed result:", parsedResult);
+    if (!contentText || contentText.trim().length === 0) {
+      logger.quizGeneration.failed(quizzId, new Error("Empty AI response"));
 
-    // Обновляем квиз данными из генерации
-    await saveQuizz({
-      ...parsedResult.quizz,
-      name: quizTitle,
-      id: quizzId,
-      status: "completed",
-      userId: userId,
+      await db
+        .update(quizzes)
+        .set({
+          status: "error",
+          description: ERROR_MESSAGES.EMPTY_RESPONSE,
+        })
+        .where(eq(quizzes.id, quizzId));
+      return;
+    }
+
+    // Clean JSON content
+    let jsonContent = contentText.trim();
+
+    if (jsonContent.includes("```json")) {
+      const jsonMatch = jsonContent.match(/```json\s*([\s\S]*?)\s*```/);
+      if (jsonMatch) {
+        jsonContent = jsonMatch[1].trim();
+      }
+    } else if (jsonContent.includes("```")) {
+      const codeMatch = jsonContent.match(/```\s*([\s\S]*?)\s*```/);
+      if (codeMatch) {
+        jsonContent = codeMatch[1].trim();
+      }
+    }
+
+    if (!jsonContent.startsWith("{")) {
+      const jsonMatch = jsonContent.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        jsonContent = jsonMatch[0];
+      }
+    }
+
+    logger.debug("JSON content cleaned", {
+      quizzId,
+      contentLength: jsonContent.length,
     });
 
-    // Добавляем дополнительную задержку для гарантии завершения всех транзакций базы данных
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const parsedResult = await parser.parse(jsonContent);
 
-    console.log(`Quiz generation completed for quizzId: ${quizzId}`);
+      await saveQuizz({
+        ...parsedResult.quizz,
+        name: quizTitle,
+        id: quizzId,
+        status: "completed",
+        userId: userId,
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // 🆕 Используем специальный метод
+      logger.quizGeneration.completed(
+        quizzId,
+        parsedResult.quizz.questions.length
+      );
+    } catch (parseError) {
+      logger.warn("Initial parse failed, attempting fix", { quizzId });
+
+      // Try to fix common JSON issues
+      try {
+        let fixedContent = jsonContent
+          .replace(/```json\s*/g, "")
+          .replace(/```\s*/g, "")
+          .replace(/^\s*/, "")
+          .replace(/\s*$/, "")
+          .replace(/,\s*}/g, "}")
+          .replace(/,\s*]/g, "]");
+
+        if (!fixedContent.startsWith("{")) {
+          const match = fixedContent.match(/(\{.*\})/);
+          if (match) {
+            fixedContent = match[1];
+          }
+        }
+
+        const parsedResult = await parser.parse(fixedContent);
+
+        await saveQuizz({
+          ...parsedResult.quizz,
+          name: quizTitle,
+          id: quizzId,
+          status: "completed",
+          userId: userId,
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        logger.quizGeneration.completed(
+          quizzId,
+          parsedResult.quizz.questions.length
+        );
+      } catch (secondParseError) {
+        logger.quizGeneration.failed(quizzId, secondParseError);
+
+        await db
+          .update(quizzes)
+          .set({
+            status: "error",
+            description: ERROR_MESSAGES.PARSE_ERROR,
+          })
+          .where(eq(quizzes.id, quizzId));
+        return;
+      }
+    }
   } catch (error) {
-    console.error(
-      `Error generating quiz in background for quizzId: ${quizzId}`,
-      error
-    );
+    logger.quizGeneration.failed(quizzId, error);
 
-    // Обновляем статус квиза в случае ошибки
     await db
       .update(quizzes)
       .set({
         status: "error",
-        description:
-          "An error occurred during quiz generation. Please try again.",
+        description: ERROR_MESSAGES.GENERATION_ERROR,
       })
       .where(eq(quizzes.id, quizzId));
   }
-}
+} 
 
