@@ -1,6 +1,6 @@
 {
-  "id": "9f308b74-2ae6-4e01-a6cb-f8b47a5d544f",
-  "prevId": "2681e1c7-cd6c-482d-a0cb-4ba7bf126108",
+  "id": "69d9d6e0-7002-43ae-be3b-4f62a0ccf2f3",
+  "prevId": "fdd33594-08b3-4cc2-bfe3-f282ca34f5d5",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -401,13 +401,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'completed'"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {},
@@ -604,6 +597,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": 0
+        },
+        "premium_expires_at": {
+          "name": "premium_expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},

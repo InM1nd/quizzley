@@ -39,7 +39,11 @@ const QuizzGeneratorClient = ({ isSubscribed }: Props) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Настройки квиза */}
             <div className="relative group">
-              <div className="relative bg-zinc-900/50 p-6 rounded-2xl ring-1 ring-white/10">
+              <div
+                className={`relative bg-zinc-900/50 p-6 rounded-2xl ring-1 ring-white/10 ${
+                  !isSubscribed ? "opacity-60" : ""
+                }`}
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <Settings className="h-6 w-6 text-primary" />
@@ -53,6 +57,7 @@ const QuizzGeneratorClient = ({ isSubscribed }: Props) => {
                     <RadioGroup
                       value={selectedQuizOption}
                       onValueChange={setSelectedQuizOption}
+                      disabled={!isSubscribed}
                     >
                       <h3 className="text-md font-medium text-primary">Type</h3>
                       {QUIZ_OPTIONS.map((option) => (
@@ -64,10 +69,13 @@ const QuizzGeneratorClient = ({ isSubscribed }: Props) => {
                             className="rounded-full border-orange-600"
                             value={option.value}
                             id={option.value}
+                            disabled={!isSubscribed}
                           />
                           <label
                             htmlFor={option.value}
-                            className="text-gray-400"
+                            className={`${
+                              isSubscribed ? "text-gray-400" : "text-gray-600"
+                            }`}
                           >
                             {option.label}
                           </label>
@@ -78,6 +86,7 @@ const QuizzGeneratorClient = ({ isSubscribed }: Props) => {
                     <RadioGroup
                       value={selectedDifficulty}
                       onValueChange={setSelectedDifficulty}
+                      disabled={!isSubscribed}
                     >
                       <h3 className="text-md font-medium text-primary">
                         Difficulty
@@ -90,10 +99,13 @@ const QuizzGeneratorClient = ({ isSubscribed }: Props) => {
                           <RadioGroupItem
                             value={option.value}
                             id={option.value}
+                            disabled={!isSubscribed}
                           />
                           <label
                             htmlFor={option.value}
-                            className="text-gray-400 cursor-pointer"
+                            className={`cursor-pointer ${
+                              isSubscribed ? "text-gray-400" : "text-gray-600"
+                            }`}
                           >
                             {option.label}
                           </label>
@@ -114,7 +126,10 @@ const QuizzGeneratorClient = ({ isSubscribed }: Props) => {
                       max="30"
                       value={questionCount}
                       onChange={(e) => setQuestionCount(Number(e.target.value))}
-                      className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer slider"
+                      disabled={!isSubscribed}
+                      className={`w-full h-2 rounded-lg appearance-none cursor-pointer slider ${
+                        isSubscribed ? "bg-zinc-800" : "bg-zinc-700 opacity-50"
+                      }`}
                     />
                     <div className="flex justify-between text-sm text-gray-400">
                       <p className="text-gray-400">5</p>
@@ -165,17 +180,7 @@ const QuizzGeneratorClient = ({ isSubscribed }: Props) => {
                   Upload Your Document
                 </h2>
               </div>
-              {isSubscribed ? (
-                <UploadDoc />
-              ) : (
-                <div className="text-center">
-                  <p className="text-gray-400 mb-6">
-                    Upgrade your plan to unlock advanced quiz features and
-                    create personalized quizzes from your documents
-                  </p>
-                  <UpgradePlan />
-                </div>
-              )}
+              {isSubscribed ? <UploadDoc /> : <UpgradePlan />}
             </div>
           </div>
         </div>

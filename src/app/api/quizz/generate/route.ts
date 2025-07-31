@@ -10,6 +10,7 @@ import {
   ERROR_MESSAGES,
 } from "@/constants/quiz-prompts";
 import { logger } from "@/lib/logger"; // 🆕 Импортируем logger
+import { getUserSubscription } from "@/app/actions/userSubscription";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -24,6 +25,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { error: "User not authenticated" },
       { status: 401 }
+    );
+  }
+
+  const hasSubscription = await getUserSubscription({ userId });
+
+  if (!hasSubscription) {
+    logger.api.error(
+      "POST",
+      "/api/quizz/generate",
+      new Error("User has no active subscription")
+    );
+    return NextResponse.json(
+      {
+        error: "Active subscription required",
+        message: "Please upgrade your plan to generate quizzes",
+      },
+      { status: 403 }
     );
   }
 

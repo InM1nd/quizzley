@@ -18,6 +18,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { CTASection } from "@/components/sections/cta-section";
+import SubscriptionSection from "@/components/sections/subscription-section";
 
 export default function Home() {
   const features = [
@@ -576,82 +577,7 @@ export default function Home() {
         {/* Pricing Section */}
         <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent  mx-auto w-4/5 my-8"></div>
 
-        {/* <section className="bg-gradient-to-b from-zinc-950 to-background py-20 sm:py-24 relative">
-          <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-
-          <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/90">
-                Simple, Transparent{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
-                  Pricing
-                </span>
-              </h2>
-              <p className="mt-6 text-lg leading-8 text-gray-300">
-                Choose the plan that works best for you
-              </p>
-            </div>
-            <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              {pricing.slice(0, 2).map((plan, index) => (
-                <AnimatedCard
-                  key={plan.name}
-                  delay={index * 0.2}
-                >
-                  <SpotlightCard
-                    className="custom-spotlight-card"
-                    spotlightColor="#ff6a008d"
-                  >
-                    <div className="flex flex-col h-full">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-                        <h3 className="text-2xl font-semibold leading-8 text-white">
-                          {plan.name}
-                        </h3>
-                        <div className="flex items-baseline gap-x-1">
-                          <span className="text-4xl font-bold tracking-tight text-white">
-                            {plan.price}
-                          </span>
-                          <span className="text-sm font-semibold leading-6 text-gray-400">
-                            /month
-                          </span>
-                        </div>
-                      </div>
-
-                      <p className="text-base leading-6 text-gray-300 mb-8">
-                        {plan.description}
-                      </p>
-
-                      <div className="flex-grow">
-                        <ul
-                          role="list"
-                          className="space-y-4 text-sm leading-6 text-gray-300"
-                        >
-                          {plan.features.map((feature) => (
-                            <li
-                              key={feature}
-                              className="flex items-center gap-x-3"
-                            >
-                              <CheckCircle className="h-5 w-5 flex-none text-primary" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="mt-8 pt-6 border-t border-white/10">
-                        <Button
-                          className="w-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:to-orange-600/90 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
-                          variant="default"
-                        >
-                          {plan.name === "Free" ? "Get Started" : "Upgrade Now"}
-                        </Button>
-                      </div>
-                    </div>
-                  </SpotlightCard>
-                </AnimatedCard>
-              ))}
-            </div>
-          </div>
-        </section> */}
+        <SubscriptionSection />
 
         {/* FAQ Section */}
         <section className="bg-gradient-to-b from-background to-zinc-950 py-20 sm:py-24 relative">
