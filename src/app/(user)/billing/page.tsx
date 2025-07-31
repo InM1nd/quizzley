@@ -24,19 +24,6 @@ const page = async () => {
     ? new Date(premiumStatus.expiresAt).toLocaleDateString()
     : "N/A";
 
-  const getSourceText = (source: string) => {
-    switch (source) {
-      case "trial":
-        return "Trial Period";
-      case "feedback":
-        return "Feedback Reward";
-      case "subscription":
-        return "Paid Subscription";
-      default:
-        return "No Active Plan";
-    }
-  };
-
   return (
     <div className="container max-w-4xl mx-auto p-6">
       <div className="space-y-6">
@@ -167,29 +154,6 @@ const page = async () => {
             </a>
           </div>
         </div>
-
-        {/* Способы получения премиума */}
-        {!premiumStatus.isPremium && (
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 p-6 backdrop-blur-sm border border-zinc-800/50">
-            <h3 className="text-lg font-semibold mb-4 text-white">
-              Ways to Get Premium Access
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="text-center p-4 rounded-lg bg-zinc-800/50">
-                <span className="text-green-400 font-semibold">+3 days</span>
-                <p className="text-zinc-300 mt-1">New user trial</p>
-              </div>
-              <div className="text-center p-4 rounded-lg bg-zinc-800/50">
-                <span className="text-blue-400 font-semibold">+5 days</span>
-                <p className="text-zinc-300 mt-1">Leave feedback</p>
-              </div>
-              <div className="text-center p-4 rounded-lg bg-zinc-800/50">
-                <span className="text-purple-400 font-semibold">+30 days</span>
-                <p className="text-zinc-300 mt-1">Monthly subscription</p>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

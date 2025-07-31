@@ -1,6 +1,6 @@
 {
-  "id": "85e52b40-f2bb-464b-b181-c8c456e72932",
-  "prevId": "56357a76-2042-4f3e-b271-bc3e16af6977",
+  "id": "25492c94-9fc1-4e23-8f64-e0f812e36ccb",
+  "prevId": "fdd33594-08b3-4cc2-bfe3-f282ca34f5d5",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -401,13 +401,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'completed'"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {},
@@ -576,27 +569,6 @@
           "name": "subscribed",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "trial_premium": {
-          "name": "trial_premium",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "trial_premium_start_date": {
-          "name": "trial_premium_start_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "trial_premium_end_date": {
-          "name": "trial_premium_end_date",
-          "type": "timestamp",
-          "primaryKey": false,
           "notNull": false
         },
         "created_at": {
@@ -625,6 +597,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": 0
+        },
+        "premium_expires_at": {
+          "name": "premium_expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},

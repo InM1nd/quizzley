@@ -111,9 +111,14 @@ export const authenticator = pgTable("authenticator", {
 },
 (table) => {
 	return {
-		authenticatorUseridCredentialidPk: primaryKey({ columns: [table.credentialId, table.userId], name: "authenticator_userid_credentialid_pk"})
-		authenticatorCredentialIdUnique: unique("authenticator_credentialId_unique").on(table.credentialId),
-	}
+    authenticatorUseridCredentialidPk: primaryKey({
+      columns: [table.credentialId, table.userId],
+      name: "authenticator_userid_credentialid_pk",
+    }),
+    authenticatorCredentialIdUnique: unique(
+      "authenticator_credentialId_unique"
+    ).on(table.credentialId),
+  };
 });
 
 export const account = pgTable("account", {
