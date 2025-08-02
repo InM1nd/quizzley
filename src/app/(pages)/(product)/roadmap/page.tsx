@@ -214,28 +214,28 @@ const RoadmapPage = () => {
   const StatusBadge = ({ status }: { status: string }) => {
     if (status === "completed") {
       return (
-        <span className="inline-flex items-center rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20 w-24">
+        <span className="inline-flex items-center justify-center rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20 w-24">
           <CheckCircle2 className="h-3 w-3 mr-1" />
           Completed
         </span>
       );
     } else if (status === "in-progress") {
       return (
-        <span className="inline-flex items-center rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-500/20 w-24">
+        <span className="inline-flex items-center justify-center rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-500/20 w-24">
           <Clock className="h-3 w-3 mr-1" />
           In Progress
         </span>
       );
     } else if (status === "planned") {
       return (
-        <span className="inline-flex items-center rounded-full bg-orange-500/10 px-2 py-1 text-xs font-medium text-orange-400 ring-1 ring-inset ring-orange-500/20 w-24">
+        <span className="inline-flex items-center justify-center rounded-full bg-orange-500/10 px-2 py-1 text-xs font-medium text-orange-400 ring-1 ring-inset ring-orange-500/20 w-24">
           <Clock className="h-3 w-3 mr-1" />
           Planned
         </span>
       );
     } else {
       return (
-        <span className="inline-flex items-center rounded-full bg-purple-500/10 px-2 py-1 text-xs font-medium text-purple-400 ring-1 ring-inset ring-purple-500/20 w-24">
+        <span className="inline-flex items-center justify-center rounded-full bg-purple-500/10 px-2 py-1 text-xs font-medium text-purple-400 ring-1 ring-inset ring-purple-500/20 w-24">
           <Zap className="h-3 w-3 mr-1" />
           Vision
         </span>

@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { saveFeedback } from "@/app/actions/saveFeedback";
 import { useSession } from "next-auth/react";
 import { ThankYouDialog } from "@/components/ui/thank-you-dialog";
+import { FaSadTear, FaFrown, FaMeh, FaSmile } from "react-icons/fa";
 
 export function FeedbackForm() {
   const { data: session } = useSession();
@@ -22,6 +22,12 @@ export function FeedbackForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.rating) {
+      setError("Please select a rating before submitting feedback.");
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
@@ -31,13 +37,10 @@ export function FeedbackForm() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       if (result.success) {
-        // Очистить форму
         setFormData({
           rating: "",
           feedback: "",
         });
-
-        // Показать диалог благодарности
         setShowThankYouDialog(true);
       } else {
         setError(
@@ -62,6 +65,54 @@ export function FeedbackForm() {
       </div>
     );
   }
+
+  const ratingOptions = [
+    {
+      value: "excellent",
+      label: "Excellent",
+      icon: <FaSmile className="w-7 h-7 text-emerald-400" />,
+      color: "text-emerald-400",
+      bgGradient: "from-emerald-500/20 to-emerald-600/20",
+      borderColor: "border-emerald-500/50",
+      glowColor: "shadow-emerald-500/30",
+    },
+    {
+      value: "very-good",
+      label: "Very Good",
+      icon: <FaSmile className="w-7 h-7 text-green-400" />,
+      color: "text-green-400",
+      bgGradient: "from-green-500/20 to-green-600/20",
+      borderColor: "border-green-500/50",
+      glowColor: "shadow-green-500/30",
+    },
+    {
+      value: "good",
+      label: "Good",
+      icon: <FaMeh className="w-7 h-7 text-yellow-400" />,
+      color: "text-yellow-400",
+      bgGradient: "from-yellow-500/20 to-yellow-600/20",
+      borderColor: "border-yellow-500/50",
+      glowColor: "shadow-yellow-500/30",
+    },
+    {
+      value: "fair",
+      label: "Fair",
+      icon: <FaFrown className="w-7 h-7 text-orange-400" />,
+      color: "text-orange-400",
+      bgGradient: "from-orange-500/20 to-orange-600/20",
+      borderColor: "border-orange-500/50",
+      glowColor: "shadow-orange-500/30",
+    },
+    {
+      value: "poor",
+      label: "Poor",
+      icon: <FaSadTear className="w-7 h-7 text-red-400" />,
+      color: "text-red-400",
+      bgGradient: "from-red-500/20 to-red-600/20",
+      borderColor: "border-red-500/50",
+      glowColor: "shadow-red-500/30",
+    },
+  ];
 
   return (
     <>
@@ -95,74 +146,67 @@ export function FeedbackForm() {
             <Label className="text-zinc-300 text-lg font-medium">
               How would you rate your experience?
             </Label>
-            <RadioGroup
-              value={formData.rating}
-              onValueChange={(value) =>
-                setFormData({ ...formData, rating: value })
-              }
-              className="grid grid-cols-2 md:grid-cols-4 gap-4"
-              disabled={isSubmitting}
-            >
-              <div className="relative">
-                <RadioGroupItem
-                  value="excellent"
-                  id="excellent"
-                  className="peer sr-only"
-                />
-                <Label
-                  htmlFor="excellent"
-                  className="flex flex-col items-center justify-center w-full h-20 p-4 text-zinc-400 bg-zinc-800/30 border-2 border-zinc-700 rounded-xl cursor-pointer hover:bg-zinc-800/50 hover:border-orange-500/50 transition-all duration-300 peer-checked:bg-gradient-to-br peer-checked:from-orange-500/20 peer-checked:to-orange-600/20 peer-checked:border-orange-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-orange-500/25"
-                >
-                  <div className="text-2xl mb-1">⭐</div>
-                  <span className="text-sm font-medium">Excellent</span>
-                </Label>
-              </div>
+            <div className="grid grid-cols-5 gap-4">
+              {ratingOptions.map((option) => {
+                const isSelected = formData.rating === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() =>
+                      setFormData({ ...formData, rating: option.value })
+                    }
+                    disabled={isSubmitting}
+                    className={`
+                      group relative flex flex-col items-center justify-center w-full h-24 p-3 
+                      bg-zinc-800/40 border-2 border-zinc-700/50 rounded-2xl 
+                      cursor-pointer transition-all duration-500 ease-out
+                      hover:bg-zinc-800/60 hover:border-zinc-600/50 hover:scale-105
+                      ${
+                        isSelected
+                          ? `bg-gradient-to-br ${option.bgGradient} ${option.borderColor} shadow-xl ${option.glowColor} scale-110`
+                          : ""
+                      }
+                    `}
+                  >
+                    {/* Фоновый градиент для выбранного состояния */}
+                    {isSelected && (
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${option.bgGradient} rounded-2xl opacity-20`}
+                      />
+                    )}
 
-              <div className="relative">
-                <RadioGroupItem
-                  value="good"
-                  id="good"
-                  className="peer sr-only"
-                />
-                <Label
-                  htmlFor="good"
-                  className="flex flex-col items-center justify-center w-full h-20 p-4 text-zinc-400 bg-zinc-800/30 border-2 border-zinc-700 rounded-xl cursor-pointer hover:bg-zinc-800/50 hover:border-orange-500/50 transition-all duration-300 peer-checked:bg-gradient-to-br peer-checked:from-orange-500/20 peer-checked:to-orange-600/20 peer-checked:border-orange-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-orange-500/25"
-                >
-                  <div className="text-2xl mb-1">👍</div>
-                  <span className="text-sm font-medium">Good</span>
-                </Label>
-              </div>
+                    {/* Иконка */}
+                    <div
+                      className={`
+                      relative z-10 mb-2 transition-all duration-500 ease-out
+                      ${
+                        isSelected
+                          ? "scale-125 drop-shadow-lg"
+                          : "group-hover:scale-110"
+                      }
+                    `}
+                    >
+                      {option.icon}
+                    </div>
 
-              <div className="relative">
-                <RadioGroupItem
-                  value="average"
-                  id="average"
-                  className="peer sr-only"
-                />
-                <Label
-                  htmlFor="average"
-                  className="flex flex-col items-center justify-center w-full h-20 p-4 text-zinc-400 bg-zinc-800/30 border-2 border-zinc-700 rounded-xl cursor-pointer hover:bg-zinc-800/50 hover:border-orange-500/50 transition-all duration-300 peer-checked:bg-gradient-to-br peer-checked:from-orange-500/20 peer-checked:to-orange-600/20 peer-checked:border-orange-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-orange-500/25"
-                >
-                  <div className="text-2xl mb-1">😐</div>
-                  <span className="text-sm font-medium">Average</span>
-                </Label>
-              </div>
-
-              <div className="relative">
-                <RadioGroupItem
-                  value="poor"
-                  id="poor"
-                  className="peer sr-only"
-                />
-                <Label
-                  htmlFor="poor"
-                  className="flex flex-col items-center justify-center w-full h-20 p-4 text-zinc-400 bg-zinc-800/30 border-2 border-zinc-700 rounded-xl cursor-pointer hover:bg-zinc-800/50 hover:border-orange-500/50 transition-all duration-300 peer-checked:bg-gradient-to-br peer-checked:from-orange-500/20 peer-checked:to-orange-600/20 peer-checked:border-orange-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-orange-500/25"
-                >
-                  <div className="text-2xl mb-1">👎</div>
-                  <span className="text-sm font-medium">Poor</span>
-                </Label>
-              </div>
-            </RadioGroup>
+                    {/* Текст */}
+                    <span
+                      className={`
+                      relative z-10 text-sm font-medium text-center leading-tight transition-all duration-300
+                      ${
+                        isSelected
+                          ? "text-white font-semibold"
+                          : "text-zinc-400 group-hover:text-zinc-300"
+                      }
+                    `}
+                    >
+                      {option.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -179,24 +223,24 @@ export function FeedbackForm() {
               onChange={(e) =>
                 setFormData({ ...formData, feedback: e.target.value })
               }
-              required
               className="min-h-[150px] bg-zinc-900/50 border-zinc-800/50 focus:border-orange-500/50 focus:ring-orange-500/20 transition-all duration-300"
               disabled={isSubmitting}
             />
           </div>
 
-          <Button
-            type="submit"
-            size={"lg"}
-            className="mt-6 w-full bg-gradient-to-r from-primary to-orange-500 hover:from-orange-500 hover:to-primary text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-primary/25"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit Feedback"}
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              type="submit"
+              size={"lg"}
+              className="py-6 px-8 rounded-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:via-orange-500/90 hover:to-orange-600/90 shadow-xl shadow-primary/25 hover:shadow-primary/40 text-lg font-bold border-0 relative overflow-hidden group"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit Feedback"}
+            </Button>
+          </div>
         </form>
       </div>
 
-      {/* Используем вынесенный компонент диалога */}
       <ThankYouDialog
         open={showThankYouDialog}
         onOpenChange={setShowThankYouDialog}

@@ -180,7 +180,7 @@ export default function Sidebar() {
         href={item.href}
         onClick={handleNavClick}
         className={cn(
-          "flex items-center px-3 py-2 text-md md:text-sm font-medium rounded-md group transition-colors",
+          "flex items-center px-3 py-2 text-md md:text-sm font-medium rounded-full group transition-all duration-300",
           pathname === item.href
             ? "bg-orange-500/10 text-orange-500"
             : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
@@ -262,7 +262,7 @@ export default function Sidebar() {
             <Link
               href="/"
               onClick={handleNavClick}
-              className="flex items-center px-3 py-2 mt-1 text-md md:text-xs font-medium text-zinc-400 rounded-md hover:text-white hover:bg-zinc-800/50 group transition-colors"
+              className="flex items-center px-3 py-2 mt-1 text-md md:text-xs font-medium text-zinc-400 rounded-full hover:text-white hover:bg-zinc-800/50 group transition-all duration-300"
             >
               <Home className="mr-3 h-5 w-5 flex-shrink-0" />
               Home Page
@@ -270,7 +270,7 @@ export default function Sidebar() {
 
             <button
               onClick={handleLogout}
-              className="flex w-full items-center px-3 py-2 mt-1 text-md md:text-sm font-medium text-red-400 rounded-md hover:text-red-300 hover:bg-red-500/10 group transition-colors"
+              className="flex w-full items-center px-3 py-2 mt-1 text-md md:text-sm font-medium text-red-400 rounded-full hover:text-red-300 hover:bg-red-500/10 group transition-all duration-300"
             >
               <LogOut className="mr-3 h-5 w-5 flex-shrink-0" />
               Log out

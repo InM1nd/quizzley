@@ -109,7 +109,7 @@ const SubscribeBtn = ({ userId, className }: Props) => {
     <div className="space-y-2">
       <Button
         onClick={handleActivatePro}
-        disabled={loading}
+        // disabled={loading}
         variant="default"
         className="w-full py-6 rounded-2xl bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:via-orange-500/90 hover:to-orange-600/90 shadow-xl shadow-primary/25 hover:shadow-primary/40 text-lg font-bold border-0 relative overflow-hidden group"
       >

@@ -23,7 +23,7 @@ const pricing = [
     trial: true,
   },
   {
-    name: "Pro",
+    name: "Premium",
     price: "$5",
     description: "Full platform access after trial period",
     features: [
@@ -71,7 +71,7 @@ const SubscriptionSection = async (props: Props) => {
                   {/* Header */}
                   <div className="flex flex-row justify-between sm:items-center sm:justify-between mb-8 gap-4">
                     <h3 className="text-3xl font-extrabold leading-8 text-white">
-                      {plan.name === "Pro" ? (
+                      {plan.name === "Premium" ? (
                         <GradientText
                           colors={[
                             "#FF6B00",

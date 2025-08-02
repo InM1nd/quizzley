@@ -19,7 +19,7 @@ function SignOut() {
     <Button
       type="button"
       variant="ghost"
-      className="text-white font-semibold text-md hover:text-primary hover:bg-white/10"
+      className="text-white font-semibold text-md rounded-full hover:text-white hover:bg-red-500/50"
       onClick={() => signOut()}
     >
       Sign Out
@@ -70,12 +70,11 @@ export default function ClientHeader({ session }: { session: any }) {
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative py-4">
-          <nav className="relative z-10 flex items-center justify-between rounded-2xl bg-zinc-900/50 p-4 backdrop-blur-sm ring-1 ring-white/10">
+          <nav className="relative z-10 flex items-center justify-between rounded-full bg-zinc-900/70 p-4 backdrop-blur-md border border-white/10">
             <Link
               href="/"
               className="flex items-center gap-1"
             >
-              {/* <Wand className="text-primary w-8 h-8" /> */}
               <Image
                 src={" /logo.png"}
                 alt="Quizzley"
@@ -91,7 +90,7 @@ export default function ClientHeader({ session }: { session: any }) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-white font-semibold text-lg hover:text-primary transition-colors duration-200"
+                  className="text-white px-4 py-2 rounded-full font-semibold text-lg hover:bg-orange-500/50 transition-all duration-300"
                 >
                   {link.label}
                 </Link>
@@ -105,7 +104,7 @@ export default function ClientHeader({ session }: { session: any }) {
                   {activeSession.user.name && activeSession.user.image && (
                     <Button
                       variant="ghost"
-                      className="hover:bg-white/10"
+                      className="rounded-full hover:bg-white/20"
                       onClick={navigateToDashboard}
                     >
                       <Image
@@ -122,7 +121,7 @@ export default function ClientHeader({ session }: { session: any }) {
               ) : (
                 <Button
                   variant="outline"
-                  className="rounded-xl font-semibold text-md border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                  className="rounded-full font-semibold text-md border-white/10 bg-green-500/50 text-white hover:bg-white/10 hover:text-white"
                   onClick={() => signIn("google")}
                 >
                   Sign In
@@ -199,7 +198,7 @@ export default function ClientHeader({ session }: { session: any }) {
                           <Button
                             type="button"
                             variant="ghost"
-                            className="w-full justify-center text-white hover:text-primary hover:bg-white/10"
+                            className="w-full justify-center text-white hover:text-white hover:bg-red-500/50"
                             onClick={() => signOut()}
                           >
                             Sign Out
@@ -210,7 +209,7 @@ export default function ClientHeader({ session }: { session: any }) {
                       <div className="px-4 py-2">
                         <Button
                           variant="outline"
-                          className="w-full justify-center rounded-xl border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                          className="w-full justify-center rounded-full border-white/10 bg-green-500/50 text-white hover:bg-white/10 hover:text-white"
                           onClick={() => signIn("google")}
                         >
                           Sign In

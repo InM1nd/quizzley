@@ -22,7 +22,7 @@ export default function GradientText({
 
   return (
     <div
-      className={`relative flex max-w-fit flex-row items-center justify-center font-medium backdrop-blur transition-shadow duration-500 overflow-hidden ${className}`}
+      className={`relative mx-auto flex max-w-fit flex-row items-center justify-center  backdrop-blur transition-shadow duration-500 overflow-hidden ${className}`}
     >
       {showBorder && (
         <div
@@ -33,7 +33,7 @@ export default function GradientText({
           }}
         >
           <div
-            className="absolute inset-0 bg-black z-[-1]"
+            className="absolute inset-0 bg-black rounded-[1.25rem] z-[-1]"
             style={{
               width: "calc(100% - 2px)",
               height: "calc(100% - 2px)",
@@ -45,7 +45,7 @@ export default function GradientText({
         </div>
       )}
       <div
-        className="inline-block relative z-2 text-transparent bg-cover animate-gradient font-extrabold"
+        className="inline-block relative z-2 text-transparent bg-cover animate-gradient"
         style={{
           ...gradientStyle,
           backgroundClip: "text",
@@ -58,3 +58,4 @@ export default function GradientText({
     </div>
   );
 }
+

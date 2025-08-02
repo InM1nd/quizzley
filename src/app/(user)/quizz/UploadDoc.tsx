@@ -214,13 +214,16 @@ const UploadDoc = () => {
             />
           </label>
           {error ? <p className="text-red-600 mt-2">{error}</p> : null}
-          <Button
-            size={"lg"}
-            className="mt-4"
-            type="submit"
-          >
-            Generate Quizz
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              size={"lg"}
+              className="mt-4 py-6 px-8 rounded-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:via-orange-500/90 hover:to-orange-600/90 shadow-xl shadow-primary/25 hover:shadow-primary/40 text-lg font-bold border-0 relative overflow-hidden group"
+              type="submit"
+              variant="default"
+            >
+              Generate Quizz
+            </Button>
+          </div>
         </form>
       )}
     </div>
