@@ -2,7 +2,7 @@ import NextAuth, { type Session, type User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "./db/index";
-import { grantTrialPremium } from "./lib/premium-manager";
+
 
 export const {
   handlers: { GET, POST },
@@ -24,19 +24,6 @@ export const {
         session.user.id = user.id;
       }
       return session;
-    },
-  },
-  events: {
-    async createUser({ user }) {
-      // Предоставляем 3-дневный трайл новому пользователю
-      if (user.id) {
-        try {
-          await grantTrialPremium(user.id);
-          console.log(`Granted 3-day trial to new user: ${user.id}`);
-        } catch (error) {
-          console.error("Error granting trial premium:", error);
-        }
-      }
     },
   },
   debug: true,

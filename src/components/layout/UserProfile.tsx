@@ -36,7 +36,7 @@ const UserProfile = memo(({ session }: UserProfileProps) => {
       </div>
 
       {/* Статус подписки */}
-      {session.user?.id && <SubscriptionStatus userId={session.user.id} />}
+      {/* {session.user?.id && <SubscriptionStatus userId={session.user.id} />} */}
     </div>
   );
 });

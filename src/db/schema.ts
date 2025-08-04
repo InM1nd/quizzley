@@ -28,7 +28,8 @@ export const users = pgTable("user", {
   loginCount: integer("login_count").default(0),
   totalQuizzesCreated: integer("total_quizzes_created").default(0),
   premiumExpiresAt: timestamp("premium_expires_at", { mode: "date" }),
-
+  dailyQuizzesCreated: integer("daily_quizzes_created").default(0),
+  lastQuizResetDate: timestamp("last_quiz_reset_date", { mode: "date" }),
 });
 
 export const userRelations = relations(users, ({ many }) => ({

@@ -1,5 +1,6 @@
 import { auth, signIn } from "@/auth";
 import { checkPremiumStatus } from "@/lib/premium-manager";
+import { canAccessQuizSettings } from "@/lib/usage-limits";
 import QuizzGeneratorClient from "./QuizzGeneratorClient";
 
 const Page = async () => {
@@ -12,8 +13,15 @@ const Page = async () => {
   }
 
   const premiumStatus = await checkPremiumStatus(userId!);
+  const canAccessSettings = await canAccessQuizSettings(userId!);
 
-  return <QuizzGeneratorClient isSubscribed={premiumStatus.isPremium} />;
+  return (
+    <QuizzGeneratorClient
+      isSubscribed={premiumStatus.isPremium}
+      userId={userId!}
+      canAccessSettings={canAccessSettings}
+    />
+  );
 };
 
 export default Page;

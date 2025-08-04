@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { logoutUser } from "@/app/actions/auth-actions";
 import { useUIStore } from "@/lib/stores/ui-store";
 import Flashcards from "@/app/(user)/flashcards/page";
+import { UsageLimitsDisplay } from "../ui/usage-limit-display";
 
 type NavItem = {
   title: string;
@@ -245,6 +246,11 @@ export default function Sidebar() {
       >
         <div className="flex flex-col h-full px-4 py-6">
           {session && <UserProfile session={session} />}
+          {session?.user?.id && (
+            <div className="mb-6 px-2">
+              <UsageLimitsDisplay userId={session.user.id} />
+            </div>
+          )}
 
           {/* Main navigation */}
           <nav className="space-y-1 flex-1">

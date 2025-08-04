@@ -1,17 +1,16 @@
 import { db } from "@/db";
 import { users, feedbacks } from "@/db/schema";
-import { eq, and, isNull, lt } from "drizzle-orm";
+import { eq, and, isNull, lt, gt } from "drizzle-orm";
 
 export interface PremiumStatus {
   isPremium: boolean;
   expiresAt: Date | null;
   daysRemaining: number;
+  hoursRemaining: number;
+  minutesRemaining: number;
   source: "trial" | "feedback" | "subscription" | "expired";
 }
 
-/**
- * Проверяет текущий статус премиума пользователя
- */
 export async function checkPremiumStatus(
   userId: string
 ): Promise<PremiumStatus> {
@@ -32,27 +31,38 @@ export async function checkPremiumStatus(
         isPremium: false,
         expiresAt: null,
         daysRemaining: 0,
+        hoursRemaining: 0,
+        minutesRemaining: 0,
         source: "expired",
       };
     }
 
     const isPremium = expiresAt > now;
-    const daysRemaining = isPremium
-      ? Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-      : 0;
+
+    let daysRemaining = 0;
+    let hoursRemaining = 0;
+    let minutesRemaining = 0;
+
+    if (isPremium) {
+      const timeRemaining = expiresAt.getTime() - now.getTime();
+      const totalMinutes = Math.floor(timeRemaining / (1000 * 60));
+
+      daysRemaining = Math.floor(totalMinutes / (24 * 60));
+      hoursRemaining = Math.floor((totalMinutes % (24 * 60)) / 60);
+      minutesRemaining = totalMinutes % 60;
+    }
 
     // Определяем источник премиума
     let source: PremiumStatus["source"] = "expired";
     if (isPremium) {
-      // ✅ ИСПРАВЛЕНИЕ: Проверяем, что у пользователя есть активная подписка
       if (user.stripeCustomerId && user.subscribed) {
         source = "subscription";
       } else if (user.stripeCustomerId && !user.subscribed) {
-        // Если есть stripeCustomerId, но подписка отменена, это может быть trial или feedback
         const activeFeedback = await db.query.feedbacks.findFirst({
           where: and(
             eq(feedbacks.userId, userId),
-            eq(feedbacks.premiumGranted, true)
+            eq(feedbacks.premiumGranted, true),
+            gt(feedbacks.premiumEndDate, now)
           ),
         });
         source = activeFeedback ? "feedback" : "trial";
@@ -61,7 +71,8 @@ export async function checkPremiumStatus(
         const activeFeedback = await db.query.feedbacks.findFirst({
           where: and(
             eq(feedbacks.userId, userId),
-            eq(feedbacks.premiumGranted, true)
+            eq(feedbacks.premiumGranted, true),
+            gt(feedbacks.premiumEndDate, now)
           ),
         });
         source = activeFeedback ? "feedback" : "trial";
@@ -72,6 +83,8 @@ export async function checkPremiumStatus(
       isPremium,
       expiresAt,
       daysRemaining,
+      hoursRemaining,
+      minutesRemaining,
       source,
     };
   } catch (error) {
@@ -80,6 +93,8 @@ export async function checkPremiumStatus(
       isPremium: false,
       expiresAt: null,
       daysRemaining: 0,
+      hoursRemaining: 0,
+      minutesRemaining: 0,
       source: "expired",
     };
   }
@@ -91,7 +106,8 @@ export async function checkPremiumStatus(
 export async function addPremiumTime(
   userId: string,
   days: number,
-  reason: string
+  reason: string,
+  setSubscribed: boolean = false
 ): Promise<Date> {
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
@@ -118,7 +134,7 @@ export async function addPremiumTime(
     .update(users)
     .set({
       premiumExpiresAt: newExpirationDate,
-      subscribed: true, // Обновляем статус для совместимости
+      subscribed: setSubscribed,
     })
     .where(eq(users.id, userId));
 
@@ -129,21 +145,16 @@ export async function addPremiumTime(
   return newExpirationDate;
 }
 
-/**
- * Предоставляет 3-дневный трайл новому пользователю
- */
-export async function grantTrialPremium(userId: string): Promise<Date> {
-  return await addPremiumTime(userId, 3, "Initial trial period");
-}
-
-/**
- * Предоставляет 5 дней премиума за отзыв
- */
 export async function grantFeedbackPremium(
   userId: string,
   feedbackId: number
 ): Promise<Date> {
-  const expirationDate = await addPremiumTime(userId, 5, "Feedback reward");
+  const expirationDate = await addPremiumTime(
+    userId,
+    5,
+    "Feedback reward",
+    false
+  );
 
   // Обновляем запись отзыва
   await db
@@ -161,7 +172,7 @@ export async function grantFeedbackPremium(
  * Добавляет месяц премиума за подписку
  */
 export async function grantSubscriptionPremium(userId: string): Promise<Date> {
-  return await addPremiumTime(userId, 30, "Monthly subscription");
+  return await addPremiumTime(userId, 30, "Monthly subscription", true);
 }
 
 /**

@@ -64,6 +64,13 @@
       "when": 1753982103397,
       "tag": "0008_perpetual_maddog",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1754167946684,
+      "tag": "0009_quiet_kingpin",
+      "breakpoints": true
     }
   ]
 }

@@ -48,10 +48,12 @@ const UpgradePlan = ({ showFeedbackOption = true }: UpgradePlanProps) => {
         </div>
 
         {/* Способы получения доступа */}
-        <div className="w-full space-y-3">
+        <div className="w-full flex flex-col items-center gap-4">
           <Button
+            variant="default"
             onClick={() => onNavigateToUpgrade(PRICE_ID)}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            size={"lg"}
+            className="mt-4 py-6 px-8 rounded-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:via-orange-500/90 hover:to-orange-600/90 shadow-xl shadow-primary/25 hover:shadow-primary/40 text-lg font-bold border-0 relative overflow-hidden group"
           >
             <ChevronsUp className="w-4 h-4 mr-2" />
             Get Premium - 30 Days
@@ -61,19 +63,13 @@ const UpgradePlan = ({ showFeedbackOption = true }: UpgradePlanProps) => {
             <Button
               onClick={onNavigateToFeedback}
               variant="outline"
-              className="w-full border-zinc-600 hover:bg-zinc-800"
+              size={"lg"}
+              className="py-6 px-8 rounded-full bg-zinc-800/50 hover:bg-zinc-700/50 text-zinc-300 hover:text-white border border-zinc-700 hover:border-zinc-600 transition-all duration-300 text-lg font-bold"
             >
               <Gift className="w-4 h-4 mr-2" />
               Leave Feedback - Get 5 Days Free
             </Button>
           )}
-        </div>
-
-        {/* Информация о накапливающейся системе */}
-        <div className="text-center text-xs text-zinc-500 max-w-sm">
-          <Clock className="w-4 h-4 inline mr-1" />
-          Premium time accumulates - purchase or earn feedback rewards to extend
-          your access
         </div>
       </div>
     </div>
