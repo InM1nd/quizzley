@@ -7,6 +7,9 @@ import { Settings, Sparkles, ScrollText, Clock } from "lucide-react";
 import { getPremiumStatus } from "@/app/actions/userSubscription";
 import SubscribeBtn from "./SubscribeBtn";
 
+// Удаляем дублирующиеся интерфейс и функцию checkPremiumStatus
+// Они уже определены в @/lib/premium-manager
+
 const page = async () => {
   const session = await auth();
   const userId = session?.user?.id;
@@ -16,7 +19,7 @@ const page = async () => {
     return null;
   }
 
-  // Используем новую функцию для получения полного статуса
+  // Используем существующую функцию из actions
   const premiumStatus = await getPremiumStatus(session.user.id);
 
   const plan = premiumStatus.isPremium ? "premium" : "free";
@@ -61,11 +64,23 @@ const page = async () => {
               <div className="mt-4 flex items-center space-x-4 text-sm text-zinc-300">
                 <div className="flex items-center space-x-2">
                   <Clock className="w-4 h-4" />
-                  <span>{premiumStatus.daysRemaining} days remaining</span>
+                  <span>
+                    {premiumStatus.daysRemaining > 0 && (
+                      <span>{premiumStatus.daysRemaining} days </span>
+                    )}
+                    {premiumStatus.hoursRemaining > 0 && (
+                      <span>{premiumStatus.hoursRemaining} hours </span>
+                    )}
+                    {premiumStatus.minutesRemaining > 0 && (
+                      <span>{premiumStatus.minutesRemaining} minutes</span>
+                    )}
+                    {premiumStatus.daysRemaining === 0 &&
+                      premiumStatus.hoursRemaining === 0 &&
+                      premiumStatus.minutesRemaining === 0 && (
+                        <span>Less than a minute</span>
+                      )}
+                  </span>
                 </div>
-                {/* <div className="text-zinc-500">
-                  Source: {getSourceText(premiumStatus.source)}
-                </div> */}
               </div>
             )}
           </div>

@@ -11,6 +11,10 @@ import {
 } from "@/constants/quiz-prompts";
 import { logger } from "@/lib/logger"; // 🆕 Импортируем logger
 import { getUserSubscription } from "@/app/actions/userSubscription";
+import {
+  checkQuizCreationLimit,
+  incrementDailyQuizCount,
+} from "@/lib/usage-limits";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -28,20 +32,21 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const hasSubscription = await getUserSubscription({ userId });
+  const usageLimits = await checkQuizCreationLimit(userId);
 
-  if (!hasSubscription) {
+  if (!usageLimits.canCreateQuiz) {
     logger.api.error(
       "POST",
       "/api/quizz/generate",
-      new Error("User has no active subscription")
+      new Error("Daily quiz creation limit exceeded")
     );
     return NextResponse.json(
       {
-        error: "Active subscription required",
-        message: "Please upgrade your plan to generate quizzes",
+        error: "Daily limit exceeded",
+        message: `You can create up to ${usageLimits.dailyQuizzesLimit} quizzes per day. Please upgrade to premium for unlimited quizzes.`,
+        usageLimits,
       },
-      { status: 403 }
+      { status: 429 }
     );
   }
 
@@ -82,6 +87,8 @@ export async function POST(req: NextRequest) {
 
     const quizzId = newQuizz[0].quizzId;
 
+    await incrementDailyQuizCount(userId);
+
     // 🆕 Используем специальный метод для генерации квиза
     logger.quizGeneration.started(quizzId, userId);
 
@@ -101,6 +108,11 @@ export async function POST(req: NextRequest) {
       {
         quizzId,
         message: "Quiz generation started",
+        usageLimits: {
+          ...usageLimits,
+          dailyQuizzesCreated: usageLimits.dailyQuizzesCreated + 1,
+          quizzesRemaining: usageLimits.quizzesRemaining - 1,
+        },
       },
       { status: 202 }
     );

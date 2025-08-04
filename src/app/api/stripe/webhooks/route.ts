@@ -3,6 +3,7 @@ import { stripe } from "@/lib/stripe";
 import {
   createSubscription,
   deleteSubscription,
+  handleTrialEnding,
 } from "@/app/actions/userSubscription";
 import { revalidatePath } from "next/cache";
 
@@ -11,7 +12,8 @@ const relevantEvents = new Set([
   "customer.subscription.created",
   "customer.subscription.updated",
   "customer.subscription.deleted",
-  "invoice.payment_succeeded", // ✅ Добавляем для recurring payments
+  "customer.subscription.trial_will_end",
+  "invoice.payment_succeeded",
 ]);
 
 export async function POST(req: Request) {
@@ -50,6 +52,40 @@ export async function POST(req: Request) {
       console.log("✅ Processing event:", event.type);
 
       switch (event.type) {
+        case "customer.subscription.trial_will_end":
+          const trialEndingSubscription = event.data
+            .object as Stripe.Subscription;
+          console.log(
+            "🔄 Trial ending subscription:",
+            trialEndingSubscription.id
+          );
+          console.log(
+            "🔄 Trial ending status:",
+            trialEndingSubscription.status
+          );
+          console.log(
+            "🔄 Trial ending customer:",
+            trialEndingSubscription.customer
+          );
+          if (trialEndingSubscription.customer) {
+            console.log("🔄 Processing trial ending subscription");
+            try {
+              await handleTrialEnding({
+                stripeCustomerId: trialEndingSubscription.customer as string,
+                trialEndDate: trialEndingSubscription.trial_end,
+              });
+            } catch (error) {
+              console.error(
+                "❌ Error in createSubscription (trial ending):",
+                error
+              );
+              throw error;
+            }
+          } else {
+            console.log("⚠️ Skipping trial ending subscription - no customer");
+          }
+          break;
+
         case "checkout.session.completed":
           const session = event.data.object as Stripe.Checkout.Session;
           console.log("🎯 Checkout session completed:", session.id);

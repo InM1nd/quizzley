@@ -169,6 +169,9 @@ export async function POST(req: Request) {
       payment_method_types: ["card"],
       line_items: [{ price, quantity }],
       mode: "subscription",
+      subscription_data: {
+        trial_period_days: 3, // 3 days trial
+      },
       metadata: {
         userId: userId,
       },
