@@ -1,13 +1,5 @@
 "use server";
 
-// TODO:
-// 1. Добавить логирование активности
-// 2. Добавить проверку на наличие пользователя
-// 3. Добавить проверку на наличие сессии
-// 4. Добавить проверку на наличие квиза
-// 5. Добавить проверку на наличие пользователя
-// 6. Добавить проверку на наличие сессии
-
 import { auth } from "@/auth";
 import { db } from "@/db";
 import { users, userActivityLogs } from "@/db/schema";
@@ -45,7 +37,6 @@ export async function updateUserLoginActivity() {
 
     return { success: true };
   } catch (error) {
-    console.error("Error updating login activity:", error);
     return { success: false, message: "Failed to update login activity" };
   }
 }
@@ -80,7 +71,6 @@ export async function updateQuizCreationActivity() {
 
     return { success: true };
   } catch (error) {
-    console.error("Error updating quiz creation activity:", error);
     return {
       success: false,
       message: "Failed to update quiz creation activity",
@@ -113,7 +103,6 @@ export async function getUserActivityStats() {
       createdAt: user.createdAt,
     };
   } catch (error) {
-    console.error("Error getting user activity stats:", error);
     return null;
   }
 }
@@ -138,7 +127,6 @@ export async function getUserActivityHistory(limit = 10) {
 
     return activities;
   } catch (error) {
-    console.error("Error getting user activity history:", error);
     return [];
   }
 }

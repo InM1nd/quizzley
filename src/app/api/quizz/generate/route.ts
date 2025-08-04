@@ -9,70 +9,173 @@ import {
   createQuizGenerationPrompt,
   ERROR_MESSAGES,
 } from "@/constants/quiz-prompts";
-import { logger } from "@/lib/logger"; // 🆕 Импортируем logger
+import { logger } from "@/lib/logger";
 import { getUserSubscription } from "@/app/actions/userSubscription";
 import {
   checkQuizCreationLimit,
   incrementDailyQuizCount,
 } from "@/lib/usage-limits";
+import { checkRateLimit } from "@/lib/rate-limit";
+
+// Константы для валидации
+const MAX_PDF_SIZE = 10 * 1024 * 1024; // 10MB
+const ALLOWED_FILE_TYPES = ["application/pdf"];
+const MIN_QUESTIONS = 1;
+const MAX_QUESTIONS = 50;
 
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!userId) {
-    logger.api.error(
-      "POST",
-      "/api/quizz/generate",
-      new Error("User not authenticated")
-    );
-    return NextResponse.json(
-      { error: "User not authenticated" },
-      { status: 401 }
-    );
-  }
-
-  const usageLimits = await checkQuizCreationLimit(userId);
-
-  if (!usageLimits.canCreateQuiz) {
-    logger.api.error(
-      "POST",
-      "/api/quizz/generate",
-      new Error("Daily quiz creation limit exceeded")
-    );
-    return NextResponse.json(
-      {
-        error: "Daily limit exceeded",
-        message: `You can create up to ${usageLimits.dailyQuizzesLimit} quizzes per day. Please upgrade to premium for unlimited quizzes.`,
-        usageLimits,
-      },
-      { status: 429 }
-    );
-  }
-
-  logger.api.request("POST", "/api/quizz/generate", userId);
-
-  const body = await req.formData();
-  const quizTitle = (body.get("quizTitle") as string) || "Quiz";
-  const document = body.get("pdf");
-  const questionCount = parseInt(body.get("questionCount") as string, 10) || 10;
-  const quizOptions = body.get("quizOptions") as string;
-  const selectedDifficulty = body.get("selectedDifficulty") as string;
-
-  if (!document) {
-    logger.api.error(
-      "POST",
-      "/api/quizz/generate",
-      new Error("No PDF file provided")
-    );
-    return NextResponse.json(
-      { error: "No PDF file provided" },
-      { status: 400 }
-    );
-  }
-
   try {
+    // Rate limiting
+    const rateLimitResult = await checkRateLimit(req, 5, "quiz"); // 5 запросов в минуту
+    if (!rateLimitResult.success) {
+      logger.api.error(
+        "POST",
+        "/api/quizz/generate",
+        new Error("Rate limit exceeded")
+      );
+      return NextResponse.json(
+        {
+          error: "Rate limit exceeded",
+          message: "Too many requests. Please try again later.",
+          retryAfter: Math.ceil((rateLimitResult.reset - Date.now()) / 1000),
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": Math.ceil(
+              (rateLimitResult.reset - Date.now()) / 1000
+            ).toString(),
+            "X-RateLimit-Limit": rateLimitResult.limit.toString(),
+            "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
+            "X-RateLimit-Reset": rateLimitResult.reset.toString(),
+          },
+        }
+      );
+    }
+
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      logger.api.error(
+        "POST",
+        "/api/quizz/generate",
+        new Error("User not authenticated")
+      );
+      return NextResponse.json(
+        { error: "User not authenticated" },
+        { status: 401 }
+      );
+    }
+
+    const usageLimits = await checkQuizCreationLimit(userId);
+
+    if (!usageLimits.canCreateQuiz) {
+      logger.api.error(
+        "POST",
+        "/api/quizz/generate",
+        new Error("Daily quiz creation limit exceeded")
+      );
+      return NextResponse.json(
+        {
+          error: "Daily limit exceeded",
+          message: `You can create up to ${usageLimits.dailyQuizzesLimit} quizzes per day. Please upgrade to premium for unlimited quizzes.`,
+          usageLimits,
+        },
+        { status: 429 }
+      );
+    }
+
+    logger.api.request("POST", "/api/quizz/generate", userId);
+
+    const body = await req.formData();
+
+    // Валидация и sanitization входных данных
+    const quizTitle = sanitizeInput(body.get("quizTitle") as string) || "Quiz";
+    const document = body.get("pdf");
+    const questionCountRaw = body.get("questionCount") as string;
+    const quizOptions = sanitizeInput(body.get("quizOptions") as string);
+    const selectedDifficulty = sanitizeInput(
+      body.get("selectedDifficulty") as string
+    );
+
+    // Валидация количества вопросов
+    const questionCount = parseInt(questionCountRaw, 10);
+    if (
+      isNaN(questionCount) ||
+      questionCount < MIN_QUESTIONS ||
+      questionCount > MAX_QUESTIONS
+    ) {
+      logger.api.error(
+        "POST",
+        "/api/quizz/generate",
+        new Error(`Invalid question count: ${questionCountRaw}`)
+      );
+      return NextResponse.json(
+        {
+          error: `Question count must be between ${MIN_QUESTIONS} and ${MAX_QUESTIONS}`,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Валидация файла
+    if (!document) {
+      logger.api.error(
+        "POST",
+        "/api/quizz/generate",
+        new Error("No PDF file provided")
+      );
+      return NextResponse.json(
+        { error: "No PDF file provided" },
+        { status: 400 }
+      );
+    }
+
     const pdfBlob = document as Blob;
+
+    // Валидация типа файла
+    if (!ALLOWED_FILE_TYPES.includes(pdfBlob.type)) {
+      logger.api.error(
+        "POST",
+        "/api/quizz/generate",
+        new Error(`Invalid file type: ${pdfBlob.type}`)
+      );
+      return NextResponse.json(
+        { error: "Only PDF files are allowed" },
+        { status: 400 }
+      );
+    }
+
+    // Валидация размера файла
+    if (pdfBlob.size > MAX_PDF_SIZE) {
+      logger.api.error(
+        "POST",
+        "/api/quizz/generate",
+        new Error(`File too large: ${pdfBlob.size} bytes`)
+      );
+      return NextResponse.json(
+        {
+          error: `File too large. Maximum size is ${
+            MAX_PDF_SIZE / (1024 * 1024)
+          }MB`,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Валидация названия квиза
+    if (quizTitle.length > 100) {
+      logger.api.error(
+        "POST",
+        "/api/quizz/generate",
+        new Error("Quiz title too long")
+      );
+      return NextResponse.json(
+        { error: "Quiz title must be less than 100 characters" },
+        { status: 400 }
+      );
+    }
 
     const newQuizz = await db
       .insert(quizzes)
@@ -89,7 +192,6 @@ export async function POST(req: NextRequest) {
 
     await incrementDailyQuizCount(userId);
 
-    // 🆕 Используем специальный метод для генерации квиза
     logger.quizGeneration.started(quizzId, userId);
 
     void generateQuizInBackground(
@@ -114,12 +216,33 @@ export async function POST(req: NextRequest) {
           quizzesRemaining: usageLimits.quizzesRemaining - 1,
         },
       },
-      { status: 202 }
+      {
+        status: 202,
+        headers: {
+          "X-RateLimit-Limit": rateLimitResult.limit.toString(),
+          "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
+          "X-RateLimit-Reset": rateLimitResult.reset.toString(),
+        },
+      }
     );
   } catch (e: any) {
     logger.api.error("POST", "/api/quizz/generate", e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
+}
+
+// Функция для sanitization входных данных
+function sanitizeInput(input: string): string {
+  if (!input) return "";
+
+  // Удаляем потенциально опасные символы
+  return input
+    .replace(/[<>]/g, "") // Удаляем < и >
+    .replace(/javascript:/gi, "") // Удаляем javascript: протокол
+    .replace(/data:/gi, "") // Удаляем data: протокол
+    .replace(/vbscript:/gi, "") // Удаляем vbscript: протокол
+    .trim()
+    .slice(0, 1000); // Ограничиваем длину
 }
 
 async function generateQuizInBackground(

@@ -38,6 +38,7 @@
     "crypto-browserify": "^3.12.1",
     "drizzle-orm": "^0.29.5",
     "framer-motion": "^10.18.0",
+    "isomorphic-dompurify": "^2.26.0",
     "langchain": "^0.1.30",
     "lucide-react": "^0.309.0",
     "next": "^14.0.1",

@@ -134,9 +134,7 @@ const SubscriptionSection = async (props: Props) => {
                           className="w-full py-6 rounded-2xl bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:via-orange-500/90 hover:to-orange-600/90 shadow-xl shadow-primary/25 hover:shadow-primary/40 text-lg font-bold border-0 relative overflow-hidden group"
                           variant="default"
                         >
-                          <span className="relative z-10">
-                            Start Free Trial
-                          </span>
+                          <span className="relative z-10">Start Free</span>
                           <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                         </Button>
                       </Link>

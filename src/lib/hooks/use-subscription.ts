@@ -44,11 +44,9 @@ export function useSubscription(userId?: string): UseSubscriptionReturn {
         if (response.ok) {
           const status = await response.json();
           setPremiumStatus(status);
-        } else {
-          console.error("Failed to fetch premium status");
         }
       } catch (error) {
-        console.error("Error fetching premium status:", error);
+        // Ошибка загрузки статуса подписки
       } finally {
         setIsLoadingStatus(false);
       }
@@ -78,8 +76,6 @@ export function useSubscription(userId?: string): UseSubscriptionReturn {
     setError(null);
 
     try {
-      console.log("🛒 Creating checkout session with PRICE_ID:", PRICE_ID);
-
       const response = await fetch("/api/stripe/checkout-session", {
         method: "POST",
         headers: {
@@ -88,9 +84,7 @@ export function useSubscription(userId?: string): UseSubscriptionReturn {
         body: JSON.stringify({ price: PRICE_ID }),
       });
 
-      // ✅ Получаем подробную информацию об ошибке
       const responseText = await response.text();
-      console.log("📝 Raw response:", responseText);
 
       if (!response.ok) {
         let errorMessage = `HTTP error! status: ${response.status}`;
@@ -104,7 +98,6 @@ export function useSubscription(userId?: string): UseSubscriptionReturn {
             errorMessage += ` - ${errorData.details}`;
           }
         } catch (parseError) {
-          console.error("❌ Failed to parse error response:", parseError);
           errorMessage += ` - Raw response: ${responseText}`;
         }
 
@@ -115,7 +108,6 @@ export function useSubscription(userId?: string): UseSubscriptionReturn {
       try {
         data = JSON.parse(responseText);
       } catch (parseError) {
-        console.error("❌ Failed to parse success response:", parseError);
         throw new Error("Invalid response format from server");
       }
 
@@ -125,14 +117,11 @@ export function useSubscription(userId?: string): UseSubscriptionReturn {
         throw new Error("No session ID received from server");
       }
 
-      console.log("✅ Received session ID:", sessionId);
-
       const stripe = await getStripe();
       if (!stripe) {
         throw new Error("Stripe failed to load");
       }
 
-      console.log("🔄 Redirecting to Stripe checkout...");
       const { error: stripeError } = await stripe.redirectToCheckout({
         sessionId,
       });
@@ -141,7 +130,6 @@ export function useSubscription(userId?: string): UseSubscriptionReturn {
         throw new Error(`Stripe error: ${stripeError.message}`);
       }
     } catch (error) {
-      console.error("❌ Error creating checkout session:", error);
       setError(
         error instanceof Error ? error.message : "Unknown error occurred"
       );

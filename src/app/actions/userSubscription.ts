@@ -15,21 +15,13 @@ export async function createSubscription({
 }: {
   stripeCustomerId: string;
 }) {
-  console.log("🚀 =================================");
-  console.log("🚀 CREATE SUBSCRIPTION CALLED");
-  console.log("🚀 stripeCustomerId:", stripeCustomerId);
-  console.log("🚀 =================================");
-
   const user = await db.query.users.findFirst({
     where: eq(users.stripeCustomerId, stripeCustomerId),
   });
 
   if (!user) {
-    console.error("❌ User not found for stripe customer:", stripeCustomerId);
     throw new Error(`User not found for stripe customer: ${stripeCustomerId}`);
   }
-
-  console.log("✅ Found user:", user.id, "email:", user.email);
 
   const subscriptions = await stripe.subscriptions.list({
     customer: stripeCustomerId,
@@ -40,20 +32,11 @@ export async function createSubscription({
   const subscription = subscriptions.data[0];
 
   if (!subscription) {
-    console.error("❌ No subscription found for customer:", stripeCustomerId);
     throw new Error(`No subscription found for customer: ${stripeCustomerId}`);
   }
 
-  console.log("📊 Subscription details:", {
-    id: subscription.id,
-    status: subscription.status,
-    trial_end: subscription.trial_end,
-    current_period_end: subscription.current_period_end,
-  });
-
   // Если подписка в триальном периоде
   if (subscription.status === "active") {
-    console.log("🎯 Processing active subscription");
     const currentPeriodEnd = new Date(subscription.current_period_end * 1000);
 
     await db
@@ -63,13 +46,7 @@ export async function createSubscription({
         subscribed: true,
       })
       .where(eq(users.id, user.id));
-
-    console.log("✅ Active subscription set until:", currentPeriodEnd);
   } else if (subscription.status === "trialing") {
-    console.log(
-      "Subscription is in trial period - will be handled by trial_will_end webhook"
-    );
-
     if (subscription.trial_end) {
       const trialEnd = new Date(subscription.trial_end * 1000);
 
@@ -80,19 +57,11 @@ export async function createSubscription({
           subscribed: false, // Триал не является активной подпиской
         })
         .where(eq(users.id, user.id));
-
-      console.log("✅ Trial subscription set until:", trialEnd);
-    } else {
-      console.log("⚠️ Trial subscription has no trial_end date");
     }
-  } else {
-    console.log(`⚠️ Unhandled subscription status: ${subscription.status}`);
   }
 
   revalidatePath("/billing");
   revalidatePath("/dashboard");
-
-  console.log("🏁 CREATE SUBSCRIPTION COMPLETED");
 }
 
 export async function deleteSubscription({
@@ -142,23 +111,17 @@ export async function handleTrialEnding({
   stripeCustomerId: string;
   trialEndDate: number | null;
 }) {
-  console.log("🔄 Handling trial ending for customer:", stripeCustomerId);
-
   const user = await db.query.users.findFirst({
     where: eq(users.stripeCustomerId, stripeCustomerId),
   });
 
   if (!user) {
-    console.error("❌ User not found for stripe customer:", stripeCustomerId);
     throw new Error(`User not found for stripe customer: ${stripeCustomerId}`);
   }
-
-  console.log("🔄 User found:", user.id, "email:", user.email);
 
   const currentStatus = await checkPremiumStatus(user.id);
 
   if (currentStatus.source === "feedback" && currentStatus.isPremium) {
-    console.log("✅ User has active feedback premium, keeping it");
     return;
   }
 
@@ -172,10 +135,6 @@ export async function handleTrialEnding({
     })
     .where(eq(users.id, user.id));
 
-  console.log("🔄 Updated user:", user.id, "premiumExpiresAt:", trialEnd);
-
   revalidatePath("/billing");
   revalidatePath("/dashboard");
-
-  console.log("🏁 Trial ending handled for user:", user.id);
 }
