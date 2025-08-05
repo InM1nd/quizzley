@@ -37,7 +37,7 @@ export function ConfirmDeleteDialog({
         <div className="py-2">{description}</div>
         <DialogFooter>
           <Button
-            variant="text-secondary"
+            variant="secondary"
             onClick={onCancel}
             disabled={isLoading}
           >

@@ -277,7 +277,7 @@ const QuizzesTable = (props: Props) => {
           </div>
           <div className="flex gap-2">
             <Button
-              variant="text-secondary"
+              variant="secondary"
               size="sm"
               onClick={goToPreviousPage}
               disabled={currentPage === 1}
@@ -289,7 +289,7 @@ const QuizzesTable = (props: Props) => {
               Page {currentPage} of {totalPages}
             </div>
             <Button
-              variant="text-secondary"
+              variant="secondary"
               size="sm"
               onClick={goToNextPage}
               disabled={currentPage === totalPages}
