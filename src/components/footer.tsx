@@ -85,7 +85,7 @@ const Footer = () => {
             <ul className="mt-4 space-y-2">
               <li>
                 <Link
-                  href="/privacy"
+                  href="/privacy-policy"
                   className="text-sm text-secondary hover:text-orange-500 transition-colors"
                 >
                   Privacy Policy
@@ -93,7 +93,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/terms"
+                  href="/terms-of-service"
                   className="text-sm text-secondary hover:text-orange-500 transition-colors"
                 >
                   Terms of Service
