@@ -58,7 +58,7 @@ export function FeedbackForm() {
   if (!session) {
     return (
       <div className="bg-zinc-900/50 rounded-xl p-6 backdrop-blur-sm border border-zinc-800 text-center">
-        <p className="text-zinc-400 mb-4">
+        <p className="text-secondary mb-4">
           You need to be logged in to submit feedback.
         </p>
         <Button>Log In</Button>
@@ -121,7 +121,7 @@ export function FeedbackForm() {
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-orange-600">
             Share Your Feedback
           </h2>
-          <p className="text-zinc-400 text-lg">
+          <p className="text-secondary text-lg">
             Help us improve Quizzley by sharing your thoughts and suggestions
           </p>
           <div className="bg-zinc-800/50 p-4 rounded-lg">
@@ -197,7 +197,7 @@ export function FeedbackForm() {
                       ${
                         isSelected
                           ? "text-white font-semibold"
-                          : "text-zinc-400 group-hover:text-zinc-300"
+                          : "text-secondary group-hover:text-zinc-300"
                       }
                     `}
                     >

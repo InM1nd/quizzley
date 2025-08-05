@@ -17,18 +17,18 @@ export function middleware(request: NextRequest) {
   response.headers.set("X-Download-Options", "noopen");
   response.headers.set("X-Permitted-Cross-Domain-Policies", "none");
 
-  // Content Security Policy
+  // Content Security Policy - обновленная версия
   const csp = [
     "default-src 'self'",
     "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://checkout.stripe.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: blob:",
-    "connect-src 'self' https://api.stripe.com https://generativelanguage.googleapis.com",
-    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
+    "connect-src 'self' https://api.stripe.com https://generativelanguage.googleapis.com https://accounts.google.com",
+    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://accounts.google.com",
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self'",
+    "form-action 'self' https://accounts.google.com",
     "frame-ancestors 'none'",
     "upgrade-insecure-requests",
   ].join("; ");

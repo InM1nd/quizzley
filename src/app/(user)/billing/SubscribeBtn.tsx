@@ -4,6 +4,7 @@ import { Loader2, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSubscription } from "@/lib/hooks/use-subscription";
 import { cn } from "@/lib/utils";
+import { LoginModal } from "@/components/auth/login-modal";
 
 type Props = {
   userId?: string;
@@ -20,6 +21,22 @@ const SubscribeBtn = ({ userId, className }: Props) => {
   } = useSubscription(userId);
 
   const isPremium = premiumStatus?.isPremium;
+
+  // Если пользователь не авторизован, показываем кнопку входа
+  if (!userId) {
+    return (
+      <LoginModal callbackUrl="/billing/subscribe">
+        <Button
+          variant="default"
+          className={cn(
+            "w-full py-6 rounded-2xl text-lg font-bold border-0 relative overflow-hidden group bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:via-orange-500/90 hover:to-orange-600/90 shadow-xl shadow-primary/25 hover:shadow-primary/40"
+          )}
+        >
+          Get Premium
+        </Button>
+      </LoginModal>
+    );
+  }
 
   return (
     <div className="space-y-2">

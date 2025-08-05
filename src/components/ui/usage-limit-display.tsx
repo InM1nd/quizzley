@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Badge } from "./badge";
 import {
   Crown,
@@ -13,50 +13,42 @@ import {
 } from "lucide-react";
 import { Button } from "./button";
 import { useSubscription } from "@/lib/hooks/use-subscription";
+import { useUsageLimitsStore } from "@/lib/stores/usage-limits-store";
 import { cn } from "@/lib/utils";
 
-interface UsageLimits {
-  canCreateQuiz: boolean;
-  dailyQuizzesCreated: number;
-  dailyQuizzesLimit: number;
-  quizzesRemaining: number;
-  isPremium: boolean;
-}
-
 interface UsageLimitsDisplayProps {
-  userId: string;
+  userId?: string;
+  limits?: any; // Добавляем опциональный проп limits
 }
 
-export function UsageLimitsDisplay({ userId }: UsageLimitsDisplayProps) {
-  const [usageLimits, setUsageLimits] = useState<UsageLimits | null>(null);
-  const [loading, setLoading] = useState(true);
+export function UsageLimitsDisplay({
+  userId,
+  limits: externalLimits,
+}: UsageLimitsDisplayProps) {
+  const {
+    limits: storeLimits,
+    isLoading,
+    error,
+    refreshLimits,
+  } = useUsageLimitsStore();
   const {
     upgradeLoading,
-    error,
+    error: subscriptionError,
     premiumStatus,
     isLoadingStatus,
     handleUpgrade,
   } = useSubscription(userId);
 
+  // Используем внешние limits если они переданы, иначе из store
+  const limits = externalLimits || storeLimits;
+
   useEffect(() => {
-    async function fetchUsageLimits() {
-      try {
-        const response = await fetch("/api/user/usage-limit");
-        if (response.ok) {
-          const data = await response.json();
-          setUsageLimits(data);
-        }
-      } catch (error) {
-        console.error("Error fetching usage limits:", error);
-      } finally {
-        setLoading(false);
-      }
+    if (!externalLimits && userId) {
+      refreshLimits();
     }
+  }, [userId, refreshLimits, externalLimits]);
 
-    fetchUsageLimits();
-  }, [userId]);
-
-  if (loading || isLoadingStatus) {
+  if (isLoading || isLoadingStatus) {
     return (
       <div className="flex items-center gap-3">
         <div className="w-4 h-4 bg-zinc-800 rounded animate-pulse"></div>
@@ -65,12 +57,12 @@ export function UsageLimitsDisplay({ userId }: UsageLimitsDisplayProps) {
     );
   }
 
-  if (!usageLimits) {
+  if (!limits) {
     return null;
   }
 
   // Используем статус из хука подписки, если он доступен
-  const isPremium = premiumStatus?.isPremium || usageLimits.isPremium;
+  const isPremium = premiumStatus?.isPremium || limits.isPremium;
 
   if (isPremium) {
     return (
@@ -85,9 +77,9 @@ export function UsageLimitsDisplay({ userId }: UsageLimitsDisplayProps) {
 
   // Вычисляем процент использования
   const usagePercentage =
-    (usageLimits.dailyQuizzesCreated / usageLimits.dailyQuizzesLimit) * 100;
+    (limits.dailyQuizzesCreated / limits.dailyQuizzesLimit) * 100;
   const remainingPercentage =
-    (usageLimits.quizzesRemaining / usageLimits.dailyQuizzesLimit) * 100;
+    (limits.quizzesRemaining / limits.dailyQuizzesLimit) * 100;
 
   return (
     <div className="flex flex-col items-start gap-4">
@@ -105,7 +97,7 @@ export function UsageLimitsDisplay({ userId }: UsageLimitsDisplayProps) {
             <span>Resets daily</span>
           </div>
           <span className="">
-            {usageLimits.dailyQuizzesCreated}/{usageLimits.dailyQuizzesLimit}
+            {limits.dailyQuizzesCreated}/{limits.dailyQuizzesLimit}
           </span>
         </div>
 
@@ -113,15 +105,12 @@ export function UsageLimitsDisplay({ userId }: UsageLimitsDisplayProps) {
         <div className="relative w-full h-3 bg-zinc-800 rounded-full overflow-hidden">
           {/* Деления */}
           <div className="absolute inset-0 flex">
-            {Array.from(
-              { length: usageLimits.dailyQuizzesLimit },
-              (_, index) => (
-                <div
-                  key={index}
-                  className="flex-1 border-r border-zinc-700 last:border-r-0"
-                />
-              )
-            )}
+            {Array.from({ length: limits.dailyQuizzesLimit }, (_, index) => (
+              <div
+                key={index}
+                className="flex-1 border-r border-zinc-700 last:border-r-0"
+              />
+            ))}
           </div>
 
           {/* Заполненная часть */}
@@ -131,7 +120,7 @@ export function UsageLimitsDisplay({ userId }: UsageLimitsDisplayProps) {
           />
 
           {/* Оставшиеся квизы (если есть) */}
-          {usageLimits.quizzesRemaining > 0 && (
+          {limits.quizzesRemaining > 0 && (
             <div
               className="h-full bg-gradient-to-r from-green-500/60 to-emerald-500/60 transition-all duration-300 ease-out"
               style={{
@@ -148,7 +137,7 @@ export function UsageLimitsDisplay({ userId }: UsageLimitsDisplayProps) {
             <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
             <span className="text-gray-400">Used</span>
           </div>
-          {usageLimits.quizzesRemaining > 0 && (
+          {limits.quizzesRemaining > 0 && (
             <div className="flex items-center gap-1">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span className="text-gray-400">Remaining</span>
@@ -158,7 +147,7 @@ export function UsageLimitsDisplay({ userId }: UsageLimitsDisplayProps) {
       </div>
 
       {/* Кнопка апгрейда */}
-      {!usageLimits.canCreateQuiz && (
+      {!limits.canCreateQuiz && (
         <div className="space-y-2">
           <Button
             size="lg"
@@ -189,19 +178,13 @@ export function UsageLimitsDisplay({ userId }: UsageLimitsDisplayProps) {
             )}
           </Button>
 
-          {error && (
+          {(error || subscriptionError) && (
             <div className="text-red-500 text-xs text-center p-2 bg-red-50 rounded border border-red-200">
-              {error}
+              {error || subscriptionError}
             </div>
           )}
         </div>
       )}
-
-      {/* Бонус за отзыв */}
-      {/* <div className="flex items-center gap-1 text-xs text-gray-500">
-        <Gift className="h-3 w-3" />
-        <span>Leave feedback → 5 days free</span>
-      </div> */}
     </div>
   );
 }

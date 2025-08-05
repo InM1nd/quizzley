@@ -83,7 +83,7 @@ export function ThankYouDialog({ open, onOpenChange }: ThankYouDialogProps) {
                         <p className="text-white font-semibold">
                           Premium Reward
                         </p>
-                        <p className="text-zinc-400 text-sm">
+                        <p className="text-secondary text-sm">
                           As a token of our gratitude
                         </p>
                       </div>
@@ -127,7 +127,7 @@ export function ThankYouDialog({ open, onOpenChange }: ThankYouDialogProps) {
                   transition={{ delay: 0.6 }}
                   className="mt-6 text-center"
                 >
-                  <p className="text-zinc-400 text-sm">
+                  <p className="text-secondary text-sm">
                     Your feedback helps us make Quizzley even better!
                   </p>
                 </motion.div>

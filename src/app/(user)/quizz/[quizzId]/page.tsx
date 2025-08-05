@@ -1,15 +1,25 @@
 import { Metadata } from "next";
-import { getQuizzById } from "@/lib/quizz";
+import { getQuizzByIdForUser } from "@/lib/quizz";
 import { notFound, redirect } from "next/navigation";
 import QuizzQuestions from "../QuizzQuestions";
 import { Loader2 } from "lucide-react";
+import { auth } from "@/auth";
 
 export async function generateMetadata({
   params,
 }: {
   params: { quizzId: string };
 }): Promise<Metadata> {
-  const quizz = await getQuizzById(params.quizzId);
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return {
+      title: "Access Denied",
+    };
+  }
+
+  const quizz = await getQuizzByIdForUser(params.quizzId, userId);
   if (!quizz) {
     return {
       title: "Quizz not found",
@@ -34,7 +44,14 @@ export default async function QuizzPage({
 }: {
   params: { quizzId: string };
 }) {
-  const quizz = await getQuizzById(params.quizzId);
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    redirect("/api/auth/signin");
+  }
+
+  const quizz = await getQuizzByIdForUser(params.quizzId, userId);
 
   if (!quizz) {
     notFound();

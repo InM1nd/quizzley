@@ -19,6 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CTASection } from "@/components/sections/cta-section";
 import SubscriptionSection from "@/components/sections/subscription-section";
+import { LoginModal } from "@/components/auth/login-modal";
 
 export default function Home() {
   const features = [
@@ -102,7 +103,7 @@ export default function Home() {
     {
       question: "How do I report a technical issue?",
       answer:
-        "The best way to report a technical issue is through the feedback form above, specifying 'Technical Issue' in the subject and providing as many details about the problem as possible.",
+        "The best way to let us know is through our feedback form (select the 'Contact' topic) or directly from your Dashboard. Please provide a clear subject and as many details as you can so we can help you faster.",
     },
   ];
 
@@ -201,7 +202,7 @@ export default function Home() {
                   delay={0.6}
                   className="mt-12 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-6"
                 >
-                  <Link href="/api/auth/signin?callbackUrl=/dashboard">
+                  <LoginModal>
                     <Button
                       size="lg"
                       className="text-lg px-8 py-7 gap-3 bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:to-orange-500 text-white shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-1 rounded-full border border-white/10 font-semibold"
@@ -209,7 +210,7 @@ export default function Home() {
                       Start Free
                       <ArrowRight className="h-5 w-5" />
                     </Button>
-                  </Link>
+                  </LoginModal>
                   <Link
                     href="/features"
                     className="text-base font-semibold leading-6 text-white bg-white/10 px-8 py-4 rounded-full border border-white/10 hover:bg-white/15 hover:text-primary transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl"
@@ -338,7 +339,7 @@ export default function Home() {
                 className="flex flex-col"
               >
                 <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                  {/* <div className="text-zinc-400 text-center p-8">
+                  {/* <div className="text-secondary text-center p-8">
                     <FileText className="h-16 w-16 mx-auto mb-4 text-primary/50" />
                     <p className="text-lg font-medium">
                       Document Upload Interface
@@ -371,48 +372,11 @@ export default function Home() {
 
               {/* Image Placeholder 2 */}
               <AnimatedCard
-                delay={0.2}
-                className="flex flex-col"
-              >
-                <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                  <div className="text-zinc-400 text-center p-8">
-                    <Brain className="h-16 w-16 mx-auto mb-4 text-primary/50" />
-                    <p className="text-lg font-medium">
-                      AI Processing Visualization
-                    </p>
-                    <p className="text-sm mt-2">
-                      Image showing AI analyzing document contents
-                    </p>
-                  </div>
-                  {/* <Image
-                    src="/images/landing/AI_Processing.png"
-                    alt="AI Analysis Process"
-                    className="object-contain rounded-lg"
-                    width={600}
-                    height={338}
-                    priority
-                    style={{ maxHeight: "100%", maxWidth: "100%" }}
-                  /> */}
-                </div>
-                <h3 className="mt-4 text-xl font-semibold text-white flex items-center gap-2">
-                  <div className="bg-primary/10 p-1.5 rounded-md">
-                    <Brain className="h-4 w-4 text-primary" />
-                  </div>{" "}
-                  Advanced AI Analysis
-                </h3>
-                <p className="mt-2 text-gray-300">
-                  Watch as our AI technology intelligently processes your
-                  documents to create perfect quiz questions.
-                </p>
-              </AnimatedCard>
-
-              {/* Image Placeholder 3 */}
-              <AnimatedCard
                 delay={0.3}
                 className="flex flex-col"
               >
                 <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                  {/* <div className="text-zinc-400 text-center p-8">
+                  {/* <div className="text-secondary text-center p-8">
                     <Sparkles className="h-16 w-16 mx-auto mb-4 text-primary/50" />
                     <p className="text-lg font-medium">
                       Quiz Question Showcase
@@ -438,8 +402,45 @@ export default function Home() {
                   Intelligent Question Generation
                 </h3>
                 <p className="mt-2 text-gray-300">
-                  Our system creates varied question types with multiple-choice,
-                  true/false, and short answer formats.
+                  Test your knowledge with dynamically created questions and get
+                  instant, corrective feedback on every answer you give.
+                </p>
+              </AnimatedCard>
+
+              {/* Image Placeholder 3 */}
+              <AnimatedCard
+                delay={0.2}
+                className="flex flex-col"
+              >
+                <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                  {/* <div className="text-secondary text-center p-8">
+                    <Brain className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                    <p className="text-lg font-medium">
+                      AI Processing Visualization
+                    </p>
+                    <p className="text-sm mt-2">
+                      Image showing AI analyzing document contents
+                    </p>
+                  </div> */}
+                  <Image
+                    src="/images/landing/Quizz_Results.png"
+                    alt="AI Analysis Process"
+                    className="object-contain rounded-lg"
+                    width={600}
+                    height={338}
+                    priority
+                    style={{ maxHeight: "100%", maxWidth: "100%" }}
+                  />
+                </div>
+                <h3 className="mt-4 text-xl font-semibold text-white flex items-center gap-2">
+                  <div className="bg-primary/10 p-1.5 rounded-md">
+                    <Brain className="h-4 w-4 text-primary" />
+                  </div>{" "}
+                  Advanced Results
+                </h3>
+                <p className="mt-2 text-gray-300">
+                  Get an instant, visual summary of your quiz performance with a
+                  detailed score breakdown and actionable recommendations.
                 </p>
               </AnimatedCard>
 
@@ -449,7 +450,7 @@ export default function Home() {
                 className="flex flex-col"
               >
                 <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                  {/* <div className="text-zinc-400 text-center p-8">
+                  {/* <div className="text-secondary text-center p-8">
                     <BarChart3 className="h-16 w-16 mx-auto mb-4 text-primary/50" />
                     <p className="text-lg font-medium">Analytics Dashboard</p>
                     <p className="text-sm mt-2">
@@ -496,7 +497,7 @@ export default function Home() {
                 Works
               </h2>
               <p className="mt-6 text-lg leading-8 text-gray-300">
-                Our streamlined process makes quiz creation effortless
+                Our streamlined process makes quizz creation effortless
               </p>
             </div>
             <div className="relative mx-auto max-w-2xl">
@@ -514,9 +515,7 @@ export default function Home() {
                   Upload Your Document
                 </h3>
                 <p className="text-gray-300">
-                  Simply upload your PDF, textbook, or article through our
-                  intuitive interface. We support various document formats to
-                  accommodate your needs.
+                  Simply upload your PDF, through our intuitive interface.
                 </p>
               </AnimatedCard>
 

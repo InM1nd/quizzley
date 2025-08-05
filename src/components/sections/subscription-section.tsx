@@ -7,6 +7,7 @@ import Link from "next/link";
 import GradientText from "../ui/gradient-text";
 import SubscribeBtn from "@/app/(user)/billing/SubscribeBtn";
 import { auth } from "@/auth";
+import { LoginModal } from "../auth/login-modal";
 
 type Props = {};
 
@@ -14,7 +15,7 @@ const pricing = [
   {
     name: "Free",
     price: "$0",
-    description: "Try all features for free for 3 days",
+    description: "Limited free quizzes per day",
     features: [
       "3 quizzes per day",
       "Standard Quizz Settings",
@@ -126,10 +127,7 @@ const SubscriptionSection = async (props: Props) => {
                   {/* CTA Button */}
                   <div className="w-full flex justify-center mt-8">
                     {plan.trial ? (
-                      <Link
-                        href="/api/auth/signin?callbackUrl=/dashboard"
-                        className="w-full"
-                      >
+                      <LoginModal>
                         <Button
                           className="w-full py-6 rounded-2xl bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:via-orange-500/90 hover:to-orange-600/90 shadow-xl shadow-primary/25 hover:shadow-primary/40 text-lg font-bold border-0 relative overflow-hidden group"
                           variant="default"
@@ -137,7 +135,7 @@ const SubscriptionSection = async (props: Props) => {
                           <span className="relative z-10">Start Free</span>
                           <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                         </Button>
-                      </Link>
+                      </LoginModal>
                     ) : (
                       <div className="w-full">
                         <SubscribeBtn userId={userId} />

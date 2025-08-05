@@ -212,7 +212,7 @@ const ContactPage = () => {
                     <div className="space-y-2">
                       <Label
                         htmlFor="name"
-                        className="text-zinc-400"
+                        className="text-secondary"
                       >
                         Your Name
                       </Label>
@@ -231,7 +231,7 @@ const ContactPage = () => {
                     <div className="space-y-2">
                       <Label
                         htmlFor="email"
-                        className="text-zinc-400"
+                        className="text-secondary"
                       >
                         Email
                       </Label>
@@ -251,7 +251,7 @@ const ContactPage = () => {
                     <div className="space-y-2">
                       <Label
                         htmlFor="subject"
-                        className="text-zinc-400"
+                        className="text-secondary"
                       >
                         Subject
                       </Label>
@@ -270,7 +270,7 @@ const ContactPage = () => {
                     <div className="space-y-2">
                       <Label
                         htmlFor="message"
-                        className="text-zinc-400"
+                        className="text-secondary"
                       >
                         Message
                       </Label>

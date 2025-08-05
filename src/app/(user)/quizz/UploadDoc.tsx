@@ -247,7 +247,7 @@ const UploadDoc = () => {
           {/* Показываем информацию о лимитах для бесплатных пользователей */}
           {/* {usageLimits && !usageLimits.isPremium && (
             <div className="mb-4 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700">
-              <p className="text-sm text-zinc-400">
+              <p className="text-sm text-secondary">
                 Quizzes created today: {usageLimits.dailyQuizzesCreated}/
                 {usageLimits.dailyQuizzesLimit}
                 {usageLimits.quizzesRemaining > 0 && (
@@ -260,13 +260,13 @@ const UploadDoc = () => {
           )} */}
 
           <label
-            className="block text-zinc-400 mb-2 font-medium"
+            className="block text-secondary mb-2 font-medium"
             htmlFor="quizTitle"
           >
             <input
               id="quizTitle"
               type="text"
-              className="w-full border rounded-md px-3 py-2 mb-4 text-zinc-400 bg-zinc-900"
+              className="w-full border rounded-md px-3 py-2 mb-4 text-secondary bg-zinc-900"
               placeholder="Enter the name of your quizz"
               value={quizTitle}
               onChange={(e) => setQuizTitle(e.target.value)}
@@ -274,7 +274,7 @@ const UploadDoc = () => {
           </label>
           <label
             htmlFor="document"
-            className="bg-secondary w-full flex h-24 rounded-md border-2 border-dashed border-orange-700 relative cursor-pointer"
+            className="bg-text-secondary w-full flex h-24 rounded-md border-2 border-dashed border-orange-700 relative cursor-pointer"
           >
             <div className="absolute inset-0 m-auto flex flex-col justify-center items-center gap-2">
               <Upload className="h-6 w-6 text-primary " />

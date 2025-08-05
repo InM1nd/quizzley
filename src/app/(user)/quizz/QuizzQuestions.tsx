@@ -121,7 +121,7 @@ export default function QuizzQuestions(props: Props) {
             </Button>
             <ProgressBar value={(currentQuestion / questions.length) * 100} />
             {started && (
-              <div className="text-sm text-zinc-400 font-medium">
+              <div className="text-sm text-secondary font-medium">
                 {currentQuestionNumber} / {questions.length}
               </div>
             )}
@@ -141,7 +141,7 @@ export default function QuizzQuestions(props: Props) {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent mb-4">
                 Ready to Start?
               </h1>
-              <p className="text-zinc-400">
+              <p className="text-secondary">
                 Click Start to begin your quiz journey
               </p>
             </div>

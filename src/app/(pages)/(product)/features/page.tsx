@@ -23,6 +23,7 @@ import {
   ArrowRight,
   Scan,
   Database,
+  Plus,
 } from "lucide-react";
 
 const FeaturesPage = () => {
@@ -73,10 +74,10 @@ const FeaturesPage = () => {
       icon: Award,
     },
     {
-      title: "Collaborative Learning",
+      title: "Additional Features",
       description:
-        "Share quizzes with students, colleagues, or study groups to enhance the learning experience.",
-      icon: Users,
+        "Platform is constantly evolving, with new features and improvements being added regularly.",
+      icon: Plus,
     },
     {
       title: "Time-Saving",
@@ -189,7 +190,7 @@ const FeaturesPage = () => {
               className="flex flex-col"
             >
               <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                {/* <div className="text-zinc-400 text-center p-8">
+                {/* <div className="text-secondary text-center p-8">
                     <FileText className="h-16 w-16 mx-auto mb-4 text-primary/50" />
                     <p className="text-lg font-medium">
                       Document Upload Interface
@@ -222,48 +223,11 @@ const FeaturesPage = () => {
 
             {/* Image Placeholder 2 */}
             <AnimatedCard
-              delay={0.2}
-              className="flex flex-col"
-            >
-              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                <div className="text-zinc-400 text-center p-8">
-                  <Brain className="h-16 w-16 mx-auto mb-4 text-primary/50" />
-                  <p className="text-lg font-medium">
-                    AI Processing Visualization
-                  </p>
-                  <p className="text-sm mt-2">
-                    Image showing AI analyzing document contents
-                  </p>
-                </div>
-                {/* <Image
-                    src="/images/landing/AI_Processing.png"
-                    alt="AI Analysis Process"
-                    className="object-contain rounded-lg"
-                    width={600}
-                    height={338}
-                    priority
-                    style={{ maxHeight: "100%", maxWidth: "100%" }}
-                  /> */}
-              </div>
-              <h3 className="mt-4 text-xl font-semibold text-white flex items-center gap-2">
-                <div className="bg-primary/10 p-1.5 rounded-md">
-                  <Brain className="h-4 w-4 text-primary" />
-                </div>{" "}
-                Advanced AI Analysis
-              </h3>
-              <p className="mt-2 text-gray-300">
-                Watch as our AI technology intelligently processes your
-                documents to create perfect quiz questions.
-              </p>
-            </AnimatedCard>
-
-            {/* Image Placeholder 3 */}
-            <AnimatedCard
               delay={0.3}
               className="flex flex-col"
             >
               <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                {/* <div className="text-zinc-400 text-center p-8">
+                {/* <div className="text-secondary text-center p-8">
                     <Sparkles className="h-16 w-16 mx-auto mb-4 text-primary/50" />
                     <p className="text-lg font-medium">
                       Quiz Question Showcase
@@ -289,8 +253,45 @@ const FeaturesPage = () => {
                 Intelligent Question Generation
               </h3>
               <p className="mt-2 text-gray-300">
-                Our system creates varied question types with multiple-choice,
-                true/false, and short answer formats.
+                Test your knowledge with dynamically created questions and get
+                instant, corrective feedback on every answer you give.
+              </p>
+            </AnimatedCard>
+
+            {/* Image Placeholder 3 */}
+            <AnimatedCard
+              delay={0.2}
+              className="flex flex-col"
+            >
+              <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
+                {/* <div className="text-secondary text-center p-8">
+                    <Brain className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                    <p className="text-lg font-medium">
+                      AI Processing Visualization
+                    </p>
+                    <p className="text-sm mt-2">
+                      Image showing AI analyzing document contents
+                    </p>
+                  </div> */}
+                <Image
+                  src="/images/landing/Quizz_Results.png"
+                  alt="AI Analysis Process"
+                  className="object-contain rounded-lg"
+                  width={600}
+                  height={338}
+                  priority
+                  style={{ maxHeight: "100%", maxWidth: "100%" }}
+                />
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-white flex items-center gap-2">
+                <div className="bg-primary/10 p-1.5 rounded-md">
+                  <Brain className="h-4 w-4 text-primary" />
+                </div>{" "}
+                Advanced Results
+              </h3>
+              <p className="mt-2 text-gray-300">
+                Get an instant, visual summary of your quiz performance with a
+                detailed score breakdown and actionable recommendations.
               </p>
             </AnimatedCard>
 
@@ -300,7 +301,7 @@ const FeaturesPage = () => {
               className="flex flex-col"
             >
               <div className="aspect-video overflow-hidden rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 relative">
-                {/* <div className="text-zinc-400 text-center p-8">
+                {/* <div className="text-secondary text-center p-8">
                     <BarChart3 className="h-16 w-16 mx-auto mb-4 text-primary/50" />
                     <p className="text-lg font-medium">Analytics Dashboard</p>
                     <p className="text-sm mt-2">
@@ -367,33 +368,39 @@ const FeaturesPage = () => {
       </section>
 
       {/* How It Works Section */}
-      <AnimatedSection className="bg-background py-20 sm:py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <AnimatedSection className="bg-gradient-to-l from-background to-zinc-950 py-20 sm:py-24 relative">
+        <div className="absolute top-20 right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+        <div className="absolute bottom-20 left-10 w-64 h-64 bg-orange-600/10 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
           <div className="mx-auto max-w-2xl text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              How Quizzley Works
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/90">
+              How{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
+                Quizzley
+              </span>{" "}
+              Works
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              Our streamlined process makes quiz creation effortless
+              Our streamlined process makes quizz creation effortless
             </p>
           </div>
           <div className="relative mx-auto max-w-2xl">
             {/* Timeline line */}
-            <div className="absolute rounded-full left-0 top-4 bottom-4 w-1 bg-gradient-to-b from-primary via-primary/50 to-primary/30"></div>
+            <div className="absolute left-0 top-4 bottom-4 rounded-full w-1 bg-gradient-to-b from-primary via-primary/50 to-primary/30"></div>
+
             <AnimatedCard
               delay={0.1}
               className="relative mb-16 ml-8 pl-8"
             >
-              <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-primary">
+              <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-r from-primary to-orange-500 shadow-lg shadow-primary/20">
                 <span className="text-white font-bold">1</span>
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">
                 Upload Your Document
               </h3>
               <p className="text-gray-300">
-                Simply upload your PDF, textbook, or article through our
-                intuitive interface. We support various document formats to
-                accommodate your needs.
+                Simply upload your PDF, through our intuitive interface.
               </p>
             </AnimatedCard>
 
@@ -401,7 +408,7 @@ const FeaturesPage = () => {
               delay={0.2}
               className="relative mb-16 ml-8 pl-8"
             >
-              <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-primary">
+              <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-r from-primary to-orange-500 shadow-lg shadow-primary/20">
                 <span className="text-white font-bold">2</span>
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">
@@ -418,7 +425,7 @@ const FeaturesPage = () => {
               delay={0.3}
               className="relative mb-16 ml-8 pl-8"
             >
-              <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-primary">
+              <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-r from-primary to-orange-500 shadow-lg shadow-primary/20">
                 <span className="text-white font-bold">3</span>
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">
@@ -435,7 +442,7 @@ const FeaturesPage = () => {
               delay={0.4}
               className="relative ml-8 pl-8"
             >
-              <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-primary">
+              <div className="absolute left-0 top-0 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-r from-primary to-orange-500 shadow-lg shadow-primary/20">
                 <span className="text-white font-bold">4</span>
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">
@@ -456,7 +463,7 @@ const FeaturesPage = () => {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Ready to Transform Your Quiz Creation?
+              Ready to Transform Your Quizz Creation?
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">
               Join thousands of educators and learners who are already saving

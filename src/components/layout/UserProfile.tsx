@@ -29,7 +29,7 @@ const UserProfile = memo(({ session }: UserProfileProps) => {
           <span className="text-sm font-medium text-white truncate max-w-[140px]">
             {session.user?.name || "Пользователь"}
           </span>
-          <span className="text-xs text-zinc-400 truncate max-w-[140px]">
+          <span className="text-xs text-secondary truncate max-w-[140px]">
             {session.user?.email || ""}
           </span>
         </div>

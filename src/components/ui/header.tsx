@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { LoginModal } from "../auth/login-modal";
 
 function SignOut() {
   return (
@@ -76,7 +77,7 @@ export default function ClientHeader({ session }: { session: any }) {
               className="flex items-center gap-1"
             >
               <Image
-                src={" /logo.png"}
+                src={"/logo.png"}
                 alt="Quizzley"
                 width={40}
                 height={40}
@@ -119,13 +120,14 @@ export default function ClientHeader({ session }: { session: any }) {
                   <SignOut />
                 </div>
               ) : (
-                <Button
-                  variant="outline"
-                  className="rounded-full font-semibold text-md border-white/10 bg-green-500/50 text-white hover:bg-white/10 hover:text-white"
-                  onClick={() => signIn("google")}
-                >
-                  Sign In
-                </Button>
+                <LoginModal>
+                  <Button
+                    variant="outline"
+                    className="rounded-full font-semibold text-md border-white/10 bg-green-500/50 text-white hover:bg-white/10 hover:text-white"
+                  >
+                    Sign In
+                  </Button>
+                </LoginModal>
               )}
             </div>
 
@@ -207,13 +209,14 @@ export default function ClientHeader({ session }: { session: any }) {
                       </div>
                     ) : (
                       <div className="px-4 py-2">
-                        <Button
-                          variant="outline"
-                          className="w-full justify-center rounded-full border-white/10 bg-green-500/50 text-white hover:bg-white/10 hover:text-white"
-                          onClick={() => signIn("google")}
-                        >
-                          Sign In
-                        </Button>
+                        <LoginModal>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-center rounded-full border-white/10 bg-green-500/50 text-white hover:bg-white/10 hover:text-white"
+                          >
+                            Sign In
+                          </Button>
+                        </LoginModal>
                       </div>
                     )}
                   </div>

@@ -50,7 +50,7 @@ const page = async () => {
                   Current Plan:
                   <span
                     className={`ml-2 font-bold ${
-                      plan === "premium" ? "text-green-400" : "text-zinc-400"
+                      plan === "premium" ? "text-green-400" : "text-secondary"
                     } uppercase`}
                   >
                     {plan}
@@ -116,7 +116,7 @@ const page = async () => {
                 </>
               ) : (
                 <>
-                  <li className="flex items-center text-zinc-400">
+                  <li className="flex items-center text-secondary">
                     <span className="mr-2">•</span>
                     Basic Quiz Generation
                   </li>
@@ -124,11 +124,11 @@ const page = async () => {
                     <span className="mr-2">✗</span>
                     Document Upload (Premium Only)
                   </li>
-                  <li className="flex items-center text-zinc-400">
+                  <li className="flex items-center text-secondary">
                     <span className="mr-2">•</span>
                     Limited Analytics
                   </li>
-                  <li className="flex items-center text-zinc-400">
+                  <li className="flex items-center text-secondary">
                     <span className="mr-2">•</span>
                     Standard Support
                   </li>
@@ -151,11 +151,11 @@ const page = async () => {
         </div>
 
         {/* Дополнительная информация */}
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 p-6 backdrop-blur-sm border border-zinc-800/50">
+        {/* <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 p-6 backdrop-blur-sm border border-zinc-800/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <ScrollText className="text-orange-500" />
-              <p className="text-sm text-zinc-400">
+              <p className="text-sm text-secondary">
                 {premiumStatus.isPremium
                   ? `Premium expires: ${nextBillingDate}`
                   : "No active premium subscription"}
@@ -168,7 +168,7 @@ const page = async () => {
               View Billing History
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

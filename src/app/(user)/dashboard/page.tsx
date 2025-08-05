@@ -40,7 +40,7 @@ const ProfileSection = async () => {
         </div>
         <div className="w-full">
           <h2 className="text-lg font-bold truncate">{session?.user?.name}</h2>
-          <p className="text-zinc-400 text-sm truncate mt-1">
+          <p className="text-secondary text-sm truncate mt-1">
             {session?.user?.email}
           </p>
         </div>

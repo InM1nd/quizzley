@@ -12,7 +12,7 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <h3 className="text-lg font-semibold text-white">Quizzley</h3>
-            <p className="mt-4 text-sm text-zinc-400">
+            <p className="mt-4 text-sm text-secondary">
               Create smart quizzes using artificial intelligence. Learn and grow
               with us.
             </p>
@@ -27,7 +27,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/features"
-                  className="text-sm text-zinc-400 hover:text-orange-500 transition-colors"
+                  className="text-sm text-secondary hover:text-orange-500 transition-colors"
                 >
                   Features
                 </Link>
@@ -35,7 +35,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/roadmap"
-                  className="text-sm text-zinc-400 hover:text-orange-500 transition-colors"
+                  className="text-sm text-secondary hover:text-orange-500 transition-colors"
                 >
                   Roadmap
                 </Link>
@@ -43,7 +43,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/api/auth/signin?callbackUrl=/dashboard"
-                  className="text-sm text-zinc-400 hover:text-orange-500 transition-colors"
+                  className="text-sm text-secondary hover:text-orange-500 transition-colors"
                 >
                   Dashboard
                 </Link>
@@ -60,7 +60,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/about-us"
-                  className="text-sm text-zinc-400 hover:text-orange-500 transition-colors"
+                  className="text-sm text-secondary hover:text-orange-500 transition-colors"
                 >
                   About Us
                 </Link>
@@ -69,7 +69,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/contact"
-                  className="text-sm text-zinc-400 hover:text-orange-500 transition-colors"
+                  className="text-sm text-secondary hover:text-orange-500 transition-colors"
                 >
                   Contact
                 </Link>
@@ -86,7 +86,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/privacy"
-                  className="text-sm text-zinc-400 hover:text-orange-500 transition-colors"
+                  className="text-sm text-secondary hover:text-orange-500 transition-colors"
                 >
                   Privacy Policy
                 </Link>
@@ -94,7 +94,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/terms"
-                  className="text-sm text-zinc-400 hover:text-orange-500 transition-colors"
+                  className="text-sm text-secondary hover:text-orange-500 transition-colors"
                 >
                   Terms of Service
                 </Link>
@@ -106,13 +106,13 @@ const Footer = () => {
         {/* Footer Bottom */}
         <div className="mt-8 border-t border-zinc-800/50 pt-8">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-secondary">
               © {new Date().getFullYear()} Quizzley. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link
                 href="https://twitter.com"
-                className="text-zinc-400 hover:text-orange-500 transition-colors"
+                className="text-secondary hover:text-orange-500 transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -120,7 +120,7 @@ const Footer = () => {
               </Link>
               <Link
                 href="https://www.instagram.com/quizzley.io?igsh=NTc4MTIwNjQ2YQ=="
-                className="text-zinc-400 hover:text-orange-500 transition-colors"
+                className="text-secondary hover:text-orange-500 transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -128,7 +128,7 @@ const Footer = () => {
               </Link>
               <Link
                 href="https://www.linkedin.com/company/quizzley-io/"
-                className="text-zinc-400 hover:text-orange-500 transition-colors"
+                className="text-secondary hover:text-orange-500 transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -136,7 +136,7 @@ const Footer = () => {
               </Link>
               <Link
                 href="https://www.tiktok.com/@quizzley.io?_t=ZN-8yGcgrOVXPS&_r=1"
-                className="text-zinc-400 hover:text-orange-500 transition-colors"
+                className="text-secondary hover:text-orange-500 transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >

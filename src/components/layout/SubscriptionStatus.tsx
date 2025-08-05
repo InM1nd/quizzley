@@ -11,17 +11,33 @@ interface PremiumStatus {
 }
 
 interface SubscriptionStatusProps {
-  userId: string;
+  userId?: string;
+  status?: PremiumStatus; // Добавляем опциональный проп status
 }
 
-const SubscriptionStatus = ({ userId }: SubscriptionStatusProps) => {
+const SubscriptionStatus = ({
+  userId,
+  status: externalStatus,
+}: SubscriptionStatusProps) => {
   const [status, setStatus] = useState<PremiumStatus | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Если передан внешний статус, используем его
+    if (externalStatus) {
+      setStatus(externalStatus);
+      setLoading(false);
+      return;
+    }
+
+    // Иначе загружаем статус через API
     const fetchStatus = async () => {
+      if (!userId) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        // Используем fetch вместо серверного действия для клиентского компонента
         const response = await fetch(
           `/api/user/subscription-status?userId=${userId}`
         );
@@ -39,7 +55,7 @@ const SubscriptionStatus = ({ userId }: SubscriptionStatusProps) => {
     };
 
     fetchStatus();
-  }, [userId]);
+  }, [userId, externalStatus]);
 
   if (loading) {
     return (

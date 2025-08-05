@@ -57,12 +57,8 @@ export function useSubscription(userId?: string): UseSubscriptionReturn {
 
   const handleUpgrade = async () => {
     if (!userId) {
-      const callbackUrl = `/billing/subscribe?price=${encodeURIComponent(
-        PRICE_ID
-      )}`;
-      router.push(
-        `/api/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`
-      );
+      // Не делаем перенаправление, просто возвращаем ошибку
+      setError("Please sign in to subscribe");
       return;
     }
 

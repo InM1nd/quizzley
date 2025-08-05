@@ -97,7 +97,7 @@ const PaymentSuccessPage = () => {
               transition={{ delay: 0.6 }}
               className="mt-6 text-center"
             >
-              <p className="text-zinc-400 text-sm">
+              <p className="text-secondary text-sm">
                 Start creating unlimited quizzes and track your progress!
               </p>
             </motion.div>

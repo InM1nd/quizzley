@@ -1,29 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { quizzes } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { getQuizzByIdForUser } from "@/lib/quizz";
+import { auth } from "@/auth";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { quizzId: string } }
 ) {
   try {
-    const quizzId = parseInt(params.quizzId);
+    const session = await auth();
+    const userId = session?.user?.id;
 
-    if (isNaN(quizzId)) {
-      return NextResponse.json({ error: "Invalid quiz ID" }, { status: 400 });
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const quizz = await db.query.quizzes.findFirst({
-      where: eq(quizzes.id, quizzId),
-      with: {
-        questions: {
-          with: {
-            answers: true,
-          },
-        },
-      },
-    });
+    const quizz = await getQuizzByIdForUser(params.quizzId, userId);
 
     if (!quizz) {
       return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
