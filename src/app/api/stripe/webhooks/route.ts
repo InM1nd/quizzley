@@ -21,19 +21,25 @@ export async function POST(req: Request) {
     const body = await req.text();
     const sig = req.headers.get("stripe-signature");
 
-    const webhookSecret =
-      process.env.NODE_ENV === "production"
-        ? process.env.STRIPE_WEBHOOK_SECRET
-        : process.env.STRIPE_WEBHOOK_LOCAL_SECRET;
+    let webhookSecret: string;
+
+    if (process.env.NODE_ENV === "production") {
+      webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+    } else {
+      webhookSecret = process.env.STRIPE_WEBHOOK_LOCAL_SECRET!;
+    }
 
     if (!webhookSecret) {
-      throw new Error("Stripe webhook secret is not set");
+      throw new Error(
+        `Webhook secret not found for environment: ${process.env.NODE_ENV}`
+      );
     }
 
     if (!sig) {
       throw new Error("No signature found in request");
     }
 
+    // ✅ Проверяем подпись
     const event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
 
     if (relevantEvents.has(event.type)) {

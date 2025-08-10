@@ -5,11 +5,12 @@ import QuizzQuestions from "../QuizzQuestions";
 import { Loader2 } from "lucide-react";
 import { auth } from "@/auth";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { quizzId: string };
-}): Promise<Metadata> {
+interface PageProps {
+  params: Promise<{ quizzId: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { quizzId } = await params;
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -19,7 +20,7 @@ export async function generateMetadata({
     };
   }
 
-  const quizz = await getQuizzByIdForUser(params.quizzId, userId);
+  const quizz = await getQuizzByIdForUser(quizzId, userId);
   if (!quizz) {
     return {
       title: "Quizz not found",
@@ -39,11 +40,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function QuizzPage({
-  params,
-}: {
-  params: { quizzId: string };
-}) {
+interface PageProps {
+  params: Promise<{ quizzId: string }>;
+}
+
+export default async function QuizzPage({ params }: PageProps) {
+  const { quizzId } = await params;
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -51,7 +53,7 @@ export default async function QuizzPage({
     redirect("/api/auth/signin");
   }
 
-  const quizz = await getQuizzByIdForUser(params.quizzId, userId);
+  const quizz = await getQuizzByIdForUser(quizzId, userId);
 
   if (!quizz) {
     notFound();

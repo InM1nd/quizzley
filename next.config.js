@@ -6,6 +6,8 @@ const nextConfig = {
     unoptimized: true,
   },
 
+  serverExternalPackages: ["@prisma/client"],
+
   // Добавляем заголовки безопасности
   async headers() {
     return [
@@ -44,11 +46,6 @@ const nextConfig = {
         ],
       },
     ];
-  },
-
-  // Настройки безопасности
-  experimental: {
-    serverComponentsExternalPackages: ["@langchain/google-genai"],
   },
 
   // Настройки для production

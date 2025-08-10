@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { quizzId: string } }
+  { params }: { params: Promise<{ quizzId: string }> }
 ) {
   try {
     const session = await auth();
@@ -14,7 +14,8 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const quizz = await getQuizzByIdForUser(params.quizzId, userId);
+    const resolvedParams = await params;
+    const quizz = await getQuizzByIdForUser(resolvedParams.quizzId, userId);
 
     if (!quizz) {
       return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
