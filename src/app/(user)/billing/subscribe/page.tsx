@@ -11,7 +11,8 @@ const SubscribePage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const price = searchParams.get("price") || "price_1OqX8X2eZvKYlo2C9Q9Q9Q9Q";
+  // Используем PRICE_ID вместо hardcoded fallback
+  const price = searchParams.get("price") || PRICE_ID;
 
   useEffect(() => {
     const createStripeSession = async () => {

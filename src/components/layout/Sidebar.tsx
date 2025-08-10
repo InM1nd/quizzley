@@ -192,7 +192,7 @@ export default function Sidebar() {
           ? "translate-x-0"
           : "-translate-x-full"
         : "translate-x-0",
-      "bg-zinc-900/50 backdrop-blur-md border-r border-zinc-800/50"
+      "bg-zinc-900/90 backdrop-blur-lg border-r border-zinc-800/50"
     );
   }, [isMobile, sidebarOpen]);
 

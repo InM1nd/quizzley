@@ -6,6 +6,7 @@ import { db } from "@/db";
 import { Settings, Sparkles, ScrollText, Clock } from "lucide-react";
 import { getPremiumStatus } from "@/app/actions/userSubscription";
 import SubscribeBtn from "./SubscribeBtn";
+import GradientText from "@/components/ui/gradient-text";
 
 // Удаляем дублирующиеся интерфейс и функцию checkPremiumStatus
 // Они уже определены в @/lib/premium-manager
@@ -28,7 +29,13 @@ const page = async () => {
     : "N/A";
 
   return (
-    <div className="container max-w-4xl mx-auto p-6">
+    <div className="w-full max-w-7xl mx-auto space-y-4 sm:space-y-6">
+      <div className="h-10 flex items-center text-center justify-center mb-4">
+        <h1 className="text-3xl lg:text-4xl font-bold text-primary ">
+          Billing
+        </h1>
+      </div>
+
       <div className="space-y-6">
         {/* Заголовок и текущий план */}
         <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 p-8 backdrop-blur-sm border border-zinc-800/50">

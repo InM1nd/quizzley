@@ -45,7 +45,45 @@ const SubmissionsHeatMap = (props: Props) => {
     return dates;
   };
 
+  // Создаем массив дат для текущего месяца (только для мобильных)
+  const generateCurrentMonthDates = () => {
+    const dates = [];
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+
+    // Первый день месяца
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+    // Последний день месяца
+    const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+
+    // Находим первое воскресенье перед началом месяца
+    const firstSunday = new Date(firstDayOfMonth);
+    const dayOfWeek = firstSunday.getDay();
+    if (dayOfWeek !== 0) {
+      firstSunday.setDate(firstSunday.getDate() - dayOfWeek);
+    }
+
+    // Находим последнюю субботу после конца месяца
+    const lastSaturday = new Date(lastDayOfMonth);
+    const lastDayOfWeek = lastSaturday.getDay();
+    if (lastDayOfWeek !== 6) {
+      lastSaturday.setDate(lastSaturday.getDate() + (6 - lastDayOfWeek));
+    }
+
+    // Генерируем все даты от первого воскресенья до последней субботы
+    for (
+      let d = new Date(firstSunday);
+      d <= lastSaturday;
+      d.setDate(d.getDate() + 1)
+    ) {
+      dates.push(new Date(d));
+    }
+    return dates;
+  };
+
   const allDates = generateDates();
+  const currentMonthDates = generateCurrentMonthDates();
 
   // Создаем карту данных для быстрого поиска
   const dataMap = new Map();
@@ -63,23 +101,24 @@ const SubmissionsHeatMap = (props: Props) => {
     return "#FF6B00"; // основной оранжевый
   };
 
-  // Функция для получения дня недели
-  const getDayOfWeek = (date: Date) => {
-    return date.getDay();
+  // Группируем даты по неделям для полного года
+  const createWeeks = (dates: Date[]) => {
+    const weeks: Date[][] = [];
+    for (let i = 0; i < dates.length; i += 7) {
+      const week = dates.slice(i, i + 7);
+      // Дополняем неделю до 7 дней, если нужно
+      while (week.length < 7) {
+        const lastDate = new Date(week[week.length - 1]);
+        lastDate.setDate(lastDate.getDate() + 1);
+        week.push(lastDate);
+      }
+      weeks.push(week);
+    }
+    return weeks;
   };
 
-  // Группируем даты по неделям (каждая неделя начинается с воскресенья)
-  const weeks: Date[][] = [];
-  for (let i = 0; i < allDates.length; i += 7) {
-    const week = allDates.slice(i, i + 7);
-    // Дополняем неделю до 7 дней, если нужно
-    while (week.length < 7) {
-      const lastDate = new Date(week[week.length - 1]);
-      lastDate.setDate(lastDate.getDate() + 1);
-      week.push(lastDate);
-    }
-    weeks.push(week);
-  }
+  const fullYearWeeks = createWeeks(allDates);
+  const currentMonthWeeks = createWeeks(currentMonthDates);
 
   // Функция для получения названия месяца
   const getMonthName = (date: Date) => {
@@ -100,7 +139,7 @@ const SubmissionsHeatMap = (props: Props) => {
     return months[date.getMonth()];
   };
 
-  // Функция для определения, нужно ли показывать месяц
+  // Функция для определения, нужно ли показывать месяц (для полного года)
   const shouldShowMonth = (weekIndex: number, week: Date[]) => {
     if (weekIndex === 0) return true;
 
@@ -139,8 +178,8 @@ const SubmissionsHeatMap = (props: Props) => {
     if (containerRect) {
       setTooltip({
         content,
-        x: rect.left - containerRect.left + rect.width / 2, // позиция относительно контейнера
-        y: rect.top - containerRect.top - 35, // выше ячейки
+        x: rect.left - containerRect.left + rect.width / 2,
+        y: rect.top - containerRect.top - 35,
         visible: true,
       });
     }
@@ -150,60 +189,131 @@ const SubmissionsHeatMap = (props: Props) => {
     setTooltip((prev) => ({ ...prev, visible: false }));
   };
 
-  return (
-    <div className="w-full relative heatmap-container">
-      <div className="flex items-start gap-2 w-full">
-        {/* Дни недели */}
-        <div className="flex flex-col gap-1 pt-8 flex-shrink-0">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div
-              key={day}
-              className="h-4 w-10 text-xs text-gray-500 text-center flex items-center justify-center"
-            >
-              {day}
-            </div>
-          ))}
+  // Рендерим разные версии для мобильных и десктопа
+  const renderMobileVersion = () => {
+    const today = new Date();
+    const currentMonthName = getMonthName(today);
+
+    return (
+      <div className="w-full">
+        {/* Заголовок текущего месяца */}
+        <div className="text-center mb-4">
+          <h4 className="text-sm font-medium text-gray-300">
+            {currentMonthName} {today.getFullYear()}
+          </h4>
         </div>
 
-        {/* Хитмапа с месяцами */}
-        <div className="flex gap-1 flex-1 min-w-0">
-          {weeks.map((week, weekIndex) => (
-            <div
-              key={weekIndex}
-              className="flex flex-col gap-1 flex-1 relative"
-            >
-              {/* Название месяца */}
-              {shouldShowMonth(weekIndex, week) && (
-                <div className="h-6 text-xs text-gray-500 flex items-center justify-center mb-1">
-                  {getMonthName(week[0])}
-                </div>
-              )}
+        <div className="flex items-start gap-1">
+          {/* Дни недели */}
+          <div className="flex flex-col gap-1 pt-6 flex-shrink-0">
+            {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+              <div
+                key={index}
+                className="h-3 w-6 text-xs text-gray-500 text-center flex items-center justify-center"
+              >
+                {day}
+              </div>
+            ))}
+          </div>
 
-              {/* Пустое место для выравнивания, если месяц не показывается */}
-              {!shouldShowMonth(weekIndex, week) && (
-                <div className="h-6 mb-1"></div>
-              )}
+          {/* Недели текущего месяца */}
+          <div className="flex gap-1 flex-1 justify-center">
+            {currentMonthWeeks.map((week, weekIndex) => (
+              <div
+                key={weekIndex}
+                className="flex flex-col gap-1"
+              >
+                {/* Пустое место для выравнивания */}
+                <div className="h-6"></div>
 
-              {/* Ячейки недели */}
-              {week.map((date, dayIndex) => {
-                const dateStr = convertDateToString(date);
-                const count = dataMap.get(dateStr) || 0;
-                const color = getCellColor(count);
+                {/* Ячейки недели */}
+                {week.map((date, dayIndex) => {
+                  const dateStr = convertDateToString(date);
+                  const count = dataMap.get(dateStr) || 0;
+                  const color = getCellColor(count);
 
-                return (
-                  <div
-                    key={dayIndex}
-                    className="w-full h-4 rounded-sm cursor-pointer transition-all duration-200 hover:scale-110 hover:ring-2 hover:ring-orange-400/50"
-                    style={{ backgroundColor: color }}
-                    onMouseEnter={(e) => handleMouseEnter(e, date, count)}
-                    onMouseLeave={handleMouseLeave}
-                  />
-                );
-              })}
-            </div>
-          ))}
+                  // Проверяем, принадлежит ли дата текущему месяцу
+                  const isCurrentMonth = date.getMonth() === today.getMonth();
+                  const opacity = isCurrentMonth ? "opacity-100" : "opacity-30";
+
+                  return (
+                    <div
+                      key={dayIndex}
+                      className={`w-8 h-3 rounded-sm cursor-pointer transition-all duration-200 hover:scale-110 hover:ring-1 hover:ring-orange-400/50 ${opacity}`}
+                      style={{ backgroundColor: color }}
+                      onMouseEnter={(e) => handleMouseEnter(e, date, count)}
+                      onMouseLeave={handleMouseLeave}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+    );
+  };
+
+  const renderDesktopVersion = () => (
+    <div className="flex items-start gap-2 w-full">
+      {/* Дни недели */}
+      <div className="flex flex-col gap-1 pt-8 flex-shrink-0">
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          <div
+            key={day}
+            className="h-4 w-10 text-xs text-gray-500 text-center flex items-center justify-center"
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+
+      {/* Хитмапа с месяцами */}
+      <div className="flex gap-1 flex-1 min-w-0">
+        {fullYearWeeks.map((week, weekIndex) => (
+          <div
+            key={weekIndex}
+            className="flex flex-col gap-1 flex-1 relative"
+          >
+            {/* Название месяца */}
+            {shouldShowMonth(weekIndex, week) && (
+              <div className="h-6 text-xs text-gray-500 flex items-center justify-center mb-1">
+                {getMonthName(week[0])}
+              </div>
+            )}
+
+            {/* Пустое место для выравнивания, если месяц не показывается */}
+            {!shouldShowMonth(weekIndex, week) && (
+              <div className="h-6 mb-1"></div>
+            )}
+
+            {/* Ячейки недели */}
+            {week.map((date, dayIndex) => {
+              const dateStr = convertDateToString(date);
+              const count = dataMap.get(dateStr) || 0;
+              const color = getCellColor(count);
+
+              return (
+                <div
+                  key={dayIndex}
+                  className="w-full h-4 rounded-sm cursor-pointer transition-all duration-200 hover:scale-110 hover:ring-2 hover:ring-orange-400/50"
+                  style={{ backgroundColor: color }}
+                  onMouseEnter={(e) => handleMouseEnter(e, date, count)}
+                  onMouseLeave={handleMouseLeave}
+                />
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="w-full relative heatmap-container">
+      {/* Показываем разные версии в зависимости от размера экрана */}
+      <div className="block sm:hidden">{renderMobileVersion()}</div>
+      <div className="hidden sm:block">{renderDesktopVersion()}</div>
 
       {/* Кастомный тултип */}
       {tooltip.visible && (
@@ -221,27 +331,27 @@ const SubmissionsHeatMap = (props: Props) => {
       )}
 
       {/* Легенда */}
-      <div className="flex items-center gap-2 mt-4 text-xs text-gray-500">
+      <div className="flex items-center gap-2 mt-4 text-xs text-gray-500 justify-center sm:justify-start">
         <span>Less</span>
         <div className="flex gap-1">
           <div
-            className="w-4 h-4 rounded-sm"
+            className="w-3 h-3 sm:w-4 sm:h-4 rounded-sm"
             style={{ backgroundColor: "#1c1917" }}
           ></div>
           <div
-            className="w-4 h-4 rounded-sm"
+            className="w-3 h-3 sm:w-4 sm:h-4 rounded-sm"
             style={{ backgroundColor: "#FFCCAA" }}
           ></div>
           <div
-            className="w-4 h-4 rounded-sm"
+            className="w-3 h-3 sm:w-4 sm:h-4 rounded-sm"
             style={{ backgroundColor: "#FFA07A" }}
           ></div>
           <div
-            className="w-4 h-4 rounded-sm"
+            className="w-3 h-3 sm:w-4 sm:h-4 rounded-sm"
             style={{ backgroundColor: "#FF8C52" }}
           ></div>
           <div
-            className="w-4 h-4 rounded-sm"
+            className="w-3 h-3 sm:w-4 sm:h-4 rounded-sm"
             style={{ backgroundColor: "#FF6B00" }}
           ></div>
         </div>
