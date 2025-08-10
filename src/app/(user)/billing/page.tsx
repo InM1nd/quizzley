@@ -3,7 +3,12 @@ import { feedbacks, users } from "@/db/schema";
 import { auth, signIn } from "@/auth";
 import { eq, desc } from "drizzle-orm";
 import { db } from "@/db";
-import { Settings, Sparkles, ScrollText } from "lucide-react";
+import { Settings, Sparkles, ScrollText, Clock } from "lucide-react";
+import { getPremiumStatus } from "@/app/actions/userSubscription";
+import SubscribeBtn from "./SubscribeBtn";
+
+// Удаляем дублирующиеся интерфейс и функцию checkPremiumStatus
+// Они уже определены в @/lib/premium-manager
 
 const page = async () => {
   const session = await auth();
@@ -14,23 +19,16 @@ const page = async () => {
     return null;
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, session.user.id),
-  });
-  const feedback = await db.query.feedbacks.findFirst({
-    where: eq(feedbacks.userId, userId!),
-    orderBy: [desc(feedbacks.createdAt)],
-  });
+  // Используем существующую функцию из actions
+  const premiumStatus = await getPremiumStatus(session.user.id);
 
-  const plan = user?.subscribed ? "premium" : "free";
-  const nextBillingDate = feedback?.premiumEndDate
-    ? new Date(feedback.premiumEndDate).toLocaleDateString()
+  const plan = premiumStatus.isPremium ? "premium" : "free";
+  const nextBillingDate = premiumStatus.expiresAt
+    ? new Date(premiumStatus.expiresAt).toLocaleDateString()
     : "N/A";
 
   return (
     <div className="container max-w-4xl mx-auto p-6">
-      {/* Фоновый градиент */}
-
       <div className="space-y-6">
         {/* Заголовок и текущий план */}
         <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 p-8 backdrop-blur-sm border border-zinc-800/50">
@@ -52,7 +50,7 @@ const page = async () => {
                   Current Plan:
                   <span
                     className={`ml-2 font-bold ${
-                      plan === "premium" ? "text-green-400" : "text-zinc-400"
+                      plan === "premium" ? "text-green-400" : "text-secondary"
                     } uppercase`}
                   >
                     {plan}
@@ -60,6 +58,31 @@ const page = async () => {
                 </p>
               </div>
             </div>
+
+            {/* Информация о времени */}
+            {premiumStatus.isPremium && (
+              <div className="mt-4 flex items-center space-x-4 text-sm text-zinc-300">
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-4 h-4" />
+                  <span>
+                    {premiumStatus.daysRemaining > 0 && (
+                      <span>{premiumStatus.daysRemaining} days </span>
+                    )}
+                    {premiumStatus.hoursRemaining > 0 && (
+                      <span>{premiumStatus.hoursRemaining} hours </span>
+                    )}
+                    {premiumStatus.minutesRemaining > 0 && (
+                      <span>{premiumStatus.minutesRemaining} minutes</span>
+                    )}
+                    {premiumStatus.daysRemaining === 0 &&
+                      premiumStatus.hoursRemaining === 0 &&
+                      premiumStatus.minutesRemaining === 0 && (
+                        <span>Less than a minute</span>
+                      )}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -80,6 +103,10 @@ const page = async () => {
                   </li>
                   <li className="flex items-center text-green-400">
                     <span className="mr-2">✓</span>
+                    Document Upload
+                  </li>
+                  <li className="flex items-center text-green-400">
+                    <span className="mr-2">✓</span>
                     Advanced Analytics
                   </li>
                   <li className="flex items-center text-green-400">
@@ -89,15 +116,19 @@ const page = async () => {
                 </>
               ) : (
                 <>
-                  <li className="flex items-center text-zinc-400">
+                  <li className="flex items-center text-secondary">
                     <span className="mr-2">•</span>
                     Basic Quiz Generation
                   </li>
-                  <li className="flex items-center text-zinc-400">
+                  <li className="flex items-center text-red-400">
+                    <span className="mr-2">✗</span>
+                    Document Upload (Premium Only)
+                  </li>
+                  <li className="flex items-center text-secondary">
                     <span className="mr-2">•</span>
                     Limited Analytics
                   </li>
-                  <li className="flex items-center text-zinc-400">
+                  <li className="flex items-center text-secondary">
                     <span className="mr-2">•</span>
                     Standard Support
                   </li>
@@ -112,19 +143,22 @@ const page = async () => {
               <Settings className="mr-2 text-orange-500" />
               Manage Subscription
             </h2>
-            <div className="relative z-10">
+            <div className="relative z-10 flex flex-col gap-4">
               <ManageSubscription />
+              <SubscribeBtn userId={userId} />
             </div>
           </div>
         </div>
 
         {/* Дополнительная информация */}
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 p-6 backdrop-blur-sm border border-zinc-800/50">
+        {/* <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/80 to-zinc-900/60 p-6 backdrop-blur-sm border border-zinc-800/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <ScrollText className="text-orange-500" />
-              <p className="text-sm text-zinc-400">
-                Next billing date: {nextBillingDate}
+              <p className="text-sm text-secondary">
+                {premiumStatus.isPremium
+                  ? `Premium expires: ${nextBillingDate}`
+                  : "No active premium subscription"}
               </p>
             </div>
             <a
@@ -134,7 +168,7 @@ const page = async () => {
               View Billing History
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

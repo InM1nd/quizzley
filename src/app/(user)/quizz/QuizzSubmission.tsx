@@ -100,7 +100,7 @@ const QuizzSubmission = (props: Props) => {
                   <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
                     Quiz Complete!
                   </h2>
-                  <p className="text-zinc-400 mt-2">{getFeedback()}</p>
+                  <p className="text-secondary mt-2">{getFeedback()}</p>
                 </div>
 
                 <div className="relative w-48 h-48">
@@ -167,13 +167,13 @@ const QuizzSubmission = (props: Props) => {
                     <p className="text-green-500 font-semibold text-2xl">
                       {score}
                     </p>
-                    <p className="text-sm text-zinc-400">Correct</p>
+                    <p className="text-sm text-secondary">Correct</p>
                   </div>
                   <div className="text-center p-4 bg-zinc-700/50 rounded-lg">
                     <p className="text-red-500 font-semibold text-2xl">
                       {totalQuestions - score}
                     </p>
-                    <p className="text-sm text-zinc-400">Incorrect</p>
+                    <p className="text-sm text-secondary">Incorrect</p>
                   </div>
                 </div>
               </div>
@@ -199,7 +199,7 @@ const QuizzSubmission = (props: Props) => {
                   <BookOpen className="h-5 w-5" />
                   <h3 className="font-semibold">Study Materials</h3>
                 </div>
-                <p className="text-zinc-400">Coming soon...</p>
+                <p className="text-secondary">Coming soon...</p>
               </div>
             </BentoBox>
 
@@ -210,7 +210,7 @@ const QuizzSubmission = (props: Props) => {
                   <Target className="h-5 w-5" />
                   <h3 className="font-semibold">Learning Goals</h3>
                 </div>
-                <p className="text-zinc-400">Coming soon...</p>
+                <p className="text-secondary">Coming soon...</p>
               </div>
             </BentoBox>
 

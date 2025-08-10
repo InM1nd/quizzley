@@ -1,10 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star } from "lucide-react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { LampContainer } from "../ui/lamp";
 import Magnet from "../ui/magnet";
+import { LoginModal } from "../auth/login-modal";
 
 export function CTASection() {
   return (
@@ -29,22 +29,18 @@ export function CTASection() {
             wrapperClassName="w-full max-w-2xl"
             innerClassName="w-full"
           >
-            <Button
-              size="lg"
-              variant="neo"
-              className="w-full text-white font-semibold text-lg py-6 px-8 my-12 rounded-full"
-              asChild
-            >
-              <Link
-                href="/api/auth/signin?callbackUrl=/dashboard"
-                target="_blank"
+            <LoginModal>
+              <Button
+                size="lg"
+                variant="neo"
+                className="w-full text-white font-semibold text-lg py-6 px-8 my-12 rounded-full"
               >
                 <span className="flex items-center justify-center gap-2">
                   <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   Get Started Now
                 </span>
-              </Link>
-            </Button>
+              </Button>
+            </LoginModal>
           </Magnet>
         </div>
       </div>

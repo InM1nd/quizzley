@@ -3,106 +3,155 @@ import { stripe } from "@/lib/stripe";
 import {
   createSubscription,
   deleteSubscription,
+  handleTrialEnding,
 } from "@/app/actions/userSubscription";
+import { revalidatePath } from "next/cache";
 
 const relevantEvents = new Set([
   "checkout.session.completed",
   "customer.subscription.created",
   "customer.subscription.updated",
   "customer.subscription.deleted",
+  "customer.subscription.trial_will_end",
+  "invoice.payment_succeeded",
 ]);
 
 export async function POST(req: Request) {
   try {
-    console.log("Webhook called");
     const body = await req.text();
-    console.log("Request body received");
-
     const sig = req.headers.get("stripe-signature");
-    console.log("Stripe signature:", sig ? "Present" : "Missing");
 
-    const webhookSecret =
-      process.env.NODE_ENV === "production"
-        ? process.env.STRIPE_WEBHOOK_SECRET
-        : process.env.STRIPE_WEBHOOK_LOCAL_SERCRET;
+    let webhookSecret: string;
 
-    console.log("Webhook secret:", webhookSecret ? "Present" : "Missing");
-    console.log("NODE_ENV:", process.env.NODE_ENV);
+    if (process.env.NODE_ENV === "production") {
+      webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+    } else {
+      webhookSecret = process.env.STRIPE_WEBHOOK_LOCAL_SECRET!;
+    }
 
     if (!webhookSecret) {
-      throw new Error("Stripe webhook secret is not set");
+      throw new Error(
+        `Webhook secret not found for environment: ${process.env.NODE_ENV}`
+      );
     }
 
     if (!sig) {
       throw new Error("No signature found in request");
     }
 
-    console.log("Constructing Stripe event...");
+    // ✅ Проверяем подпись
     const event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-    console.log("Received webhook event:", event.type);
 
     if (relevantEvents.has(event.type)) {
-      console.log("Processing event:", event.type);
       switch (event.type) {
-        case "checkout.session.completed":
-          const session = event.data.object as Stripe.Checkout.Session;
-          console.log("Checkout session completed:", session.id);
-          console.log("Session mode:", session.mode);
-          console.log("Session customer:", session.customer);
-          if (session.mode === "subscription" && session.customer) {
-            console.log(
-              "Creating subscription for customer:",
-              session.customer
-            );
-            await createSubscription({
-              stripeCustomerId: session.customer as string,
-            });
-            console.log("Subscription created successfully");
+        case "customer.subscription.trial_will_end":
+          const trialEndingSubscription = event.data
+            .object as Stripe.Subscription;
+          if (trialEndingSubscription.customer) {
+            try {
+              await handleTrialEnding({
+                stripeCustomerId: trialEndingSubscription.customer as string,
+                trialEndDate: trialEndingSubscription.trial_end,
+              });
+            } catch (error) {
+              throw error;
+            }
           }
           break;
-        case "customer.subscription.created":
-          const subscription = event.data.object as Stripe.Subscription;
-          console.log(
-            "Creating subscription for customer:",
-            subscription.customer
-          );
-          await createSubscription({
-            stripeCustomerId: subscription.customer as string,
-          });
-          console.log("Subscription created successfully");
+
+        case "checkout.session.completed":
+          const session = event.data.object as Stripe.Checkout.Session;
+
+          if (session.mode === "subscription" && session.customer) {
+            try {
+              await createSubscription({
+                stripeCustomerId: session.customer as string,
+              });
+            } catch (error) {
+              throw error;
+            }
+          }
           break;
+
+        case "customer.subscription.created":
+          const createdSubscription = event.data.object as Stripe.Subscription;
+          if (createdSubscription.customer) {
+            try {
+              await createSubscription({
+                stripeCustomerId: createdSubscription.customer as string,
+              });
+            } catch (error) {
+              throw error;
+            }
+          }
+          break;
+
+        case "invoice.payment_succeeded":
+          const invoice = event.data.object as Stripe.Invoice;
+          if (invoice.subscription && invoice.customer) {
+            try {
+              await createSubscription({
+                stripeCustomerId: invoice.customer as string,
+              });
+            } catch (error) {
+              throw error;
+            }
+          }
+          break;
+
+        case "customer.subscription.updated":
+          const updatedSubscription = event.data.object as Stripe.Subscription;
+          if (updatedSubscription.customer) {
+            if (updatedSubscription.status === "active") {
+              try {
+                await createSubscription({
+                  stripeCustomerId: updatedSubscription.customer as string,
+                });
+              } catch (error) {
+                throw error;
+              }
+            } else if (updatedSubscription.status === "canceled") {
+              try {
+                await deleteSubscription({
+                  stripeCustomerId: updatedSubscription.customer as string,
+                });
+              } catch (error) {
+                throw error;
+              }
+            }
+          }
+          break;
+
         case "customer.subscription.deleted":
           const deletedSubscription = event.data.object as Stripe.Subscription;
-          console.log(
-            "Deleting subscription for customer:",
-            deletedSubscription.customer
-          );
-          await deleteSubscription({
-            stripeCustomerId: deletedSubscription.customer as string,
-          });
-          console.log("Subscription deleted successfully");
+          if (deletedSubscription.customer) {
+            try {
+              await deleteSubscription({
+                stripeCustomerId: deletedSubscription.customer as string,
+              });
+            } catch (error) {
+              throw error;
+            }
+          }
           break;
-        default:
-          console.log(`Unhandled event type: ${event.type}`);
       }
-    } else {
-      console.log("Event type not in relevantEvents:", event.type);
+
+      revalidatePath("/billing");
+      revalidatePath("/dashboard");
     }
 
-    console.log("Webhook processed successfully");
-    return new Response(JSON.stringify({ received: true }), { status: 200 });
+    return new Response(JSON.stringify({ received: true }), {
+      status: 200,
+    });
   } catch (error) {
-    console.error("Webhook error:", error);
-    console.error(
-      "Error details:",
-      error instanceof Error ? error.stack : String(error)
-    );
     return new Response(
       JSON.stringify({
-        error: "Webhook handler failed",
+        error: "Webhook error",
         details: error instanceof Error ? error.message : String(error),
       }),
-      { status: 400 }
+      {
+        status: 400,
+      }
     );
   }
 }

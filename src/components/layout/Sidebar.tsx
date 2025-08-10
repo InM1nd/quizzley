@@ -23,6 +23,10 @@ import { cn } from "@/lib/utils";
 import { logoutUser } from "@/app/actions/auth-actions";
 import { useUIStore } from "@/lib/stores/ui-store";
 import Flashcards from "@/app/(user)/flashcards/page";
+import { UsageLimitsDisplay } from "../ui/usage-limit-display";
+import { useUserProfileStore } from "@/lib/stores/user-profile-store";
+import { LoadingSkeleton } from "../skeletons/loading-skeleton";
+import SubscriptionStatus from "./SubscriptionStatus";
 
 type NavItem = {
   title: string;
@@ -83,6 +87,26 @@ const UserProfile = dynamic(() => import("./UserProfile"), {
   ),
   ssr: false,
 });
+
+const UserProfileSection = ({ session }: { session: any }) => {
+  const { profile, isLoading, fetchProfile } = useUserProfileStore();
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
+  if (isLoading) return <LoadingSkeleton />;
+
+  return (
+    <div>
+      <UsageLimitsDisplay
+        userId={session?.user?.id}
+        limits={profile?.usageLimits}
+      />
+      {/* <SubscriptionStatus status={profile?.subscriptionStatus} /> */}
+    </div>
+  );
+};
 
 export default function Sidebar() {
   const { data: session, status } = useSession();
@@ -180,10 +204,10 @@ export default function Sidebar() {
         href={item.href}
         onClick={handleNavClick}
         className={cn(
-          "flex items-center px-3 py-2 text-md md:text-sm font-medium rounded-md group transition-colors",
+          "flex items-center px-3 py-2 text-md md:text-sm font-medium rounded-full group transition-all duration-300",
           pathname === item.href
             ? "bg-orange-500/10 text-orange-500"
-            : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+            : "text-secondary hover:text-white hover:bg-zinc-800/50"
         )}
       >
         <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
@@ -245,11 +269,16 @@ export default function Sidebar() {
       >
         <div className="flex flex-col h-full px-4 py-6">
           {session && <UserProfile session={session} />}
+          {session?.user?.id && (
+            <div className="mb-6 px-2">
+              <UserProfileSection session={session} />
+            </div>
+          )}
 
           {/* Main navigation */}
           <nav className="space-y-1 flex-1">
             <div className="px-3 py-2">
-              <h3 className="text-md md:text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              <h3 className="text-md md:text-xs font-semibold secondary uppercase tracking-wider">
                 Main
               </h3>
             </div>
@@ -262,7 +291,7 @@ export default function Sidebar() {
             <Link
               href="/"
               onClick={handleNavClick}
-              className="flex items-center px-3 py-2 mt-1 text-md md:text-xs font-medium text-zinc-400 rounded-md hover:text-white hover:bg-zinc-800/50 group transition-colors"
+              className="flex items-center px-3 py-2 mt-1 text-md md:text-xs font-medium text-secondary rounded-full hover:text-white hover:bg-zinc-800/50 group transition-all duration-300"
             >
               <Home className="mr-3 h-5 w-5 flex-shrink-0" />
               Home Page
@@ -270,7 +299,7 @@ export default function Sidebar() {
 
             <button
               onClick={handleLogout}
-              className="flex w-full items-center px-3 py-2 mt-1 text-md md:text-sm font-medium text-red-400 rounded-md hover:text-red-300 hover:bg-red-500/10 group transition-colors"
+              className="flex w-full items-center px-3 py-2 mt-1 text-md md:text-sm font-medium text-red-400 rounded-full hover:text-red-300 hover:bg-red-500/10 group transition-all duration-300"
             >
               <LogOut className="mr-3 h-5 w-5 flex-shrink-0" />
               Log out

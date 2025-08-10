@@ -4,18 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Check, Medal } from "lucide-react";
 import { saveFeedback } from "@/app/actions/saveFeedback";
 import { useSession } from "next-auth/react";
+import { ThankYouDialog } from "@/components/ui/thank-you-dialog";
+import { FaSadTear, FaFrown, FaMeh, FaSmile } from "react-icons/fa";
 
 export function FeedbackForm() {
   const { data: session } = useSession();
@@ -30,6 +22,12 @@ export function FeedbackForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.rating) {
+      setError("Please select a rating before submitting feedback.");
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
@@ -39,13 +37,10 @@ export function FeedbackForm() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       if (result.success) {
-        // Очистить форму
         setFormData({
           rating: "",
           feedback: "",
         });
-
-        // Показать диалог благодарности
         setShowThankYouDialog(true);
       } else {
         setError(
@@ -63,13 +58,61 @@ export function FeedbackForm() {
   if (!session) {
     return (
       <div className="bg-zinc-900/50 rounded-xl p-6 backdrop-blur-sm border border-zinc-800 text-center">
-        <p className="text-zinc-400 mb-4">
+        <p className="text-secondary mb-4">
           You need to be logged in to submit feedback.
         </p>
         <Button>Log In</Button>
       </div>
     );
   }
+
+  const ratingOptions = [
+    {
+      value: "excellent",
+      label: "Excellent",
+      icon: <FaSmile className="w-7 h-7 text-emerald-400" />,
+      color: "text-emerald-400",
+      bgGradient: "from-emerald-500/20 to-emerald-600/20",
+      borderColor: "border-emerald-500/50",
+      glowColor: "shadow-emerald-500/30",
+    },
+    {
+      value: "very-good",
+      label: "Very Good",
+      icon: <FaSmile className="w-7 h-7 text-green-400" />,
+      color: "text-green-400",
+      bgGradient: "from-green-500/20 to-green-600/20",
+      borderColor: "border-green-500/50",
+      glowColor: "shadow-green-500/30",
+    },
+    {
+      value: "good",
+      label: "Good",
+      icon: <FaMeh className="w-7 h-7 text-yellow-400" />,
+      color: "text-yellow-400",
+      bgGradient: "from-yellow-500/20 to-yellow-600/20",
+      borderColor: "border-yellow-500/50",
+      glowColor: "shadow-yellow-500/30",
+    },
+    {
+      value: "fair",
+      label: "Fair",
+      icon: <FaFrown className="w-7 h-7 text-orange-400" />,
+      color: "text-orange-400",
+      bgGradient: "from-orange-500/20 to-orange-600/20",
+      borderColor: "border-orange-500/50",
+      glowColor: "shadow-orange-500/30",
+    },
+    {
+      value: "poor",
+      label: "Poor",
+      icon: <FaSadTear className="w-7 h-7 text-red-400" />,
+      color: "text-red-400",
+      bgGradient: "from-red-500/20 to-red-600/20",
+      borderColor: "border-red-500/50",
+      glowColor: "shadow-red-500/30",
+    },
+  ];
 
   return (
     <>
@@ -78,7 +121,7 @@ export function FeedbackForm() {
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-orange-600">
             Share Your Feedback
           </h2>
-          <p className="text-zinc-400 text-lg">
+          <p className="text-secondary text-lg">
             Help us improve Quizzley by sharing your thoughts and suggestions
           </p>
           <div className="bg-zinc-800/50 p-4 rounded-lg">
@@ -99,77 +142,77 @@ export function FeedbackForm() {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
-          <div className="space-y-2">
-            <Label className="text-zinc-400">
+          <div className="space-y-4">
+            <Label className="text-zinc-300 text-lg font-medium">
               How would you rate your experience?
             </Label>
-            <RadioGroup
-              value={formData.rating}
-              onValueChange={(value) =>
-                setFormData({ ...formData, rating: value })
-              }
-              className="flex flex-wrap gap-4"
-              disabled={isSubmitting}
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value="excellent"
-                  id="excellent"
-                  className="border-zinc-800/50 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
-                />
-                <Label
-                  htmlFor="excellent"
-                  className="text-zinc-400"
-                >
-                  Excellent
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value="good"
-                  id="good"
-                  className="border-zinc-800/50 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
-                />
-                <Label
-                  htmlFor="good"
-                  className="text-zinc-400"
-                >
-                  Good
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value="average"
-                  id="average"
-                  className="border-zinc-800/50 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
-                />
-                <Label
-                  htmlFor="average"
-                  className="text-zinc-400"
-                >
-                  Average
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value="poor"
-                  id="poor"
-                  className="border-zinc-800/50 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
-                />
-                <Label
-                  htmlFor="poor"
-                  className="text-zinc-400"
-                >
-                  Poor
-                </Label>
-              </div>
-            </RadioGroup>
+            <div className="grid grid-cols-5 gap-4">
+              {ratingOptions.map((option) => {
+                const isSelected = formData.rating === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() =>
+                      setFormData({ ...formData, rating: option.value })
+                    }
+                    disabled={isSubmitting}
+                    className={`
+                      group relative flex flex-col items-center justify-center w-full h-24 p-3 
+                      bg-zinc-800/40 border-2 border-zinc-700/50 rounded-2xl 
+                      cursor-pointer transition-all duration-500 ease-out
+                      hover:bg-zinc-800/60 hover:border-zinc-600/50 hover:scale-105
+                      ${
+                        isSelected
+                          ? `bg-gradient-to-br ${option.bgGradient} ${option.borderColor} shadow-xl ${option.glowColor} scale-110`
+                          : ""
+                      }
+                    `}
+                  >
+                    {/* Фоновый градиент для выбранного состояния */}
+                    {isSelected && (
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${option.bgGradient} rounded-2xl opacity-20`}
+                      />
+                    )}
+
+                    {/* Иконка */}
+                    <div
+                      className={`
+                      relative z-10 mb-2 transition-all duration-500 ease-out
+                      ${
+                        isSelected
+                          ? "scale-125 drop-shadow-lg"
+                          : "group-hover:scale-110"
+                      }
+                    `}
+                    >
+                      {option.icon}
+                    </div>
+
+                    {/* Текст */}
+                    <span
+                      className={`
+                      relative z-10 text-sm font-medium text-center leading-tight transition-all duration-300
+                      ${
+                        isSelected
+                          ? "text-white font-semibold"
+                          : "text-secondary group-hover:text-zinc-300"
+                      }
+                    `}
+                    >
+                      {option.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label
               htmlFor="feedback"
-              className="text-zinc-400"
+              className="text-zinc-300 text-lg font-medium"
             >
               Your Feedback
             </Label>
@@ -180,64 +223,28 @@ export function FeedbackForm() {
               onChange={(e) =>
                 setFormData({ ...formData, feedback: e.target.value })
               }
-              required
-              className="min-h-[150px] bg-zinc-900/50 border-zinc-800/50 focus:border-orange-500/50"
+              className="min-h-[150px] bg-zinc-900/50 border-zinc-800/50 focus:border-orange-500/50 focus:ring-orange-500/20 transition-all duration-300"
               disabled={isSubmitting}
             />
           </div>
 
-          <Button
-            type="submit"
-            size={"lg"}
-            className="mt-4 w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit Feedback"}
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              type="submit"
+              size={"lg"}
+              className="py-6 px-8 rounded-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:via-orange-500/90 hover:to-orange-600/90 shadow-xl shadow-primary/25 hover:shadow-primary/40 text-lg font-bold border-0 relative overflow-hidden group"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit Feedback"}
+            </Button>
+          </div>
         </form>
       </div>
 
-      {/* Диалог благодарности остается без изменений */}
-      <Dialog
+      <ThankYouDialog
         open={showThankYouDialog}
         onOpenChange={setShowThankYouDialog}
-      >
-        <DialogContent className="bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 text-white max-w-md rounded-xl">
-          <DialogHeader>
-            <div className="flex justify-center my-4">
-              <div className="h-20 w-20 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 flex items-center justify-center">
-                <Check className="h-10 w-10 text-white" />
-              </div>
-            </div>
-            <DialogTitle className="text-xl text-center font-bold text-white">
-              Thank You for Your Feedback!
-            </DialogTitle>
-            <DialogDescription className="text-center text-zinc-400 mt-2">
-              We appreciate your time and thoughts. As a token of our gratitude,
-              we&apos;ve added 2 weeks of premium subscription to your account.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="bg-zinc-800/50 p-4 rounded-lg flex items-center gap-3 my-4">
-            <Medal className="h-6 w-6 text-orange-500" />
-            <div>
-              <p className="text-white font-medium">Premium Benefits Added</p>
-              <p className="text-zinc-400 text-sm">
-                2 weeks of free premium access
-              </p>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              className="w-full bg-gradient-to-r from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700"
-              onClick={() => setShowThankYouDialog(false)}
-            >
-              Continue to Quizzley
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      />
     </>
   );
 }

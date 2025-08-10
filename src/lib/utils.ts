@@ -26,4 +26,22 @@ export function convertDateToString(date: Date): string {
   return formattedDate;
 }
 
-export const PRICE_ID: string = "price_1R6WGpBVanHArmp8JApjJ0Xx";
+export const PRICE_ID: string = (() => {
+  const priceId = process.env.STRIPE_PRICE_ID;
+
+  if (!priceId) {
+    console.warn("⚠️ STRIPE_PRICE_ID не установлен в переменных окружения");
+    // Возвращаем оригинальный ID как fallback для разработки
+    return "price_1RqzEOBVanHArmp8vNj2sJJg";
+  }
+
+  // Валидация формата Stripe Price ID
+  if (!priceId.startsWith("price_")) {
+    throw new Error(
+      '❌ Неверный формат STRIPE_PRICE_ID. Должен начинаться с "price_"'
+    );
+  }
+
+  return priceId;
+})();
+

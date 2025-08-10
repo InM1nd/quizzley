@@ -4,12 +4,27 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ProgressBar from "@/components/progressBar";
 import { useQuizGenerationStore } from "@/lib/stores/quiz-generation-store";
+import { Upload } from "lucide-react";
+import UpgradePlan from "./UpgradePlan";
+
+// Добавляем интерфейс для лимитов использования
+interface UsageLimits {
+  canCreateQuiz: boolean;
+  dailyQuizzesCreated: number;
+  dailyQuizzesLimit: number;
+  quizzesRemaining: number;
+  isPremium: boolean;
+}
 
 const UploadDoc = () => {
   const router = useRouter();
   const quizOptions = useQuizGenerationStore.getState().quizOptions;
   const selectedDifficulty =
     useQuizGenerationStore.getState().selectedDifficulty;
+
+  // Добавляем состояние для лимитов использования
+  const [usageLimits, setUsageLimits] = useState<UsageLimits | null>(null);
+  const [isLoadingLimits, setIsLoadingLimits] = useState(true);
 
   const {
     isLoading,
@@ -28,6 +43,27 @@ const UploadDoc = () => {
     reset,
     getCurrentMessage,
   } = useQuizGenerationStore();
+
+  // Загружаем лимиты использования при монтировании компонента
+  useEffect(() => {
+    const fetchUsageLimits = async () => {
+      try {
+        const response = await fetch("/api/user/usage-limit");
+        if (response.ok) {
+          const limits = await response.json();
+          setUsageLimits(limits);
+        } else {
+          console.error("Failed to fetch usage limits");
+        }
+      } catch (error) {
+        console.error("Error fetching usage limits:", error);
+      } finally {
+        setIsLoadingLimits(false);
+      }
+    };
+
+    fetchUsageLimits();
+  }, []);
 
   useEffect(() => {
     if (isLoading) {
@@ -59,6 +95,14 @@ const UploadDoc = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Проверяем лимиты перед отправкой
+    if (usageLimits && !usageLimits.canCreateQuiz) {
+      setError(
+        "You have reached your daily quiz creation limit. Please upgrade to continue."
+      );
+      return;
+    }
 
     if (!quizTitle) {
       setError("Please enter the name of your quizz");
@@ -165,6 +209,22 @@ const UploadDoc = () => {
     }
   };
 
+  // Показываем загрузку лимитов
+  if (isLoadingLimits) {
+    return (
+      <div className="w-full flex justify-center items-center p-6">
+        <div className="text-center">
+          <p className="text-lg font-medium text-primary">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Показываем UpgradePlan если пользователь не может создавать квизы
+  if (usageLimits && !usageLimits.canCreateQuiz && !usageLimits.isPremium) {
+    return <UpgradePlan />;
+  }
+
   return (
     <div className="w-full">
       {isLoading ? (
@@ -184,14 +244,29 @@ const UploadDoc = () => {
           className="w-full"
           onSubmit={handleSubmit}
         >
+          {/* Показываем информацию о лимитах для бесплатных пользователей */}
+          {/* {usageLimits && !usageLimits.isPremium && (
+            <div className="mb-4 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700">
+              <p className="text-sm text-secondary">
+                Quizzes created today: {usageLimits.dailyQuizzesCreated}/
+                {usageLimits.dailyQuizzesLimit}
+                {usageLimits.quizzesRemaining > 0 && (
+                  <span className="text-green-400 ml-2">
+                    ({usageLimits.quizzesRemaining} remaining)
+                  </span>
+                )}
+              </p>
+            </div>
+          )} */}
+
           <label
-            className="block text-zinc-400 mb-2 font-medium"
+            className="block text-secondary mb-2 font-medium"
             htmlFor="quizTitle"
           >
             <input
               id="quizTitle"
               type="text"
-              className="w-full border rounded-md px-3 py-2 mb-4 text-zinc-400 bg-zinc-900"
+              className="w-full border rounded-md px-3 py-2 mb-4 text-secondary bg-zinc-900"
               placeholder="Enter the name of your quizz"
               value={quizTitle}
               onChange={(e) => setQuizTitle(e.target.value)}
@@ -199,9 +274,10 @@ const UploadDoc = () => {
           </label>
           <label
             htmlFor="document"
-            className="bg-secondary w-full flex h-20 rounded-md border-2 border-dashed border-orange-700 relative"
+            className="bg-text-secondary w-full flex h-24 rounded-md border-2 border-dashed border-orange-700 relative cursor-pointer"
           >
-            <div className="absolute inset-0 m-auto flex justify-center items-center">
+            <div className="absolute inset-0 m-auto flex flex-col justify-center items-center gap-2">
+              <Upload className="h-6 w-6 text-primary " />
               {document && document instanceof File
                 ? document.name
                 : "Drag your file"}
@@ -214,13 +290,17 @@ const UploadDoc = () => {
             />
           </label>
           {error ? <p className="text-red-600 mt-2">{error}</p> : null}
-          <Button
-            size={"lg"}
-            className="mt-4"
-            type="submit"
-          >
-            Generate Quizz
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              size={"lg"}
+              className="mt-4 py-6 px-8 rounded-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary/90 hover:via-orange-500/90 hover:to-orange-600/90 shadow-xl shadow-primary/25 hover:shadow-primary/40 text-lg font-bold border-0 relative overflow-hidden group"
+              type="submit"
+              variant="default"
+              disabled={usageLimits ? !usageLimits.canCreateQuiz : false}
+            >
+              Generate Quizz
+            </Button>
+          </div>
         </form>
       )}
     </div>

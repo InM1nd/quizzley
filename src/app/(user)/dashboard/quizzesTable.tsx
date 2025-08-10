@@ -139,25 +139,25 @@ const QuizzesTable = (props: Props) => {
         <Table className="w-full">
           <TableHeader className="bg-zinc-900/50 border-b border-zinc-800/50 sticky top-0 z-10">
             <TableRow>
-              <TableHead className="text-zinc-400 text-center py-4 px-6 font-medium hidden md:table-cell">
+              <TableHead className="text-secondary text-center py-4 px-6 font-medium hidden md:table-cell">
                 №
               </TableHead>
               <TableHead
-                className="text-zinc-400 text-left py-4 md:px-6 font-medium cursor-pointer"
+                className="text-secondary text-left py-4 md:px-6 font-medium cursor-pointer"
                 onClick={() => handleSort("name")}
               >
                 <span className="inline-flex items-center gap-1">
                   Name {getSortIcon("name")}
                 </span>
               </TableHead>
-              <TableHead className="text-zinc-400 text-left py-4 px-6 font-medium hidden md:table-cell">
+              <TableHead className="text-secondary text-left py-4 px-6 font-medium hidden md:table-cell">
                 Description
               </TableHead>
-              <TableHead className="text-zinc-400 text-center py-4 px-6 font-medium hidden md:table-cell">
+              <TableHead className="text-secondary text-center py-4 px-6 font-medium hidden md:table-cell">
                 Questions
               </TableHead>
               <TableHead
-                className="text-zinc-400 items-center justify-center text-center py-4 px-6 font-medium hidden md:table-cell cursor-pointer"
+                className="text-secondary items-center justify-center text-center py-4 px-6 font-medium hidden md:table-cell cursor-pointer"
                 onClick={() => handleSort("createdAt")}
               >
                 <span className="inline-flex items-center gap-1">
@@ -165,7 +165,7 @@ const QuizzesTable = (props: Props) => {
                 </span>
               </TableHead>
               <TableHead
-                className="text-zinc-400 text-center py-4 px-6 font-medium hidden md:table-cell cursor-pointer"
+                className="text-secondary text-center py-4 px-6 font-medium hidden md:table-cell cursor-pointer"
                 onClick={() => handleSort("score")}
               >
                 <span className="inline-flex items-center gap-1">
@@ -189,11 +189,11 @@ const QuizzesTable = (props: Props) => {
                       {quizz.name}
                     </p>
                   </Link>
-                  <div className="md:hidden mt-2 text-sm text-zinc-400 gap-2">
+                  <div className="md:hidden mt-2 text-sm text-secondary gap-2">
                     <p className="line-clamp-2 mb-2 md:mb-0">
                       {truncateWords(quizz.description || "No description", 10)}
                     </p>
-                    <p className="text-sm text-zinc-400">
+                    <p className="text-sm text-secondary">
                       Questions: {quizz.questionCount}
                     </p>
                     <p>
@@ -202,7 +202,7 @@ const QuizzesTable = (props: Props) => {
                         ? new Date(quizz.createdAt).toLocaleDateString()
                         : "Not taken"}
                     </p>
-                    <p className="text-sm text-zinc-400">
+                    <p className="text-sm text-secondary">
                       Score:{" "}
                       {quizz.score !== null ? (
                         <span
@@ -222,20 +222,20 @@ const QuizzesTable = (props: Props) => {
                     </p>
                   </div>
                 </TableCell>
-                <TableCell className="py-4 px-6 text-zinc-400 hidden md:table-cell">
+                <TableCell className="py-4 px-6 text-secondary hidden md:table-cell">
                   <p className="line-clamp-2">
                     {truncateWords(quizz.description || "No description", 10)}
                   </p>
                 </TableCell>
-                <TableCell className="py-4 px-6 text-zinc-400 hidden md:table-cell text-center">
+                <TableCell className="py-4 px-6 text-secondary hidden md:table-cell text-center">
                   {quizz.questionCount}
                 </TableCell>
-                <TableCell className="py-4 px-6 text-zinc-400 hidden md:table-cell text-center">
+                <TableCell className="py-4 px-6 text-secondary hidden md:table-cell text-center">
                   {quizz.createdAt
                     ? new Date(quizz.createdAt).toLocaleDateString()
                     : "Not taken"}
                 </TableCell>
-                <TableCell className="py-4 px-6 text-zinc-400 hidden md:table-cell text-center">
+                <TableCell className="py-4 px-6 text-secondary hidden md:table-cell text-center">
                   {quizz.score !== null ? (
                     <span
                       className={`font-medium ${
@@ -270,7 +270,7 @@ const QuizzesTable = (props: Props) => {
       {/* Пагинация */}
       {totalPages > 1 && (
         <div className="flex justify-between items-center">
-          <div className="text-sm text-zinc-400">
+          <div className="text-sm text-secondary">
             Showing {startIndex + 1}-
             {Math.min(startIndex + ITEMS_PER_PAGE, props.quizzes.length)} of{" "}
             {props.quizzes.length} quizzes
@@ -285,7 +285,7 @@ const QuizzesTable = (props: Props) => {
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <div className="flex items-center px-2 text-sm text-zinc-400">
+            <div className="flex items-center px-2 text-sm text-secondary">
               Page {currentPage} of {totalPages}
             </div>
             <Button

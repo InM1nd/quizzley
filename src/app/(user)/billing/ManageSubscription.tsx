@@ -53,7 +53,7 @@ const ManageSubscription = () => {
       <Button
         type="submit"
         size={"lg"}
-        className="mt-4"
+        className="w-full py-4 rounded-2xl bg-zinc-800/50 hover:bg-zinc-700/50 text-zinc-300 hover:text-white border border-zinc-700 hover:border-zinc-600 transition-all duration-300 text-base font-medium"
         disabled={loading}
         onClick={redirectToCustomerPortal}
       >
@@ -63,7 +63,7 @@ const ManageSubscription = () => {
             Please Wait
           </>
         ) : (
-          "Change your subscription"
+          "Manage your subscription"
         )}
       </Button>
       {error && <p className="text-sm text-red-500">{error}</p>}
