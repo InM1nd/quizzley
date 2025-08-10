@@ -27,12 +27,15 @@ export function convertDateToString(date: Date): string {
 }
 
 export const PRICE_ID: string = (() => {
-  const priceId = process.env.STRIPE_PRICE_ID;
+  // Сначала проверяем публичную переменную (для клиента)
+  // Затем приватную (для сервера)
+  const priceId =
+    process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || process.env.STRIPE_PRICE_ID;
 
   if (!priceId) {
     console.warn("⚠️ STRIPE_PRICE_ID не установлен в переменных окружения");
     // Возвращаем оригинальный ID как fallback для разработки
-    return "price_1RqzEOBVanHArmp8vNj2sJJg";
+    return "price_1RsVQoBVanHArmp8uIBhGumq";
   }
 
   // Валидация формата Stripe Price ID
