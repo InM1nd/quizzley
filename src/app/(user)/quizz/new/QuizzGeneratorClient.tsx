@@ -51,15 +51,12 @@ export default function QuizzGeneratorClient({
 
   return (
     <div className="flex flex-col flex-1">
-      <main className="py-11 flex flex-col items-center flex-1">
-        <div className="max-w-5xl mx-auto px-4 w-full">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-primary mb-2">
-              Generate Your Quiz
+      <main className="flex flex-col items-center flex-1">
+        <div className="max-w-5xl mx-auto w-full">
+          <div className="h-10 flex items-center text-center justify-center mb-4">
+            <h1 className="text-3xl lg:text-4xl font-bold text-primary ">
+              Generate Quizz
             </h1>
-            <p className="text-gray-400">
-              Create personalized quizzes from your documents
-            </p>
           </div>
 
           {/* Верхняя панель с настройками и информацией */}
@@ -219,7 +216,7 @@ export default function QuizzGeneratorClient({
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-center sm:items-start gap-4">
                     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 text-primary flex items-center justify-center text-sm font-medium">
                       1
                     </div>
@@ -233,7 +230,7 @@ export default function QuizzGeneratorClient({
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-center sm:items-start gap-4">
                     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 text-primary flex items-center justify-center text-sm font-medium">
                       2
                     </div>
@@ -247,7 +244,7 @@ export default function QuizzGeneratorClient({
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-center sm:items-start gap-4">
                     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 text-primary flex items-center justify-center text-sm font-medium">
                       3
                     </div>

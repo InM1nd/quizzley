@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 
@@ -6,7 +6,6 @@ import ClickSpark from "@/components/ui/click-spark";
 import ConditionalAurora from "@/components/ui/conditional-aurora";
 import { SessionProvider } from "next-auth/react";
 import { Providers } from "./providers";
-import { Toaster } from "sonner";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -40,8 +39,12 @@ export const metadata: Metadata = {
     description:
       "Generate personalized quizzes with AI to prepare faster and learn more effectively.",
   },
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default async function RootLayout({
@@ -53,8 +56,12 @@ export default async function RootLayout({
     <html
       lang="en"
       className={nunito.className}
+      suppressHydrationWarning={true}
     >
-      <body className={"dark"}>
+      <body
+        className="dark"
+        suppressHydrationWarning={true}
+      >
         <SessionProvider>
           <Providers>
             <ClickSpark
@@ -66,11 +73,6 @@ export default async function RootLayout({
             >
               {children}
             </ClickSpark>
-            <Toaster
-              position="bottom-right"
-              richColors
-              className="z-[1000]"
-            />
           </Providers>
         </SessionProvider>
       </body>
