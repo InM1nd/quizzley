@@ -32,7 +32,7 @@ export const PRICE_ID: string = (() => {
   if (!priceId) {
     console.warn("⚠️ STRIPE_PRICE_ID не установлен в переменных окружения");
     // Возвращаем оригинальный ID как fallback для разработки
-    return "price_1RqzEOBVanHArmp8vNj2sJJg";
+    return "price_1RsVQoBVanHArmp8uIBhGumq";
   }
 
   // Валидация формата Stripe Price ID
