@@ -1,17 +1,18 @@
+import { Metadata } from "next";
+import StructuredData from "@/components/seo/StructuredData";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/footer";
 import { AnimatedSection } from "@/components/ui/animated-section";
-import { AnimatedIcon } from "@/components/ui/animated-icon";
 import { AnimatedHeading } from "@/components/ui/animated-heading";
 import { AnimatedCard } from "@/components/ui/animated-card";
 import { FeaturesSection } from "@/components/sections/features-section";
-import SpotlightCard from "@/components/ui/spotlight-card";
 import {
   ArrowRight,
   BarChart3,
   Brain,
   CheckCircle,
   FileText,
+  MessageCircleQuestion,
   Sparkles,
   Star,
 } from "lucide-react";
@@ -20,6 +21,56 @@ import Link from "next/link";
 import { CTASection } from "@/components/sections/cta-section";
 import SubscriptionSection from "@/components/sections/subscription-section";
 import { LoginModal } from "@/components/auth/login-modal";
+
+export const metadata: Metadata = {
+  title: "Quizzley - AI-Powered Quiz Generator | Create Smart Quizzes",
+  description:
+    "Transform your learning with Quizzley's AI-powered quiz generator. Create personalized quizzes from any content, upload documents, and get intelligent questions that adapt to your knowledge level.",
+  keywords: [
+    "AI quiz generator",
+    "personalized learning",
+    "quiz creation",
+    "educational technology",
+    "test preparation",
+    "adaptive learning",
+    "study tools",
+    "online quizzes",
+    "learning assessment",
+    "AI-powered education",
+  ],
+  authors: [{ name: "Quizzley Team" }],
+  creator: "Quizzley",
+  publisher: "Quizzley",
+  openGraph: {
+    title: "Quizzley - AI-Powered Quiz Generator",
+    description:
+      "Transform your learning with AI-powered quizzes. Create personalized assessments from any content.",
+    type: "website",
+    locale: "en_US",
+    siteName: "Quizzley",
+    url: "/",
+    images: [
+      {
+        url: "/images/landing/Question_Showcase.png",
+        width: 1200,
+        height: 630,
+        alt: "Quizzley AI Quiz Generator Interface",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Quizzley - AI-Powered Quiz Generator",
+    description:
+      "Transform your learning with AI-powered quizzes. Create personalized assessments from any content.",
+    images: ["/images/landing/Question_Showcase.png"],
+    creator: "@quizzley",
+    site: "@quizzley",
+  },
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default function Home() {
   const features = [
@@ -91,21 +142,41 @@ export default function Home() {
 
   const faqs = [
     {
+      question: "What is Quizzley and how does it work?",
+      answer:
+        "Quizzley is an AI-powered quiz generator that creates personalized quizzes from your documents. Simply upload a PDF, and our AI analyzes the content to identify key concepts and generate relevant questions with multiple choice answers. The process is streamlined: upload document → AI analysis → automatic quiz generation → ready to use.",
+    },
+    {
+      question: "How does the AI generate quiz questions?",
+      answer:
+        "Our advanced AI processes your uploaded documents using natural language processing to identify key concepts, important facts, and knowledge points. It then automatically creates meaningful questions with accurate answers based on the content, customized to your preferences.",
+    },
+    {
+      question: "What types of documents can I upload?",
+      answer:
+        "Quizzley supports PDF documents through our intuitive interface. Simply upload your PDF and our AI will process it to generate relevant quiz questions. The system is designed to work with any type of educational or informational content.",
+    },
+    {
       question: "How quickly do you respond to inquiries?",
       answer:
         "We strive to respond to all inquiries within 24 hours on business days. For urgent technical support questions, we typically respond much faster.",
     },
-    // {
-    //   question: "Can I request a product demonstration?",
-    //   answer:
-    //     "Yes, we'd be happy to provide a demonstration of Quizzley for you or your team. Fill out the form above indicating 'Demo Request' in the subject, and we'll arrange a presentation.",
-    // },
     {
       question: "How do I report a technical issue?",
       answer:
         "The best way to let us know is through our feedback form (select the 'Contact' topic) or directly from your Dashboard. Please provide a clear subject and as many details as you can so we can help you faster.",
     },
   ];
+
+  const organizationData = {
+    name: "Quizzley",
+    url: "https://quizzley.com",
+    description: "AI-powered quiz generator for personalized learning",
+  };
+
+  const faqData = {
+    questions: faqs,
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -605,7 +676,8 @@ export default function Home() {
                     className="flex flex-col"
                   >
                     <div className="rounded-xl bg-gradient-to-br from-zinc-900/90 to-zinc-800/50 p-6 ring-1 ring-white/10 shadow-lg hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-                      <h3 className="text-lg font-medium text-white mb-2">
+                      <h3 className="text-lg flex items-center gap-2 font-bold text-primary mb-2">
+                        <MessageCircleQuestion />
                         {faq.question}
                       </h3>
                       <p className="text-gray-300">{faq.answer}</p>
@@ -621,6 +693,22 @@ export default function Home() {
       </main>
 
       <Footer />
+      <StructuredData
+        type="Organization"
+        data={organizationData}
+      />
+      <StructuredData
+        type="WebSite"
+        data={organizationData}
+      />
+      <StructuredData
+        type="SoftwareApplication"
+        data={organizationData}
+      />
+      <StructuredData
+        type="FAQPage"
+        data={faqData}
+      />
     </div>
   );
 }

@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Block admin and private areas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow important files
+Allow: /sitemap.xml
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.gif
+Allow: /*.svg
+Allow: /*.ico
+
+# Sitemap
+Sitemap: https://quizzley.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

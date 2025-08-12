@@ -29,7 +29,7 @@ const page = async () => {
     : "N/A";
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-4 sm:space-y-6">
+    <div className="w-full max-w-4xl mx-auto space-y-4 sm:space-y-6">
       <div className="h-10 flex items-center text-center justify-center mb-4">
         <h1 className="text-3xl lg:text-4xl font-bold text-primary ">
           Billing

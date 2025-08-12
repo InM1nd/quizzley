@@ -8,7 +8,16 @@ const nextConfig = {
 
   serverExternalPackages: ["@prisma/client"],
 
-  // Добавляем заголовки безопасности
+  // SEO и производительность
+  compress: true,
+  poweredByHeader: false,
+
+  // Экспериментальные функции для SEO
+  experimental: {
+    optimizePackageImports: ["@mui/material", "@mui/icons-material"],
+  },
+
+  // Заголовки безопасности и SEO
   async headers() {
     return [
       {
@@ -17,7 +26,7 @@ const nextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+            value: process.env.NEXT_PUBLIC_BASE_URL || "https://quizzley.io",
           },
           {
             key: "Access-Control-Allow-Methods",
@@ -42,6 +51,22 @@ const nextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=(), payment=()",
+          },
+          // SEO заголовки
+          { key: "X-Robots-Tag", value: "index, follow" },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      // Специальные заголовки для статических ресурсов
+      {
+        source: "/(.*).(js|css|png|jpg|jpeg|gif|svg|ico)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
