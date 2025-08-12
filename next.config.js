@@ -14,7 +14,6 @@ const nextConfig = {
 
   // Экспериментальные функции для SEO
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ["@mui/material", "@mui/icons-material"],
   },
 
