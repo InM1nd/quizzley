@@ -24,7 +24,7 @@ export function middleware(request: NextRequest) {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: blob:",
-    "connect-src 'self' https://api.stripe.com https://generativelanguage.googleapis.com https://accounts.google.com https://*.google-analytics.com",
+    "connect-src 'self' https://api.stripe.com https://generativelanguage.googleapis.com https://accounts.google.com https://*.google-analytics.com https://*.doubleclick.net",
     "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://accounts.google.com",
     "object-src 'none'",
     "base-uri 'self'",
