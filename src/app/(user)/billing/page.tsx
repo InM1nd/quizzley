@@ -125,11 +125,10 @@ const page = async () => {
                 <>
                   <li className="flex items-center text-secondary">
                     <span className="mr-2">•</span>
-                    Basic Quiz Generation
+                    Basic Quiz Settings
                   </li>
-                  <li className="flex items-center text-red-400">
-                    <span className="mr-2">✗</span>
-                    Document Upload (Premium Only)
+                  <li className="flex items-center text-secondary">
+                    <span className="mr-2">•</span>3 quizzes per day
                   </li>
                   <li className="flex items-center text-secondary">
                     <span className="mr-2">•</span>
