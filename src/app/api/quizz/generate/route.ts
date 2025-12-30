@@ -231,18 +231,18 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Функция для sanitization входных данных
+// Function for sanitization of input data
 function sanitizeInput(input: string): string {
   if (!input) return "";
 
-  // Удаляем потенциально опасные символы
+  // Cleaning input
   return input
-    .replace(/[<>]/g, "") // Удаляем < и >
-    .replace(/javascript:/gi, "") // Удаляем javascript: протокол
-    .replace(/data:/gi, "") // Удаляем data: протокол
-    .replace(/vbscript:/gi, "") // Удаляем vbscript: протокол
+    .replace(/[<>]/g, "") 
+    .replace(/javascript:/gi, "") 
+    .replace(/data:/gi, "") 
+    .replace(/vbscript:/gi, "") 
     .trim()
-    .slice(0, 1000); // Ограничиваем длину
+    .slice(0, 1000); 
 }
 
 async function generateQuizInBackground(
@@ -361,7 +361,7 @@ async function generateQuizInBackground(
       contentText = String(result.content || "");
     }
 
-    // 🆕 Используем специальный метод
+    //special method
     logger.quizGeneration.aiResponseReceived(quizzId, contentText.length);
 
     if (!contentText || contentText.trim().length === 0) {
@@ -417,7 +417,6 @@ async function generateQuizInBackground(
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // 🆕 Используем специальный метод
       logger.quizGeneration.completed(
         quizzId,
         parsedResult.quizz.questions.length
